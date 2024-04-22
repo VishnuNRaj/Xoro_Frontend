@@ -1,0 +1,258 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import * as authService from './AuthService';
+import * as interfaces from './Interfaces';
+import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+
+
+
+export const login = createAsyncThunk<interfaces.loginResponse, interfaces.LoginCredentials>(
+    'auth/login',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.login(credentials);
+            return data;
+        } catch (error) {
+            return rejectWithValue(<interfaces.loginResponse>{
+                message: 'Internal Server Error',
+                errors: [],
+            });
+        }
+    }
+);
+
+export const register = createAsyncThunk<interfaces.registerResponse, interfaces.RegisterCredentials>(
+    'auth/register',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.register(credentials);
+            return data;
+        } catch (error) {
+            return rejectWithValue(<interfaces.registerResponse>{
+                message: 'Internal Server Error',
+                errors: [],
+            });
+        }
+    }
+);
+
+export const verifyAccount = createAsyncThunk<interfaces.verifyAccountResponse, interfaces.VerifyAccount>(
+    'auth/verifyAccount',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.verifyaccount(credentials);
+            return data;
+        } catch (error) {
+            return rejectWithValue(<interfaces.verifyAccountResponse>{
+                message: 'Internal Server Error',
+            });
+        }
+    }
+)
+
+export const AddProfilePic = createAsyncThunk<interfaces.addProfileResponse, interfaces.AddProfilePic>(
+    'auth/AddProfilePic',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.addProfile(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.addProfileResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
+export const OTPLogin = createAsyncThunk<interfaces.OTPVerifyResponse, interfaces.OTPVerify>(
+    'auth/OTPLogin',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.otplogin(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.OTPVerifyResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
+export const AuthUser = createAsyncThunk<interfaces.AuthVerifyUserResponse, interfaces.AuthVerifyUser>(
+    'auth/AuthUser',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.VerifyUserAuth(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.OTPVerifyResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
+
+export const resendOtp = createAsyncThunk<interfaces.resendOTPResponse, interfaces.resendOTP>(
+    'auth/resendOtp',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.otpresend(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.resendOTPResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
+
+const initialState: interfaces.AuthState = {
+    user: null,
+    loading: false,
+    error: [],
+    message: '',
+};
+
+const authSlice = createSlice({
+    name: 'auth',
+    initialState,
+    reducers: {
+        resetState: (state) => {
+            Object.assign(state, initialState);
+        },
+        setUser:(state,action:PayloadAction<interfaces.User>) => {
+            state.user = action.payload;
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.pending, (state) => {
+                state.loading = true;
+                state.error = [];
+            })
+            .addCase(register.pending, (state) => {
+                state.loading = true;
+                state.error = [];
+            })
+            .addCase(login.fulfilled, (state, action: PayloadAction<interfaces.loginResponse>) => {
+                state.loading = false;
+                state.message = action.payload.message;
+                state.error = action.payload.errors;
+                state.user = action.payload.user;
+            })
+            .addCase(register.fulfilled, (state, action: PayloadAction<interfaces.registerResponse>) => {
+                state.loading = false;
+                state.message = action.payload.message;
+                state.error = action.payload.errors;
+                let toastify = toast.error;
+                if (action.payload.status === 200) {
+                    toastify = toast.success;
+                }
+                toastify(action.payload.message, {
+                    position: 'top-center',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    style: {
+                        minWidth: '400px',
+                        fontSize: '14px'
+                    }
+                });
+            })
+            .addCase(verifyAccount.pending, (state) => {
+                state.loading = true
+                state.message = 'Verifying Account Please Wait'
+            })
+            .addCase(verifyAccount.fulfilled, (state, action: PayloadAction<interfaces.verifyAccountResponse>) => {
+                state.loading = false
+                state.message = action.payload.message
+                if (action.payload.status === 200) {
+                    state.user = action.payload.user
+                    Cookies.set('token', action.payload.token)
+                }
+                else {
+                    state.user = null
+                }
+            })
+            .addCase(AddProfilePic.pending, (state) => {
+                state.loading = true
+                state.message = ''
+            })
+            .addCase(AddProfilePic.fulfilled, (state, action: PayloadAction<interfaces.addProfileResponse>) => {
+                state.message = action.payload.message;
+                state.loading = false
+                if (action.payload.status === 200) {
+                    Cookies.set('token', action.payload.token)
+                }
+            })
+            .addCase(OTPLogin.pending, (state) => {
+                state.loading = true
+                state.message = ''
+            })
+            .addCase(OTPLogin.fulfilled, (state, action: PayloadAction<interfaces.OTPVerifyResponse>) => {
+                state.message = action.payload.message;
+                state.loading = false
+                if (action.payload.status === 200) {
+                    Cookies.set('token', action.payload.token)
+                }
+            })
+            .addCase(AuthUser.pending, (state) => {
+                state.loading = true
+                state.message = ''
+            })
+            .addCase(AuthUser.fulfilled, (state, action: PayloadAction<interfaces.AuthVerifyUserResponse>) => {
+                if (action.payload.status !== 200) {
+                    toast.error(action.payload.message, {
+                        position: 'top-center',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: false,
+                        progress: undefined,
+                        style: {
+                            minWidth: '400px',
+                            fontSize: '14px'
+                        }
+                    });
+                    Cookies.remove('token')
+                }
+                state.message = action.payload.message;
+                state.loading = false
+                if (action.payload.status === 200) {
+                    state.user = action.payload.user
+                }
+            })
+            .addCase(resendOtp.pending, (state) => {
+                state.loading = true
+                state.message = ''
+            })
+            .addCase(resendOtp.fulfilled, (state, action: PayloadAction<interfaces.resendOTPResponse>) => {
+                let toastify = toast.error;
+                if (action.payload.status === 200) {
+                    toastify = toast.success;
+                }
+                state.loading = false
+                toastify(action.payload.message, {
+                    position: 'top-center',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    style: {
+                        minWidth: '400px',
+                        fontSize: '14px'
+                    }
+                });
+            })
+    },
+});
+export const { resetState,setUser } = authSlice.actions;
+export default authSlice.reducer;

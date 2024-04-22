@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+.black-varient-1 {
+  background-color: #111;
+}
+
+:root {
+  --fireengine: #C51A1A;
+  --electricviolet: #451093;
+}
+
+.color-red:hover {
+  color: var(--fireengine); 
+  font-weight: 600;
+}
+.electric-violet {
+  background-color: #451093;
+}
+
+.border-violet {
+  border: 2px solid #8f00ff;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #222;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #15cc80; 
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+
+/* Show count information on hover */
+.relative:hover .absolute {
+  opacity: 1;
+}
