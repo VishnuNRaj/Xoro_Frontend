@@ -50,8 +50,3 @@ body {
   background: #555; 
 }
 
-
-/* Show count information on hover */
-.relative:hover .absolute {
-  opacity: 1;
-}

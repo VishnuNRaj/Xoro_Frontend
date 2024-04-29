@@ -19,6 +19,7 @@ import Camera from "./Assets/Post/PostPage1";
 function App() {
   return (
     <Router>
+      {/* <Offcanvas /> */}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<Home />} />

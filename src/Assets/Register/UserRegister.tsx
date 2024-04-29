@@ -65,7 +65,17 @@ const SignUpForm: React.FC = () => {
             return false;
         }
         const { Name, Email, Password, Phone } = Form;
-        dispatch(register({ Name, Email, Password, Phone }));
+        dispatch(register({ Name, Email, Password, Phone })).then((state: any) => {
+            if (state.payload.status === 200) {
+                SetForm({
+                    Name: "",
+                    Email: "",
+                    Password: "",
+                    Phone: null,
+                    ConfirmPassword: ""
+                })
+            }
+        })
     };
 
     if (loading) {
@@ -111,7 +121,7 @@ const SignUpForm: React.FC = () => {
                                 </center>
                             </div>
                             <div className="w-full float-left">
-                                <center><span onClick={()=>navigate('/login')} className='font-medium text-sm hover:text-green-700'>Already have an account ?</span></center>
+                                <center><span onClick={() => navigate('/login')} className='font-medium text-sm hover:text-green-700'>Already have an account ?</span></center>
                             </div>
                         </div>
                     </div>

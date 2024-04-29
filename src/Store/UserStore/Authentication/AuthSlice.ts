@@ -107,6 +107,19 @@ export const resendOtp = createAsyncThunk<interfaces.resendOTPResponse, interfac
     }
 )
 
+export const getTwoStep = createAsyncThunk<interfaces.getTwoStepResponse, interfaces.getTwoStep>(
+    'auth/getTwoStep',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await authService.getTwoStep(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.resendOTPResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
 
 const initialState: interfaces.AuthState = {
     user: null,
@@ -138,7 +151,22 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action: PayloadAction<interfaces.loginResponse>) => {
                 state.loading = false;
-                state.message = action.payload.message;
+                if(action.payload.status === 204) {
+                    toast.success(action.payload.message, {
+                        position: 'top-center',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: false,
+                        progress: undefined,
+                        style: {
+                            minWidth: '400px',
+                            fontSize: '14px'
+                        }
+                    });
+                    return ;
+                }
                 state.error = action.payload.errors;
                 state.user = action.payload.user;
             })
@@ -251,6 +279,15 @@ const authSlice = createSlice({
                         fontSize: '14px'
                     }
                 });
+            })
+            .addCase(getTwoStep.pending,(state)=>{
+                state.loading = true
+                state.message = ''
+            })
+            .addCase(getTwoStep.fulfilled,(state,action:PayloadAction<interfaces.getTwoStepResponse>)=>{
+                state.loading = false
+                state.message = action.payload.message
+                                
             })
     },
 });

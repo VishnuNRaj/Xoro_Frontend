@@ -73,7 +73,7 @@ const LoginForm: React.FC = () => {
             }
             toastify(state.payload.message, {
                 position: 'top-center',
-                autoClose: 3000,
+                autoClose: 1000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -94,8 +94,8 @@ const LoginForm: React.FC = () => {
 
     return (
         <>
-            <ToastContainer />
             <Offcanvas />
+            <ToastContainer />
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">

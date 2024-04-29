@@ -29,7 +29,7 @@ const ImgComponent: React.FC = () => {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 font-semibold">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 font-semibold">
             {post.map((item, index) => (
                 <div
                     key={index}
@@ -37,7 +37,7 @@ const ImgComponent: React.FC = () => {
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
                 >
-                    <img src={item.Images[0]} alt='' className='w-full h-auto rounded-md' />
+                    <img src={item.Images[0]} alt='' className='w-full h-[100%] rounded-md' />
                     <div className="absolute top-0 cursor-pointer right-0 p-2 text-black hover:text-white" onClick={() => handleMenuOpen(index)}>
                         <Menu placement="left-start" open={menuOpen && menuIndex === index}>
                             <MenuHandler>

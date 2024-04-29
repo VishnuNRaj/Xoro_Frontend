@@ -89,13 +89,13 @@ export const VerifyUserAuth: Function = async (data: interfaces.AuthVerifyUser):
         return <interfaces.AuthVerifyUserResponse>response.data;
     } catch (e) {
         console.error(e);
-        return < interfaces.AuthVerifyUserResponse>{
+        return <interfaces.AuthVerifyUserResponse>{
             message: 'Internal Server Error'
         };
     }
 };
 
-export const otpresend: Function = async (data:interfaces.resendOTP): Promise<interfaces.resendOTPResponse> => {
+export const otpresend: Function = async (data: interfaces.resendOTP): Promise<interfaces.resendOTPResponse> => {
     try {
         const response = await axios.post(`http://localhost:6700/user/resendotp/${data.UserId}`, data, {
             withCredentials: true
@@ -103,6 +103,22 @@ export const otpresend: Function = async (data:interfaces.resendOTP): Promise<in
         return <interfaces.resendOTPResponse>response.data
     } catch (e) {
         return <interfaces.resendOTPResponse>{
+            message: 'Internal Server Error',
+        }
+    }
+}
+
+export const getTwoStep: Function = async (data: interfaces.getTwoStep): Promise<interfaces.getTwoStepResponse> => {
+    try {
+        const response = await axios.post(`http://localhost:6700/user/get-twostep`, data, {
+            withCredentials: true,
+            headers: {
+                Authorization: `${data.token}`
+            }
+        })
+        return <interfaces.getTwoStepResponse>response.data
+    } catch (e) {
+        return <interfaces.getTwoStepResponse>{
             message: 'Internal Server Error',
         }
     }

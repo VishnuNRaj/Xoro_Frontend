@@ -37,7 +37,7 @@ export const Offcanvas: React.FC = memo(() => {
                 className="p-0 bg-black"
             >
                 <div>
-                    <button className="px-4 pt-4" onClick={closeDrawerLeft}><i className="fa fa-close text-blue-700 hover:text-purple-800"></i></button>
+                    <button className="px-4 pt-4" onClick={closeDrawerLeft}><i className="fa fa-close text-blue-700 hover:text-gray-600"></i></button>
                 </div>
                 <div className="mt-5  h-auto snap-center font-medium py-5">
                     <Buttons text={'Home'} route={'/'} />
@@ -58,7 +58,7 @@ export const Offcanvas: React.FC = memo(() => {
                                 </>
                             ) : (
                                 <center>
-                                    <button onClick={logout} className={`w-1/2 bg-red-700 p-2 px-3 h-full cursor-pointer rounded-2xl text-white hover:bg-red-800`}>Logout</button>
+                                    <button onClick={logout} className={`w-1/2 bg-red-500 p-2 px-3 h-full cursor-pointer rounded-2xl text-white hover:bg-red-800 `}>Logout</button>
                                 </center>
                             )}
                         </div>

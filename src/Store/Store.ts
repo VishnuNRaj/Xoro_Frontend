@@ -7,19 +7,23 @@ import AdminUserSlice, { resetAdminUserState } from './AdminStore/Management/Use
 import { UserManage } from './AdminStore/Management/UserManagement/Interfaces';
 import { PostState } from './UserStore/Post-Management/Interfaces';
 import postSlice from './UserStore/Post-Management/PostSlice';
+import { profileState } from './UserStore/ProfileManagement/interfaces';
+import profileSlice from './UserStore/ProfileManagement/profileSlice';
 
 interface RootReducerInterface {
   auth: AuthState;
   admin: AdminAuth;
-  adminuser:UserManage,
-  post:PostState
+  adminuser:UserManage;
+  post:PostState;
+  profile:profileState;
 }
 
 const rootReducer: Reducer<RootReducerInterface> = combineReducers({
   auth: authReducer,
   admin: authSliceAdmin,
   adminuser:AdminUserSlice,
-  post:postSlice
+  post:postSlice,
+  profile:profileSlice
 });
 
 

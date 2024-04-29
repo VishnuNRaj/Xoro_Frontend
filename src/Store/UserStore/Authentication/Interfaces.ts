@@ -30,7 +30,14 @@ export interface User {
     Favourites: string;
     ProfileLink: string;
     Posts:number;
+    Settings:{
+        Private:boolean;
+        Notifications:boolean;
+        BlockedUsers:any[];
+        Favourites:any[];
+    }
     Banner:string;
+    ProfileLock:boolean;
 }
 
 
@@ -122,4 +129,15 @@ export interface resendOTP {
 export interface resendOTPResponse {
     message: string;
     status: number;
+}
+
+export interface getTwoStep {
+    token:string;
+}
+
+export interface getTwoStepResponse {
+    message: string;
+    status:number
+    user:User;
+    TwoStepVerification:boolean;
 }
