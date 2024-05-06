@@ -44,6 +44,7 @@ export interface User {
 export interface LoginCredentials {
     Email: string;
     Password: string;
+    Type:string;
 }
 
 export interface RegisterCredentials {
@@ -51,6 +52,8 @@ export interface RegisterCredentials {
     Email: string;
     Password: string;
     Phone: string | null | number;
+    Profile?:string;
+    Type?:string;
 }
 
 export interface AuthState {

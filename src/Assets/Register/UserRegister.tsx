@@ -10,7 +10,23 @@ import { AppDispatch, RootState } from '../../Store/Store';
 import Preloader from '../Components/Preloader';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Google from '../Components/Google';
+import LinkedIn from '../Components/LinkedIn';
 
+
+const Validate: Function = ({ Form, errors, setErrors }: any) => {
+    const response: RegisterValidate = validateForm(Form);
+    if (!response.status) {
+        const error: ErrorForm = response.ErrorForm;
+        if (error.Main) {
+            setErrors({ ...errors, Main: error.Main });
+            return false;
+        }
+        setErrors(error);
+        return false;
+    }
+    return true
+}
 
 const SignUpForm: React.FC = () => {
     const navigate = useNavigate()
@@ -54,18 +70,32 @@ const SignUpForm: React.FC = () => {
     };
     const dispatch: AppDispatch = useDispatch()
     const userRegister = () => {
-        const response: RegisterValidate = validateForm(Form);
-        if (!response.status) {
-            const error: ErrorForm = response.ErrorForm;
-            if (error.Main) {
-                setErrors({ ...errors, Main: error.Main });
-                return false;
-            }
-            setErrors(error);
-            return false;
-        }
+        const response: boolean = Validate({ Form, errors, setErrors });
+        if (!response) return false
         const { Name, Email, Password, Phone } = Form;
-        dispatch(register({ Name, Email, Password, Phone })).then((state: any) => {
+        dispatch(register({ Name, Email, Password, Phone, Type: 'Email' })).then((state: any) => {
+            if (state.payload.status === 200) {
+                SetForm({
+                    Name: "",
+                    Email: "",
+                    Password: "",
+                    Phone: null,
+                    ConfirmPassword: ""
+                })
+            }
+        })
+    };
+
+    const socialMedia = (data: {
+        type: string;
+        user: RegisterForm;
+    }) => {
+        const { Email, Name, Password, Profile } = data.user;
+        console.log(Name, Email, Password)
+        const response: boolean = Validate({ Form: { Email, Name, Phone: null, type: data.type, Password, ConfirmPassword: Password }, errors, setErrors });
+        if (!response) return false
+        console.log(response, 'response')
+        dispatch(register({ Name, Email, Password, Phone: null, Type: data.type, Profile })).then((state: any) => {
             if (state.payload.status === 200) {
                 SetForm({
                     Name: "",
@@ -125,7 +155,14 @@ const SignUpForm: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
+                    <div className='w-full float-left' style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ marginRight: '10px' }}> {/* Add margin-right to create space between the buttons */}
+                            <Google socialMedia={socialMedia} />
+                        </div>
+                        <div>
+                            <LinkedIn />
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

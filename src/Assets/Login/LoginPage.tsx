@@ -12,6 +12,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { encryptUserID } from '../../Common';
+import Google from '../Components/Google';
+import LinkedIn from '../Components/LinkedIn';
 
 
 const LoginForm: React.FC = () => {
@@ -45,6 +47,40 @@ const LoginForm: React.FC = () => {
             Main: ""
         });
     };
+    const socialMedia = (data: {
+        type: string;
+        user: LoginFormInterface;
+    }) => {
+        const { Email, Password } = data.user;
+        dispatch(login({ Email, Password, Type: data.type })).then((state: any) => {
+            let userId = '';
+            let toastify = toast.error
+            if (state.payload.status === 200) {
+                userId = state.payload.user._id ? encryptUserID(state.payload.user._id) : '';
+                toastify = toast.success
+            }
+            if (state.payload.status === 210) {
+                Cookies.set('token', state.payload.message)
+                navigate('/')
+            }
+            toastify(state.payload.message, {
+                position: 'top-center',
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: false,
+                progress: undefined,
+                onClose: state.payload.status === 200 ? () => navigate('/otp/' + userId) : undefined,
+                style: {
+                    minWidth: '400px',
+                    fontSize: '14px'
+                }
+            });
+        })
+
+    };
+
     const { loading } = useSelector((state: RootState) => state.auth)
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
@@ -60,7 +96,7 @@ const LoginForm: React.FC = () => {
             return false
         }
         const { Email, Password } = Form
-        dispatch(login({ Email, Password })).then((state: any) => {
+        dispatch(login({ Email, Password, Type: 'Email' })).then((state: any) => {
             let userId = '';
             let toastify = toast.error
             if (state.payload.status === 200) {
@@ -117,7 +153,7 @@ const LoginForm: React.FC = () => {
                             </div>
                             <div className='float-left w-full md:w-full mb-4'>
                                 <center>
-                                    <button onClick={userLogin} className='w-full md:w-[300px] h-10 rounded-md bg-green-700 text-white font-semibold text-sm px-4 py-2'>Login</button>
+                                    <button onClick={userLogin} className='w-[80%] md:w-[80%] h-10 rounded-md bg-green-700 text-white font-semibold text-sm px-4 py-2'>Login</button>
                                 </center>
                             </div>
                             <div className="w-full md:w-1/2 float-left">
@@ -125,6 +161,14 @@ const LoginForm: React.FC = () => {
                             </div>
                             <div className="w-full md:w-1/2 float-left">
                                 <center><span className='font-medium text-sm float-none md:float-right hover:text-green-700'>Forgot Password ?</span></center>
+                            </div>
+                        </div>
+                        <div className='w-full float-left' style={{ display: 'flex', justifyContent: 'center' }}>
+                            <div style={{ marginRight: '10px' }}> {/* Add margin-right to create space between the buttons */}
+                                <Google socialMedia={socialMedia} />
+                            </div>
+                            <div>
+                                <LinkedIn />
                             </div>
                         </div>
                     </div>

@@ -6,9 +6,10 @@ import { Provider } from 'react-redux';
 import store from './Store/Store.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ThemeProvider>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </ThemeProvider>
+
+    <ThemeProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
 );

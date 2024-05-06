@@ -4,6 +4,8 @@ export interface RegisterForm {
     Password:string;
     ConfirmPassword:string;
     Phone:number | null;
+    Profile?:string;
+    type?:string;
 }
 
 export interface RegisterValidate {

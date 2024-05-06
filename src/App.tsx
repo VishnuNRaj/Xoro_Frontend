@@ -10,8 +10,9 @@ import AdminLoginOTP from "./Assets/AdminOTPLogin/AdminLoginOTP";
 import Dashboard from "./Assets/AdminDashboard/Dashboard";
 import UserManagement from "./Assets/AdminUserManagement/Usermanagement";
 import Profile from "./Assets/UserProfile/Profile";
-import Gallery from "./Assets/Post/PostPage2";
-import Camera from "./Assets/Post/PostPage1";
+// import Gallery from "./Assets/Post/PostPage2";
+import UploadCamera from "./Assets/Post/SelectPost";
+import ScreenCapture from "./Assets/Livestream";
 
 
 
@@ -31,9 +32,7 @@ function App() {
         <Route path="/admin/" element={<Dashboard />} />
         <Route path="/admin/users" element={<UserManagement />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/post/camera" element={<Camera />} />
-        <Route path="/post/gallery" element={<Gallery />} />
-        {/* <Route path="/post/upload/:imgDataString" element={<PostPage2 />} /> */}
+        <Route path="/post/" element={<UploadCamera />} />
       </Routes>
     </Router>
   );

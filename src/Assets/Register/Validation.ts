@@ -2,7 +2,8 @@ import { ErrorForm, RegisterForm, RegisterValidate } from "./RegisterInterface";
 
 
 export const validateForm = (form: RegisterForm): RegisterValidate => {
-    const { Name, Email, Password, Phone, ConfirmPassword } = form;
+    const { Name, Email, Password, Phone, ConfirmPassword,type } = form;
+    console.log(form)
     let ErrorForm = <ErrorForm>{
         Name: "",
         Email: "",
@@ -14,7 +15,7 @@ export const validateForm = (form: RegisterForm): RegisterValidate => {
 
     let check = true
 
-    if (!Name || !Email || !Phone || !ConfirmPassword) {
+    if (!Name || !Email || type === 'Email' && !ConfirmPassword) {
         ErrorForm.Main = 'Enter Valid Details'
         return { status: false, ErrorForm };
     }
@@ -44,7 +45,7 @@ export const validateForm = (form: RegisterForm): RegisterValidate => {
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(Password) && Password === ConfirmPassword) {
+    if (type === 'Email' && !passwordRegex.test(Password) && Password === ConfirmPassword) {
         check = false
         ErrorForm.Password = 'Password must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character';
     }
