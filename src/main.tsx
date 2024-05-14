@@ -9,7 +9,6 @@ import { googleConfig } from './Configs/googleConfig'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId={googleConfig.CliendID}>
-
     <ThemeProvider>
       <Provider store={store}>
         <App />
