@@ -8,7 +8,7 @@ import { UserManage } from './AdminStore/Management/UserManagement/Interfaces';
 import { PostState } from './UserStore/Post-Management/Interfaces';
 import postSlice from './UserStore/Post-Management/PostSlice';
 import { profileState } from './UserStore/ProfileManagement/interfaces';
-import profileSlice from './UserStore/ProfileManagement/profileSlice';
+import profileSlice from './UserStore/ProfileManagement/ProfileSlice';
 
 interface RootReducerInterface {
   auth: AuthState;

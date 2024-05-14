@@ -9,3 +9,12 @@ export const decryptUserID = (UserId: string | any) => {
     const decrypted = CryptoJS.AES.decrypt(decodeURIComponent(UserId), 'vishnu8240.achu@gmail.com').toString(CryptoJS.enc.Utf8);
     return decrypted;
 };
+
+// export const decodeData = async (data: string) => {
+//     const decrypted = {
+//         users:[],
+//         message:'Set',
+//         status:200
+//     }
+//     return decrypted;
+// }

@@ -1,7 +1,11 @@
 import { User } from "../Authentication/Interfaces";
 
 export interface PostImage {
-    Images: string[];
+    _id:string;
+    Images: {
+        postType:string,
+        link:string,
+    }[];
     Caption: string;
     Hashtags: string[];
     Tags: string[];
@@ -21,7 +25,7 @@ export interface PostState {
 }
 
 export interface addPost {
-    Images: string[];
+    Images: File[];
     Caption: string;
     Hashtags: string[];
     Tags: string[];
@@ -45,4 +49,14 @@ export interface showPostResponse {
     status: number;
     post?: PostImage[],
     user?: User | null;
+}
+
+export interface deletePost {
+    token:string;
+    PostId:string;
+}
+
+export interface deletePostResponse {
+    message:string;
+    status:number;
 }

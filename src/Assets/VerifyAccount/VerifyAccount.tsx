@@ -23,7 +23,7 @@ const VerifyAccount: React.FC = () => {
     const [RememberMe, setRememberMe] = useState<boolean>(true);
     const [show, setShow] = useState<string>('');
     const [Username, setUsername] = useState<string>('');
-    const [error, setError] = useState<string>('');
+    const [error] = useState<string>('');
     const navigate = useNavigate()
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -144,6 +144,7 @@ const VerifyAccount: React.FC = () => {
         return (
             <>
                 <Offcanvas />
+                {loading && <Preloader />}
                 <center><ToastContainer style={{ width: 'auto', marginTop: '100px' }} /></center>
                 <div className='mt-[100px]'>
                     <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-10 text-white '>
@@ -193,12 +194,9 @@ const VerifyAccount: React.FC = () => {
         )
     }
 
-    if (loading) {
-        return <Preloader />;
-    }
-
     return (
         <div>
+            {loading && <Preloader />}
             <ToastContainer style={{ width: 'auto' }} />
             <Offcanvas />
             <center>

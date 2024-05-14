@@ -38,3 +38,29 @@ export interface profileSettingsResponse {
     status:number;
     user:User;
 }
+
+export interface searchUsers {
+    token:string;
+    search:string;
+}
+
+export interface searchUsersResponse {
+    user?:User;
+    users?:Array<User>
+    message:string;
+    status:number;
+}
+
+export interface editProfile {
+    Name:string;
+    Username:string;
+    token:string;
+    Description:string[];
+}
+
+export interface editProfileResponse {
+    message:string;
+    status:number;
+    user:User;
+}
+

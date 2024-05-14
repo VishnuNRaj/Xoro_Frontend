@@ -1,5 +1,4 @@
 import { googleConfigInterface } from '../Interfaces/UserInterface'
-console.log(import.meta.env)
 
 export const googleConfig = <googleConfigInterface>{
     CliendID: import.meta.env.VITE_GOOGLE_CLIENT_ID || '',

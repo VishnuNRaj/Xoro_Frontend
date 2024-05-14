@@ -37,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                         )}
                         {user && (
                             <>
-                                <button onClick={() => navigate('/post/camera')} className="bg-blue-700 text-white rounded-full hover:bg-green-700 text-sm font-semibold px-3 mt-2  mx-4"><i className="fa fa-camera"></i> Upload</button>
+                                <button onClick={() => navigate('/post/')} className="bg-blue-700 text-white rounded-full hover:bg-green-700 text-sm font-semibold px-3 mt-2  mx-4"><i className="fa fa-camera"></i> Upload</button>
                                 <img src={user && user.Profile} className="w-8 mt-2 cursor-pointer rounded-full border-2 border-white h-8" onClick={() => navigate('/profile')} alt="" />
                                 <button type="button" className="text-white font-medium rounded-lg text-sm px-3 py-2 text-center cursor-pointer"><span className="text-pink-700 underline underline-offset-4" onClick={() => navigate('/profile')}>{user && user.Name}</span></button>
                             </>
@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                     <div className={`items-center justify-between w-full min-w-[300px] md:flex md:w-auto md:order-1 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-sticky">
                         <ul className="flex w-full flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:border-gray-700 float-left">
                             <li className="w-full">
-                                {user && <Search />}
+                                {/* {user && <Search />} */}
                             </li>
                         </ul>
                     </div>

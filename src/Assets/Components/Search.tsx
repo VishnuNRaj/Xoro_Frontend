@@ -1,14 +1,41 @@
 import React, { memo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+import { AppDispatch, } from '../../Store/Store';
+import { useDispatch,  } from 'react-redux';
+import { resetStateProfile, searchUsers } from "../../Store/UserStore/ProfileManagement/ProfileSlice";
 
 const Search: React.FC = memo(() => {
   const navigate = useNavigate()
   const [search, setSearch] = useState<string>('')
+  const dispatch: AppDispatch = useDispatch()
+
+  const searchUserData: Function = async (search: string) => {
+    const token = Cookies.get('token');
+    if (token) {
+      if (search.length > 0) {
+        dispatch(searchUsers({ token, search })).then((state: any) => {
+          console.log(state)
+          if (state.payload.status === 202) {
+            return navigate('/login')
+          }
+        })
+      } else {
+        return dispatch(resetStateProfile())
+      }
+    } else {
+      return navigate('/login')
+    }
+
+  }
+  // const { users, loadingProfile } = useSelector((state: RootState) => state.profile)
   return (
     <div className="w-full">
       <div className="relative w-full h-10">
         <div className="absolute grid w-5 h-5 place-items-center  top-2/4 right-3 -translate-y-2/4">
-          <i className="fa fa-search cursor-pointer text-white" onClick={() => navigate('/search/' + search)} aria-hidden="true"></i>
+          <i className="fa fa-search cursor-pointer text-white" onClick={()=>{
+            searchUserData(search)
+          }} aria-hidden="true"></i>
         </div>
         <input
           className="peer md:w-full w-[80%] h-full bg-transparent text-white font-sans font-medium outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-white placeholder-shown:border-t-white border focus:border-2 focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] !pr-9 focus:border-white"
@@ -20,6 +47,25 @@ const Search: React.FC = memo(() => {
           Search
         </label>
       </div>
+      {/* <div style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }} className='z-10 float-left w-full mt-1 rounded-lg bg-white sticky max-h-[80px] overflow-y-auto scroll-m-0 scroll-smooth'>
+        {users.length > 0 && search && users.map((user, index) => (
+          <div key={index}>
+            {loadingProfile && (
+              <div className='h-[80px]'>
+                <Preloader />
+              </div>
+            )}
+            {!loadingProfile && (
+              <div className={`w-full h-10 text-black float-left border-b-2`} >
+                <div className="float-left px-2 pt-1">
+                  <img src={user.Profile} className='w-8 h-8 rounded-full border-2 border-white' alt="" />
+                </div>
+                <h1 className='pt-4 font-semibold'>{user.Username}</h1>
+              </div>
+            )}
+          </div>
+        ))}
+      </div> */}
     </div>
   );
 })

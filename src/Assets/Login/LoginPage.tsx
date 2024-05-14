@@ -124,14 +124,12 @@ const LoginForm: React.FC = () => {
         })
     }
 
-    if (loading) {
-        return <Preloader />
-    }
 
     return (
         <>
             <Offcanvas />
             <ToastContainer />
+            {loading && <Preloader />}
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">

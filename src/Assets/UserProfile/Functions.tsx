@@ -1,9 +1,9 @@
-import { editProfilePic } from '../../Store/UserStore/ProfileManagement/profileSlice';
+import { editProfilePic } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { User } from '../../Store/UserStore/Authentication/Interfaces';
 import { AppDispatch } from '../../Store/Store';
-import { editBanner } from '../../Store/UserStore/ProfileManagement/profileSlice';
+import { editBanner } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 
 
 export const handleImages = async (e: React.ChangeEvent<HTMLInputElement>, profile: { Image: File | null; Show: string; }, setProfile: React.Dispatch<React.SetStateAction<{ Image: File | null; Show: string; }>>, user: User | null, dispatch: AppDispatch) => {

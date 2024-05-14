@@ -1,15 +1,12 @@
 import React from 'react';
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { googleConfig } from '../../Configs/googleConfig'
+
 interface props {
     socialMedia: Function;
 }
 const Google: React.FC<props> = ({ socialMedia }) => {
-    const { CliendID } = googleConfig
     const responseMessage = (response: CredentialResponse) => {
-        console.log('Login successful:', response);
         if (response.credential) {
             const userData: {
                 email: string;
@@ -17,8 +14,7 @@ const Google: React.FC<props> = ({ socialMedia }) => {
                 sub: string | number;
                 picture: string;
             } = jwtDecode(response.credential);
-            console.log(userData)
-            if (userData) {
+             if (userData) {
                 socialMedia({
                     type: 'Google',
                     user: {
@@ -31,9 +27,7 @@ const Google: React.FC<props> = ({ socialMedia }) => {
             }
         }
     };
-    console.log(googleConfig)
     return (
-        <GoogleOAuthProvider clientId={CliendID}>
             <div>
                 <GoogleLogin
                     onSuccess={responseMessage}
@@ -46,7 +40,6 @@ const Google: React.FC<props> = ({ socialMedia }) => {
                     ux_mode='popup'
                 />
             </div>
-        </GoogleOAuthProvider>
     );
 };
 

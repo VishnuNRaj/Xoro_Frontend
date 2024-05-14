@@ -3,12 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png'
 import { FormInput } from '../Components/Input';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../Store/Store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../Store/Store';
 import { AuthUser, OTPLogin, resendOtp } from '../../Store/UserStore/Authentication/AuthSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { decryptUserID } from '../../Common';
+import Preloader from '../Components/Preloader';
 interface Params {
     [key: string]: string | undefined;
 }
@@ -18,6 +19,7 @@ const OTPPage: React.FC = () => {
     const [RememberMe, setRememberMe] = useState<boolean>(false)
     let { UserId } = useParams<Params>();
     const dispatch: AppDispatch = useDispatch()
+    const { loading } = useSelector((state: RootState) => state.auth)
     const navigate = useNavigate()
     useEffect(() => {
         const token = Cookies.get('token')
@@ -58,6 +60,7 @@ const OTPPage: React.FC = () => {
         <>
             <Offcanvas />
             <ToastContainer />
+            {loading && <Preloader />}
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">

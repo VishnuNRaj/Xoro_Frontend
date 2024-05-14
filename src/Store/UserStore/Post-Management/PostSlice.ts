@@ -32,6 +32,21 @@ export const showPost = createAsyncThunk<interfaces.showPostResponse, interfaces
     }
 )
 
+export const deletePost = createAsyncThunk<interfaces.deletePostResponse, interfaces.deletePost>(
+    'post/deletePost',
+    async (credentials: interfaces.deletePost, { rejectWithValue }) => {
+        try {
+            const data = await postService.deletePost(credentials);
+            return data;
+        } catch (error) {
+            return rejectWithValue(<interfaces.addPostResponse>{
+                message: 'Internal Server Error',
+                status: 500
+            })
+        }
+    }
+)
+
 const initialState: interfaces.PostState = {
     loadingPost: false,
     message: '',
@@ -43,6 +58,9 @@ const postSlice = createSlice({
     reducers: {
         resetPostState: (state) => {
             Object.assign(state, initialState);
+        },
+        setPosts: (state,action) =>{
+            state.post = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -64,8 +82,15 @@ const postSlice = createSlice({
                 state.loadingPost = false;
                 state.post = action.payload.post ? action.payload.post : [];
             })
+            .addCase(deletePost.pending, (state) => {
+                state.loadingPost = true;
+                state.message = '';
+            })
+            .addCase(deletePost.fulfilled, (state) => {
+                state.loadingPost = false;
+            })
     },
 })
 
-export const { resetPostState } = postSlice.actions
+export const { resetPostState,setPosts } = postSlice.actions
 export default postSlice.reducer

@@ -1,10 +1,11 @@
 import axios from 'axios';
 import * as interfaces from './Interfaces'
+import config from '../../../Configs/config'
 
 
 export const login: Function = async (data: interfaces.LoginCredentials): Promise<interfaces.loginResponse> => {
     try {
-        const response = await axios.post('http://localhost:6700/user/login', data, {
+        const response = await axios.post(`${config.USER}/login`, data, {
             withCredentials: true
         })
         return <interfaces.loginResponse>response.data
@@ -20,7 +21,7 @@ export const login: Function = async (data: interfaces.LoginCredentials): Promis
 
 export const register: Function = async (data: interfaces.RegisterCredentials): Promise<interfaces.registerResponse> => {
     try {
-        const response = await axios.post('http://localhost:6700/user/register', data, {
+        const response = await axios.post(`${config.USER}/register`, data, {
             withCredentials: true
         })
         return <interfaces.registerResponse>response.data
@@ -35,7 +36,7 @@ export const register: Function = async (data: interfaces.RegisterCredentials): 
 
 export const verifyaccount: Function = async (data: interfaces.VerifyAccount): Promise<interfaces.verifyAccountResponse> => {
     try {
-        const response = await axios.get(`http://localhost:6700/user/verify-account/${data.VerificationLink}/${data.UserId}`, {
+        const response = await axios.get(`${config.USER}/verify-account/${data.VerificationLink}/${data.UserId}`, {
             withCredentials: true
         })
         return <interfaces.verifyAccountResponse>response.data
@@ -54,7 +55,7 @@ export const addProfile: Function = async (data: interfaces.AddProfilePic): Prom
         formData.append('Username', data.Username);
         formData.append('UserId', data.UserId ? data.UserId : '');
         formData.append('RememberMe', String(data.RememberMe));
-        const response = await axios.post(`http://localhost:6700/user/update-verify/${data.UserId}`, formData, {
+        const response = await axios.post(`${config.USER}/update-verify/${data.UserId}`, formData, {
             withCredentials: true
         })
         return <interfaces.addProfileResponse>response.data
@@ -67,7 +68,7 @@ export const addProfile: Function = async (data: interfaces.AddProfilePic): Prom
 
 export const otplogin: Function = async (data: interfaces.OTPVerify): Promise<interfaces.OTPVerifyResponse> => {
     try {
-        const response = await axios.post(`http://localhost:6700/user/otp/${data.UserId}`, data, {
+        const response = await axios.post(`${config.USER}/otp/${data.UserId}`, data, {
             withCredentials: true
         })
         return <interfaces.OTPVerifyResponse>response.data
@@ -80,7 +81,7 @@ export const otplogin: Function = async (data: interfaces.OTPVerify): Promise<in
 
 export const VerifyUserAuth: Function = async (data: interfaces.AuthVerifyUser): Promise<interfaces.AuthVerifyUserResponse> => {
     try {
-        const response = await axios.get('http://localhost:6700/user/verify', {
+        const response = await axios.get(`${config.USER}/verify`, {
             withCredentials: true,
             headers: {
                 Authorization: `${data.token}`
@@ -97,7 +98,7 @@ export const VerifyUserAuth: Function = async (data: interfaces.AuthVerifyUser):
 
 export const otpresend: Function = async (data: interfaces.resendOTP): Promise<interfaces.resendOTPResponse> => {
     try {
-        const response = await axios.post(`http://localhost:6700/user/resendotp/${data.UserId}`, data, {
+        const response = await axios.post(`${config.USER}/resendotp/${data.UserId}`, data, {
             withCredentials: true
         })
         return <interfaces.resendOTPResponse>response.data
@@ -110,7 +111,7 @@ export const otpresend: Function = async (data: interfaces.resendOTP): Promise<i
 
 export const getTwoStep: Function = async (data: interfaces.getTwoStep): Promise<interfaces.getTwoStepResponse> => {
     try {
-        const response = await axios.post(`http://localhost:6700/user/get-twostep`, data, {
+        const response = await axios.post(`${config.USER}/get-twostep`, data, {
             withCredentials: true,
             headers: {
                 Authorization: `${data.token}`
@@ -123,3 +124,4 @@ export const getTwoStep: Function = async (data: interfaces.getTwoStep): Promise
         }
     }
 }
+

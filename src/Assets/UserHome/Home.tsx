@@ -22,11 +22,10 @@ const Home: React.FC = () => {
             })
         }
     }, [])
-    if (loading) {
-        return <Preloader />
-    }
+    
     return (
         <>
+            {loading && <Preloader />}
             <Offcanvas />
         </>
     )

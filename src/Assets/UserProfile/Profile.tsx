@@ -56,14 +56,10 @@ const Profile: React.FC = () => {
                 setBanner({ ...banner, Show: state.payload.user.Banner })
                 dispatch(setUser(state.payload.user))
             });
-        }
+        } else navigate('/login')
     }, []);
 
     const [open, setOpen] = useState(false)
-
-    if (loadingPost || loading || loadingProfile) {
-        return <Preloader />;
-    }
 
     return (
         <div>
@@ -71,6 +67,9 @@ const Profile: React.FC = () => {
             <ToastContainer />
             <Toaster />
             {open && <SecureAccount open={open} setOpen={setOpen} />}
+            {loadingPost || loading || loadingProfile ? (
+                <Preloader />
+            ) : <></>}
             <center>
                 <div className="container h-screen rounded-xl bg-[#000] mt-24 relative">
                     {/* Banner */}

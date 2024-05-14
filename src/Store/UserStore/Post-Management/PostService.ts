@@ -1,12 +1,27 @@
 import axios from "axios";
 import * as interfaces from "./Interfaces";
+import config from "../../../Configs/config";
 
-export const addPost: Function = async (data:interfaces.addPost):Promise<interfaces.addPostResponse> => {
+
+export const addPost: Function = async (data: interfaces.addPost): Promise<interfaces.addPostResponse> => {
     try {
-        const response = await axios.post('http://localhost:6700/post/add-post', data,{
-            headers:{
+        const form = new FormData();
+
+        form.append('Caption', data.Caption);
+        data.Hashtags.forEach((tag, index) => {
+            form.append(`HashTags${index}`, tag);
+        });
+        data.Tags.forEach((tag, index) => {
+            form.append(`Tags${index}`, tag);
+        });
+
+        data.Images.forEach((media) => {
+            form.append(`Media`, media);
+        });
+
+        const response = await axios.post(`${config.POST}/add-post`, form, {
+            headers: {
                 Authorization: `${data.token}`,
-                'Content-Type': 'application/json'
             }
         });
         return response.data
@@ -17,10 +32,10 @@ export const addPost: Function = async (data:interfaces.addPost):Promise<interfa
     }
 }
 
-export const showPost:Function = async (data: interfaces.showPost): Promise<interfaces.showPostResponse> => {
+export const showPost: Function = async (data: interfaces.showPost): Promise<interfaces.showPostResponse> => {
     try {
-        const response = await axios.get('http://localhost:6700/post/',{
-            headers:{
+        const response = await axios.get(`${config.POST}/`, {
+            headers: {
                 Authorization: `${data.token}`,
             }
         });
@@ -32,3 +47,18 @@ export const showPost:Function = async (data: interfaces.showPost): Promise<inte
     }
 }
 
+export const deletePost: Function = async (data: interfaces.deletePost) => {
+    try {
+        const response = await axios.get(`${config.POST}/delete/${data.PostId}`, {
+            headers: {
+                Authorization: `${data.token}`,
+            }
+        });
+        return response.data
+    } catch (e) {
+        return <interfaces.deletePostResponse>{
+            message: 'Internal Server Error',
+            status: 500,
+        }
+    }
+}

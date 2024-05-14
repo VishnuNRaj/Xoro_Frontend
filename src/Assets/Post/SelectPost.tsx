@@ -25,9 +25,9 @@ const UploadCamera: React.FC = () => {
             })
         } else navigate('/login')
     }, [])
-    if (loading) return <Preloader />
     return (
         <div>
+            {loading && <Preloader />}
             <div>
                 <Offcanvas />
             </div>
