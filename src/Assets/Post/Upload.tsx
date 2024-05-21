@@ -182,7 +182,7 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
                 </div>
                 <div className="w-[90%] mt-5">
                   <FormInput error={error.Caption} label={'Hashtags'} name={'Hashtags'} placeholder={'Enter Hashtags'} type={'text'} onChange={(e) => SetForm({ ...Form, Hashtags: e.target.value })} value={Form.Hashtags} width={'w-4/5 float-left'} />
-                  <button className='bg-green-700 w-10 h-11 text-white float-left mx-2 rounded-md' onClick={() => {
+                  <button className='bg-blue-700 w-10 h-11 text-white float-left mx-2 rounded-md' onClick={() => {
                     let value = Form.Hashtags.trim().split('#')[1]
                     if (value) {
                       setHash([...hashTag, value])
@@ -256,11 +256,8 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
                   </div>
                 </div>
 
-
-
-
                 <div className='w-full inline-block'>
-                  <button onClick={upload} className='bg-green-700 text-white p-2 px-3 rounded-md mt-5'>Upload</button>
+                  <button onClick={upload} className='bg-blue-700 text-white p-2 px-3 rounded-md mt-5'>Upload</button>
                 </div>
               </div>
             </center>

@@ -1,5 +1,5 @@
 import React, { useState, Fragment, memo } from "react";
-import { Navbar } from "./Navbar";
+import Navbar from "./Navbar";
 import Buttons from "./Buttons";
 import { Drawer } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ export const Offcanvas: React.FC = memo(() => {
     const [openLeft, setOpenLeft] = useState<boolean>(false);
     const openDrawerLeft = () => setOpenLeft(true);
     const closeDrawerLeft = () => setOpenLeft(false);
-    const { user, loading } = useSelector((state: RootState) => state.auth)
+    const { user } = useSelector((state: RootState) => state.auth)
     const navigate = useNavigate()
     const dispatch: AppDispatch = useDispatch()
     const logout = () => {
@@ -63,8 +63,7 @@ export const Offcanvas: React.FC = memo(() => {
                 placement="left"
                 open={openLeft}
                 onClose={closeDrawerLeft}
-                className="p-0 bg-black"
-            >
+                className="p-0 bg-black" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}            >
                 <div>
                     <button className="px-4 pt-4" onClick={closeDrawerLeft}><i className="fa fa-close text-blue-700 hover:text-gray-600"></i></button>
                 </div>

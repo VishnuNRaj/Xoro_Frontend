@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const profileState: interfaces.profileState = {
     loadingProfile: false,
     users: [],
+    posts: []
 }
 
 export const editProfilePic = createAsyncThunk<interfaces.EditProfilePicResponse, interfaces.EditProfilePic>(
@@ -74,7 +75,47 @@ export const editProfile = createAsyncThunk<interfaces.editProfileResponse, inte
     }
 )
 
-// export const searchData = createAsyncThunk<>()
+export const getProfile = createAsyncThunk<interfaces.getProfileResponse, interfaces.getProfile>(
+    'profile/getProfile',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.getProfile(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.getProfileResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
+export const followUser = createAsyncThunk<interfaces.followUserResponse, interfaces.followUser>(
+    'profile/followUser',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.followUser(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.followUserResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
+export const unfollowUser = createAsyncThunk<interfaces.followUserResponse, interfaces.followUser>(
+    'profile/unfollowUser',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.unFollowUser(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.followUserResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
 
 type ToastType = 'warning' | 'error' | 'success' | 'info';
 
@@ -135,7 +176,19 @@ const profileSlice = createSlice({
             .addCase(editProfile.pending, (state) => {
                 state.loadingProfile = true;
             })
-            .addCase(editProfile.fulfilled, (state, action: PayloadAction<interfaces.editProfileResponse>) => {
+            .addCase(editProfile.fulfilled, (state) => {
+                state.loadingProfile = false;
+            })
+            .addCase(followUser.pending, (state) => {
+                state.loadingProfile = true;
+            })
+            .addCase(followUser.fulfilled, (state) => {
+                state.loadingProfile = false;
+            })
+            .addCase(unfollowUser.pending, (state) => {
+                state.loadingProfile = true;
+            })
+            .addCase(unfollowUser.fulfilled, (state) => {
                 state.loadingProfile = false;
             })
     }

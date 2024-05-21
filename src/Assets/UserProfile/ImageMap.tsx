@@ -34,7 +34,7 @@ const ImgComponent: React.FC = () => {
     };
 
     if (!post || post.length === 0) {
-        return <div className="text-center font-semibold text-xl">No posts available</div>;
+        return <div className="text-center font-semibold text-xl">Upload Feeds</div>;
     }
 
     return (
@@ -49,9 +49,9 @@ const ImgComponent: React.FC = () => {
                     {item.Images[0].postType === 'image' ? (
                         <img src={item.Images[0].link} alt='' onClick={() => {
                             setShow(post[index])
-                        }} className='w-full h-[100%] rounded-md' />
+                        }} className='object-cover border-2 border-gray-400 overflow-hidden aspect-square cursor-pointer rounded-md' />
                     ) : (
-                        <video onClick={() => {
+                        <video className='cursor-pointer' onClick={() => {
                             setShow(post[index])
                         }} src={item.Images[0].link} controls></video>
                     )}

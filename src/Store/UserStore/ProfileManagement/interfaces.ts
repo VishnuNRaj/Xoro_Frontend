@@ -1,8 +1,10 @@
 import { User } from "../Authentication/Interfaces";
+import { PostImage } from "../Post-Management/Interfaces";
 
 export interface profileState {
     loadingProfile:boolean;
     users:User[];
+    posts:PostImage[];
 }
 export interface EditProfilePic {
     Image:File;
@@ -64,3 +66,27 @@ export interface editProfileResponse {
     user:User;
 }
 
+export interface getProfile {
+    token:string;
+    ProfileLink:string;
+}
+
+export interface getProfileResponse {
+    message:string;
+    status:number;
+    user:User;
+    userData:User;
+    post:{
+        Images:PostImage[]
+    }
+}
+
+export interface followUser {
+    token:string;
+    UserId:string;
+}
+
+export interface followUserResponse {
+    message:string;
+    status:number;
+}

@@ -1,125 +1,121 @@
 import React, { useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '../../Store/Store';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Preloader from '../Components/Preloader';
 import { Offcanvas } from '../Components/Canvas';
-import { showPost } from '../../Store/UserStore/Post-Management/PostSlice';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
 import ImgComponent from './ImageMap';
 import { ToastContainer } from 'react-toastify';
-import { handleBanner, handleImages } from './Functions';
-import {
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
-} from "@material-tailwind/react";
 import { Toaster } from 'react-hot-toast'
-import SecureAccount from './SecureAccount';
+import { User } from '../../Store/UserStore/Authentication/Interfaces';
+import { followUser, getProfile, unfollowUser } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
+import { PostImage } from '../../Store/UserStore/Post-Management/Interfaces';
+import { useSocket } from '../../Socket';
 
 
-const Profile: React.FC = () => {
+const OtherProfiles: React.FC = () => {
     const navigate = useNavigate();
     const dispatch: AppDispatch = useDispatch();
-
-    const { user, loading } = useSelector((state: RootState) => state.auth);
-    const { loadingPost } = useSelector((state: RootState) => state.post);
+    const socket = useSocket()
+    const [userData, setUserData] = useState<User | null>(null)
+    const [post, setPost] = useState<{
+        Images: PostImage[]
+    } | null>(null)
+    const { loading, user } = useSelector((state: RootState) => state.auth);
     const { loadingProfile } = useSelector((state: RootState) => state.profile);
     const [type, setType] = useState<string>('Images')
-
-    const [profile, setProfile] = useState<{
-        Image: File | null;
-        Show: string;
+    const [Connection, setConnection] = useState<{
+        Following: boolean;
+        Follower: boolean;
     }>({
-        Image: null,
-        Show: ''
+        Following: false,
+        Follower: false
     })
-
-    const [banner, setBanner] = useState<{
-        Image: File | null;
-        Show: string;
-    }>({
-        Image: null,
-        Show: ''
-    })
-
+    const { ProfileLink } = useParams()
     useEffect(() => {
         const token = Cookies.get('token');
-        if (token) {
-            dispatch(showPost({ token })).then((state: any) => {
+        if (token && ProfileLink) {
+            dispatch(getProfile({ token, ProfileLink })).then((state: any) => {
                 if (!state.payload.user) {
                     navigate('/login');
                 }
-                setProfile({ ...profile, Show: state.payload.user.Profile })
-                setBanner({ ...banner, Show: state.payload.user.Banner })
+                if (!state.payload.userData) navigate(-1)
+                let data: User = state.payload.userData
+                console.log(state.payload.post)
                 dispatch(setUser(state.payload.user))
+                setUserData(data);
+                setConnection({
+                    Following: data.connections[0].Following.some((connection) => connection === state.payload.user._id),
+                    Follower: data.connections[0].Followers.some((connection) => connection === state.payload.user._id)
+                });
+                if (!state.payload.userData.Settings.Private) setPost(state.payload.post)
             });
-        } else navigate('/login')
-    }, []);
+        } else if (!ProfileLink) navigate(-1);
+    }, [ProfileLink]);
 
-    const [open, setOpen] = useState(false)
+
 
     return (
         <div className='font-semibold'>
             <Offcanvas />
             <ToastContainer />
             <Toaster />
-            {open && <SecureAccount open={open} setOpen={setOpen} />}
-            {loadingPost || loading || loadingProfile ? (
+            {loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}
             <center>
                 <div className="container h-screen rounded-xl bg-[#000] mt-24 relative">
                     {/* Banner */}
                     <div className=''>
-                        {user?.Banner && (
+                        {userData?.Banner && (
                             <div>
-                                <img src={banner.Show} className="absolute top-0 left-0 w-full h-40 object-cover rounded-t-xl" alt="Banner" />
-                                <div className="absolute -mt-5 left-[90%] right-0 flex justify-center cursor-pointer">
-                                    <Menu>
-                                        <MenuHandler>
-                                            <button className='w-8 h-8 rounded-full bg-blue-700 text-white'><i className="fa fa-gear"></i></button>
-                                        </MenuHandler>
-                                        <MenuList className='space-y-2' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                                            <MenuItem className='hover:bg-blue-500 rounded-full hover:text-white' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                                                <label htmlFor="banner-upload" className="cursor-pointer">
-                                                    <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2 mr-3"></i> Change Banner
-                                                    <input id="banner-upload" onChange={(e) => handleBanner(e, banner, setBanner, user, dispatch)} type="file" className="hidden" />
-                                                </label>
-                                            </MenuItem>
-                                            <MenuItem className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-lock bg-blue-500 rounded-full p-2 px-3 mr-4'></i>Secure Account</MenuItem>
-                                            <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Profile Settings</MenuItem>
-                                            {!user.Channel ? (
-                                                <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Create Channel</MenuItem>
-
-                                            ) : (
-                                                <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Edit Channel</MenuItem>
-                                            )}
-                                        </MenuList>
-                                    </Menu>
-                                </div>
+                                <img src={userData.Banner} className="absolute top-0 left-0 w-full h-40 object-cover rounded-t-xl" alt="Banner" />
                             </div>
                         )}
 
                         <div className="row p-8 gap-8 text-white font-semibold relative">
                             {/* Profile Image */}
                             <div className="h-full w-2/4 lg:w-1/6 relative">
-                                {user && user.ProfileLock && (
+                                {userData && userData.ProfileLock && (
                                     <div className="absolute -mt-2 left-0 right-0 flex justify-center">
                                         <i className="fa fa-lock w-8 h-8 cursor-pointer text-white bg-green-700 rounded-full p-2"></i>
                                     </div>
                                 )}
-                                <div className="rounded-full flex-auto w-40 h-40 mt-10 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${profile.Show})` }} ></div>
-                                <div className="absolute -mt-2 left-0 right-0 flex justify-center">
-                                    <label htmlFor="profile-upload" className="cursor-pointer">
-                                        <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2"></i>
-                                    </label>
-                                    <input id="profile-upload" onChange={(e) => handleImages(e, profile, setProfile, user, dispatch)} type="file" className="hidden" />
-                                </div>
+                                <div className="rounded-full flex-auto w-40 h-40 mt-10 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${userData?.Profile})` }} ></div>
                             </div>
-
+                            {user && user._id !== userData?._id && (
+                                <>
+                                    {userData && Connection.Follower && (
+                                        <div className="w-[220px] flex">
+                                            <div className='w-[100px] mt-5'>
+                                                <button onClick={() => {
+                                                    const token = Cookies.get('token');
+                                                    if (token) dispatch(unfollowUser({ token, UserId: userData._id })).then((() => {
+                                                        setConnection({...Connection,Follower:false})
+                                                    }))
+                                                }} className='w-full py-2 flex items-center justify-center bg-pink-700 rounded-full'>Unfollow</button>
+                                            </div>
+                                            <div className='w-[100px] mt-5 ml-[20px]'>
+                                            <button className='w-full py-2 flex items-center justify-center bg-blue-700 rounded-full'>Message</button>
+                                        </div>
+                                        </div>
+                                    )}
+                                    {userData && !Connection.Follower && (
+                                        <div className='w-[100px] mt-5'>
+                                            <button onClick={() => {
+                                                const token = Cookies.get('token');
+                                                if (token) dispatch(followUser({ token, UserId: userData._id })).then((state:any)=>{
+                                                    if(!userData.Settings.Private) setConnection({...Connection,Follower:true})
+                                                    if(socket) socket.emit('notification',{data:state.payload.notification,UserId:userData._id})
+                                                })
+                                                else navigate('/login')
+                                            }} className='w-full py-2 flex items-center justify-center bg-green-700 rounded-full'>Follow</button>
+                                        </div>
+                                    )}
+                                </>
+                            )}
                             <div className="w-full rounded-2xl mt-20 md:mt-0 bg-[#000] float-left">
                                 {/* names */}
                                 <div className="h-full w-full md:w-1/4 float-left">
@@ -128,13 +124,13 @@ const Profile: React.FC = () => {
                                             <li>
                                                 <div className="p-2 float-left w-full">
                                                     <div className="text-lg w-full float-left font-semibold align-middle">
-                                                        <h1 className='text-black'>{user?.Name} <button className='bg-blue-700  text-black p-1 px-2 rounded-full'><center><i className='fa fa-edit font-semibold'></i></center></button>
+                                                        <h1 className='text-black'>{userData?.Name} <button className='bg-blue-700  text-black p-1 px-2 rounded-full'><center><i className='fa fa-edit font-semibold'></i></center></button>
                                                         </h1>
                                                     </div>
                                                 </div>
                                                 <div className=" float-left  w-full rounded-full mt-4">
                                                     <center>
-                                                        <h1 className='bg-blue-700 font-bold rounded-full'>@{user?.Username}</h1>
+                                                        <h1 className='bg-blue-700 font-bold rounded-full'>@{userData?.Username}</h1>
                                                     </center>
                                                 </div>
                                             </li>
@@ -152,15 +148,15 @@ const Profile: React.FC = () => {
                                                             <div className="flex justify-around space-x-4">
                                                                 <div className="text-center">
                                                                     <h1>Followers</h1>
-                                                                    <p>{user?.Followers}</p>
+                                                                    <p>{userData?.Followers}</p>
                                                                 </div>
                                                                 <div className="text-center">
                                                                     <h1>Following</h1>
-                                                                    <p>{user?.Following}</p>
+                                                                    <p>{userData?.Following}</p>
                                                                 </div>
                                                                 <div className="text-center">
                                                                     <h1>Posts</h1>
-                                                                    <p>{user?.Posts}</p>
+                                                                    <p>{userData?.Posts}</p>
                                                                 </div>
                                                             </div>
                                                         </center>
@@ -175,15 +171,15 @@ const Profile: React.FC = () => {
                                 <center>
                                     <div className='w-full px-[25%] mt-50 float-left'>
                                         {/* <h1 className='underline p-5'>Description</h1> */}
-                                        {user?.Description.length === 0 ? (
+                                        {userData?.Description.length === 0 ? (
                                             <>
                                                 <button className='p-2 px-3 bg-pink-700'> <i className='fa fa-plus'></i> Add Description</button>
                                             </>
                                         ) : (
                                             <>
-                                                {user && user?.Description.length > 0 && (
+                                                {userData && userData?.Description.length > 0 && (
                                                     <ul>
-                                                        {user.Description.map((description, index) => (
+                                                        {userData.Description.map((description, index) => (
                                                             <li key={index}>{description}</li>
                                                         ))}
                                                     </ul>
@@ -208,7 +204,7 @@ const Profile: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="w-full p-5 float-left mt-10 bg-[#111]">
-                                    {type === 'Images' && <ImgComponent />}
+                                    {type === 'Images' && post && <ImgComponent post={post.Images} />}
                                 </div>
                             </div>
                         </div>
@@ -219,4 +215,4 @@ const Profile: React.FC = () => {
     );
 };
 
-export default Profile;
+export default OtherProfiles;

@@ -6,13 +6,16 @@ import { Provider } from 'react-redux';
 import store from './Store/Store.ts'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { googleConfig } from './Configs/googleConfig'
+import { SocketProvider } from './Socket.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId={googleConfig.CliendID}>
     <ThemeProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <SocketProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </SocketProvider>
     </ThemeProvider>
   </GoogleOAuthProvider>
 

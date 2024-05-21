@@ -77,3 +77,43 @@ export const editProfile: Function = async (data: interfaces.editProfile) => {
         return { message: 'Internal Server Error' }
     }
 }
+
+export const getProfile: Function = async (data: interfaces.getProfile) => {
+    try {
+        const response = await axios.get(`${config.PROFILE}/${data.ProfileLink}`, {
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data;
+    } catch (e) {
+        return { message: 'Internal Server Error' }
+    }
+}
+
+export const followUser: Function = async (data: interfaces.followUser) => {
+    try {
+        const response = await axios.post(`${config.PROFILE}/follow/${data.UserId}`,null ,{
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data;
+    } catch (e) {
+        return { message: 'Internal Server Error' }
+    }
+}
+
+export const unFollowUser: Function = async (data: interfaces.followUser) => {
+    try {
+        console.log(data)
+        const response = await axios.post(`${config.PROFILE}/unfollow/${data.UserId}`,null, {
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data;
+    } catch (e) {
+        return { message: 'Internal Server Error' }
+    }
+}

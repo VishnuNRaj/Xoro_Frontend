@@ -1,3 +1,20 @@
+export interface Connections {
+    UserId: string;
+    _id: string;
+    Followers: string[];
+    Following: string[];
+    FollowRequest: string[];
+    FollowRequests: string[];
+}
+
+export interface Notification {
+    Type: string;
+    Message: string;
+    Time: Date;
+    Link: string;
+    Username: string;
+    Seen: boolean;
+}
 export interface User {
     _id: string;
     Name: string;
@@ -29,22 +46,25 @@ export interface User {
     Description: string[];
     Favourites: string;
     ProfileLink: string;
-    Posts:number;
-    Settings:{
-        Private:boolean;
-        Notifications:boolean;
-        BlockedUsers:any[];
-        Favourites:any[];
+    Posts: number;
+    Settings: {
+        Private: boolean;
+        Notifications: boolean;
+        BlockedUsers: any[];
+        Favourites: any[];
     }
-    Banner:string;
-    ProfileLock:boolean;
+    Banner: string;
+    ProfileLock: boolean;
+    Channel:boolean;
+    connections: Connections[];
+    notifications: Notification[];
 }
 
 
 export interface LoginCredentials {
     Email: string;
     Password: string;
-    Type:string;
+    Type: string;
 }
 
 export interface RegisterCredentials {
@@ -52,22 +72,22 @@ export interface RegisterCredentials {
     Email: string;
     Password: string;
     Phone: string | null | number;
-    Profile?:string;
-    Type?:string;
+    Profile?: string;
+    Type?: string;
 }
 
 export interface AuthState {
     user: User | null;
     loading: boolean;
     error: string[];
-    message:string;
+    message: string;
 }
 
 export interface loginResponse {
     message: string,
     errors: string[] | [];
     status: number;
-    user?:any;
+    user?: any;
 }
 
 export interface registerResponse {
@@ -77,29 +97,29 @@ export interface registerResponse {
 }
 
 export interface VerifyAccount {
-    VerificationLink:string;
+    VerificationLink: string;
     UserId: string;
 }
 
 export interface verifyAccountResponse {
     message: string;
-    status:number;
+    status: number;
     token: string;
-    user:any
+    user: any
 }
 
 export interface AddProfilePic {
-    Profile:File | null | string;
-    Username:string;
-    RememberMe:boolean;
-    UserId?:string;
+    Profile: File | null | string;
+    Username: string;
+    RememberMe: boolean;
+    UserId?: string;
 }
 
 export interface addProfileResponse {
-    message:string;
-    token:string;
-    status:number;
-    user?:any;
+    message: string;
+    token: string;
+    status: number;
+    user?: any;
 }
 
 export interface OTPVerify {
@@ -110,13 +130,13 @@ export interface OTPVerify {
 
 export interface OTPVerifyResponse {
     message: string;
-    user?:any;
+    user?: any;
     status: number;
     token: string;
 }
 
 export interface AuthVerifyUser {
-    token:string;
+    token: string;
 }
 
 export interface AuthVerifyUserResponse {
@@ -126,7 +146,7 @@ export interface AuthVerifyUserResponse {
 }
 
 export interface resendOTP {
-    UserId:string;
+    UserId: string;
 }
 
 export interface resendOTPResponse {
@@ -135,12 +155,12 @@ export interface resendOTPResponse {
 }
 
 export interface getTwoStep {
-    token:string;
+    token: string;
 }
 
 export interface getTwoStepResponse {
     message: string;
-    status:number
-    user:User;
-    TwoStepVerification:boolean;
+    status: number
+    user: User;
+    TwoStepVerification: boolean;
 }

@@ -1,4 +1,5 @@
 interface configuration {
+    BASE:string;
     USER: string;
     ADMIN: string;
     POST: string;
@@ -9,6 +10,7 @@ interface configuration {
 
 
 const config: configuration = {
+    BASE:import.meta.env.VITE_APP_BASE_URL,
     USER: import.meta.env.VITE_APP_USER_API_URL,
     ADMIN: import.meta.env.VITE_APP_ADMIN_API_URL,
     POST: import.meta.env.VITE_APP_POST_API_URL,

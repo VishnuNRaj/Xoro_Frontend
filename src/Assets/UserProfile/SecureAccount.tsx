@@ -80,22 +80,18 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
     }
     return (
         <div>
-            <Dialog open={open} size='xs' className='w-[200px]'>
-                <div className='float-left w-[50px] bg-white'>
-                    <div className='w-full float-left'>
-                        <button onClick={() => setOpen(false)} className='hover:bg-red-700 hover:text-white w-[50px] h-[50px] float-right'>
+            <Dialog open={open} size='xs' className='bg-[#111]'>
+                <div className="flex justify-between bg-[#111]">
+                    <div className="float-left w-full bg-[#111] ">
+                        <button onClick={() => setOpen(false)} className='hover:bg-red-700 hover:text-white w-[50px] h-[50px] float-left'>
                             <i className='fa fa-times'></i>
                         </button>
-                    </div>
-                    <div className='w-full float-left'>
-                        <button onClick={() => {
-                            setState('Edit')
-                        }} className={`w-full float-left h-[50px] ${state === 'Edit' ? 'bg-green-700' : 'bg-black'} text-white`}> <i className='fa fa-edit'></i> </button>
-                    </div>
-                    <div className='w-full float-left'>
-                        <button onClick={() => {
-                            setState('Settings')
-                        }} className={`w-full float-left h-[50px] ${state === 'Settings' ? 'bg-green-700' : 'bg-black'} text-white`}> <i className='fa fa-gear'></i> </button>
+                        <button onClick={() => setState('Edit')} className={`w-[50px] float-left h-[50px] ${state === 'Edit' ? 'bg-green-700' : 'bg-blue-700'} text-white`}>
+                            <i className='fa fa-edit'></i>
+                        </button>
+                        <button onClick={() => setState('Settings')} className={`w-[50px] float-left h-[50px] ${state === 'Settings' ? 'bg-green-700' : 'bg-blue-700'} text-white`}>
+                            <i className='fa fa-gear'></i>
+                        </button>
                     </div>
                 </div>
                 <div className='float-left'>
@@ -131,25 +127,27 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
                         </>
                     )}
                     {state === 'Edit' && (
-                        <>
-                            <div className='min-w-[300px] max-w-[420px] float-left mt-[50px] px-5 pb-5'>
+                        <>  <div className="w-full mt-2 justify-center text-center text-2xl text-white font-semibold underline underline-offset-4">
+                            <h1 >Edit Profile</h1>
+                        </div>
+                            <div className='float-left mt-4 px-5 pb-5'>
                                 <div className="w-full float-left ">
                                     <input type="text" onChange={(e) => {
                                         setEdit({ ...edit, Name: e.target.value })
-                                    }} className=' w-full text-black border-2 border-blue-700 bg-gray-300 float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Name} placeholder='Enter Name' />
+                                    }} className=' w-full text-black border-2 border-blue-700 bg-white float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Name} placeholder='Enter Name' />
                                 </div>
                                 <div className="w-full float-left mt-3">
                                     <input type="text" onChange={(e) => {
                                         setEdit({ ...edit, Username: e.target.value })
-                                    }} className=' w-full text-black border-2 border-blue-700 bg-gray-300 float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Username} placeholder='Enter Username' />
+                                    }} className=' w-full text-black border-2 border-blue-700 bg-white float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Username} placeholder='Enter Username' />
                                 </div>
                                 <div className='w-full inline-block float-left mt-4'>
                                     <input type="text" onChange={(e) => {
                                         setEdit({ ...edit, Description: e.target.value })
-                                    }} className=' w-[80%] text-black border-2 border-blue-700 bg-gray-300 float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Description} placeholder='Enter Description' />
-                                    <button className='bg-green-700 w-10 h-10 ml-4 text-white float-left rounded-md' onClick={() => {
+                                    }} className=' w-[88%] text-black border-2 border-blue-700 bg-white float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Description} placeholder='Add Description' />
+                                    <button className='bg-blue-700 w-[8%] h-10 ml-4 text-white float-left rounded-md' onClick={() => {
                                         if (edit.Description.length > 0) {
-                                            setDescription([...Description,edit.Description]);
+                                            setDescription([...Description, edit.Description]);
                                             setEdit({ ...edit, Description: '' })
                                         }
                                     }} ><i className='fa fa-plus'></i></button>
@@ -158,7 +156,7 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
                                             <div key={index} className='bg-gray-200 mt-2 float-left p-2 px-3 rounded-md text-gray-900'>
                                                 <p className='float-left'>{tag}</p>
                                                 <button onClick={() => {
-                                                    setDescription(Description.filter((item, i) => i!== index))
+                                                    setDescription(Description.filter((item, i) => i !== index))
                                                 }} className='bg-red-700 w-7 h-7 text-white float-left mx-2 rounded-md'><i className='fa fa-times'></i></button>
                                             </div>
                                         ))}
@@ -176,11 +174,11 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
                                     <input type="text" className=' w-full text-black border-2 border-blue-700 bg-gray-300 float-left h-[40px] p-2 px-5 rounded-md font-semibold' value={edit.Country} placeholder='Add Country' />
                                 </div> */}
                                 <center>
-                                    <button className='p-2 px-3 text-white font-semibold inline-block bg-green-700 rounded-md mt-5' onClick={() => {
+                                    <button className='p-2 px-3 text-white font-semibold inline-block bg-blue-700 rounded-md mt-5' onClick={() => {
                                         if (edit.Name && edit.Username && edit.Name.length > 0 && edit.Username.length > 0) {
                                             const token = Cookies.get('token');
                                             if (token) {
-                                                dispatch(editProfile({ token, Name: edit.Name, Username: edit.Username,Description })).then((state: any) => {
+                                                dispatch(editProfile({ token, Name: edit.Name, Username: edit.Username, Description })).then((state: any) => {
                                                     dispatch(setUser(state.payload.user))
                                                     if (state.payload.status === 202) navigate('/login')
                                                     console.log(state)
