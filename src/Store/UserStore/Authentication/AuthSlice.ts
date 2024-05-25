@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as authService from './AuthService';
 import * as interfaces from './Interfaces';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
 
@@ -153,44 +153,18 @@ const authSlice = createSlice({
                 state.loading = false;
                 if(action.payload.status === 204) {
                     toast.success(action.payload.message, {
-                        position: 'top-center',
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: false,
-                        progress: undefined,
-                        style: {
-                            minWidth: '400px',
-                            fontSize: '14px'
-                        }
+                        position: 'top-right',
+                        duration: 3000,
                     });
                     return ;
                 }
                 state.error = action.payload.errors;
-                state.user = action.payload.user;
+                state.user = action.payload.status === 210 ? action.payload.user : null;
             })
             .addCase(register.fulfilled, (state, action: PayloadAction<interfaces.registerResponse>) => {
                 state.loading = false;
                 state.message = action.payload.message;
                 state.error = action.payload.errors;
-                let toastify = toast.error;
-                if (action.payload.status === 200) {
-                    toastify = toast.success;
-                }
-                toastify(action.payload.message, {
-                    position: 'top-center',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    style: {
-                        minWidth: '400px',
-                        fontSize: '14px'
-                    }
-                });
             })
             .addCase(verifyAccount.pending, (state) => {
                 state.loading = true
@@ -236,17 +210,8 @@ const authSlice = createSlice({
             .addCase(AuthUser.fulfilled, (state, action: PayloadAction<interfaces.AuthVerifyUserResponse>) => {
                 if (action.payload.status !== 200) {
                     toast.error(action.payload.message, {
-                        position: 'top-center',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: false,
-                        progress: undefined,
-                        style: {
-                            minWidth: '400px',
-                            fontSize: '14px'
-                        }
+                        position: 'top-right',
+                        duration: 2000,
                     });
                     Cookies.remove('token')
                 }
@@ -268,16 +233,7 @@ const authSlice = createSlice({
                 state.loading = false
                 toastify(action.payload.message, {
                     position: 'top-center',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    style: {
-                        minWidth: '400px',
-                        fontSize: '14px'
-                    }
+                    duration: 3000,
                 });
             })
             .addCase(getTwoStep.pending,(state)=>{

@@ -7,8 +7,6 @@ import Preloader from '../Components/Preloader';
 import { Offcanvas } from '../Components/Canvas';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
 import ImgComponent from './ImageMap';
-import { ToastContainer } from 'react-toastify';
-import { Toaster } from 'react-hot-toast'
 import { User } from '../../Store/UserStore/Authentication/Interfaces';
 import { followUser, getProfile, unfollowUser } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 import { PostImage } from '../../Store/UserStore/Post-Management/Interfaces';
@@ -60,8 +58,6 @@ const OtherProfiles: React.FC = () => {
     return (
         <div className='font-semibold'>
             <Offcanvas />
-            <ToastContainer />
-            <Toaster />
             {loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}

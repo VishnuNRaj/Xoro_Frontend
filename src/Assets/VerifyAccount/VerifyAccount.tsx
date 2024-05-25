@@ -5,7 +5,7 @@ import { Offcanvas } from "../Components/Canvas";
 import Preloader from "../Components/Preloader";
 import { RootState, AppDispatch } from "../../Store/Store";
 import { verifyAccount } from "../../Store/UserStore/Authentication/AuthSlice";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Logo from '/Logo.png';
 import { FormInput } from './../Components/Input';
 import { AddProfilePic } from '../../Store/UserStore/Authentication/AuthSlice';
@@ -30,17 +30,8 @@ const VerifyAccount: React.FC = () => {
             const file: File = e.target.files[0];
             if (!file.type.startsWith('image/')) {
                 return toast.error('Please Upload Image Files', {
-                    position: 'top-center',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    style: {
-                        minWidth: '400px',
-                        fontSize: '14px'
-                    }
+                    position: 'top-right',
+                    duration: 2000,
                 });
             }
             setProfile(file);
@@ -66,17 +57,8 @@ const VerifyAccount: React.FC = () => {
                     setShow(data.Profile)
                 } else {
                     toast.error(state.payload.message, {
-                        position: 'top-center',
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        style: {
-                            minWidth: '400px',
-                            fontSize: '14px'
-                        }
+                        position: 'top-right',
+                        duration: 2000,
                     });
                 }
 
@@ -89,17 +71,8 @@ const VerifyAccount: React.FC = () => {
             const usernameRegex = /^[a-z0-9_.]+$/;
             if (!usernameRegex.test(Username)) {
                 return toast.error('Enter Username Properly', {
-                    position: 'top-center',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    style: {
-                        minWidth: '400px',
-                        fontSize: '14px'
-                    }
+                    position: 'top-right',
+                    duration: 2000,
                 });
             }
             const data = {
@@ -115,23 +88,12 @@ const VerifyAccount: React.FC = () => {
                         toastify = toast.success;
                     }
                     return toastify(state.payload.message, {
-                        position: 'top-center',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        onClose: function () {
-                            if (state.payload.status === 200) {
-                                navigate('/')
-                            }
-                        },
-                        style: {
-                            minWidth: '400px',
-                            fontSize: '14px'
-                        }
+                        position: 'top-right',
+                        duration: 2000,
                     });
+                    if (state.payload.status === 200) {
+                        navigate('/')
+                    }
                 })
             }
         } catch (e) {
@@ -145,7 +107,6 @@ const VerifyAccount: React.FC = () => {
             <>
                 <Offcanvas />
                 {loading && <Preloader />}
-                <center><ToastContainer style={{ width: 'auto', marginTop: '100px' }} /></center>
                 <div className='mt-[100px]'>
                     <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-10 text-white '>
                         <div>
@@ -197,7 +158,6 @@ const VerifyAccount: React.FC = () => {
     return (
         <div>
             {loading && <Preloader />}
-            <ToastContainer style={{ width: 'auto' }} />
             <Offcanvas />
             <center>
                 <img src={Logo} className='w-24 h-24 mt-[200px] rounded-full border-violet shadow-lg bg-white justify-center shadow-red-700 inline-block' alt="" />

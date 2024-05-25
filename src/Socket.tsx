@@ -28,6 +28,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
         newSocket.on('connect', () => {
             setSocket(newSocket);
+            console.log(newSocket.id)
             axios.interceptors.request.use(config => {
                 config.headers['socket-id'] = newSocket.id;
                 return config;

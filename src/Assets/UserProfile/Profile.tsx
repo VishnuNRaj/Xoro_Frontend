@@ -8,7 +8,6 @@ import { Offcanvas } from '../Components/Canvas';
 import { showPost } from '../../Store/UserStore/Post-Management/PostSlice';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
 import ImgComponent from './ImageMap';
-import { ToastContainer } from 'react-toastify';
 import { handleBanner, handleImages } from './Functions';
 import {
     Menu,
@@ -16,7 +15,6 @@ import {
     MenuList,
     MenuItem,
 } from "@material-tailwind/react";
-import { Toaster } from 'react-hot-toast'
 import SecureAccount from './SecureAccount';
 
 
@@ -64,8 +62,7 @@ const Profile: React.FC = () => {
     return (
         <div className='font-semibold'>
             <Offcanvas />
-            <ToastContainer />
-            <Toaster />
+ 
             {open && <SecureAccount open={open} setOpen={setOpen} />}
             {loadingPost || loading || loadingProfile ? (
                 <Preloader />

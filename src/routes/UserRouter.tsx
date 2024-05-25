@@ -7,9 +7,11 @@ import OTPPage from "../Assets/OTPLogin/OTPPage";
 import Profile from "../Assets/UserProfile/Profile";
 import UploadCamera from "../Assets/Post/SelectPost";
 import VideoUpload from "../Assets/VideoUpload/VideoUpload";
-import CreativeEditorSDKComponent from "../Assets/Test";
+// import CreativeEditorSDKComponent from "../Assets/Test";
 import OtherProfiles from "../Assets/OtherProfiles/OtherProfiles";
 import SocketToast from "../Other/SocketToast";
+import StartStream from "../Assets/LiveStream/StartStream";
+// import ViewStream from "../Assets/LiveStream/ViewStream";
 
 const UserRoutes: React.FC = () => {
     
@@ -26,7 +28,8 @@ const UserRoutes: React.FC = () => {
                 <Route path="/profile/:ProfileLink" element={<OtherProfiles />} />
                 <Route path="/post/" element={<UploadCamera />} />
                 <Route path="/video/upload" element={<VideoUpload />} />
-                <Route path="/test" element={<CreativeEditorSDKComponent />} />
+                <Route path="/test" element={<StartStream />} />
+                {/* <Route path="/test2" element={<ViewStream />} /> */}
             </Routes>
         </>
     );

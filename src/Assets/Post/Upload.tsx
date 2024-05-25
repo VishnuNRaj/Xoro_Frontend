@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { resetState } from '../../Store/UserStore/Authentication/AuthSlice';
 import { addPost } from '../../Store/UserStore/Post-Management/PostSlice';
 import { FormInput } from '../Components/Input';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Preloader from '../Components/Preloader';
 import { resetStateProfile, searchUsers } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 // import { User } from '../../Store/UserStore/Authentication/Interfaces';
@@ -131,18 +131,9 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
         } else {
           toast.success(state.payload.message, {
             position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            progress: undefined,
-            onClose: state.payload.status === 200 ? () => navigate('/profile') : undefined,
-            style: {
-              minWidth: '400px',
-              fontSize: '14px'
-            }
+            duration: 1000,
           });
+          return state.payload.status === 200 ? () => navigate('/profile') : null
         }
       })
     } else {
@@ -154,7 +145,6 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
   return (
     <div>
       <Offcanvas />
-      <ToastContainer />
       {loadingPost && <Preloader />}
       {Media.length > 0 && (
         <center>

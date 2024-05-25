@@ -1,7 +1,7 @@
 import { createAsyncThunk, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import * as interfaces from "./interfaces";
 import * as profileService from "./ProfileService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 const profileState: interfaces.profileState = {
     loadingProfile: false,
     users: [],
@@ -117,17 +117,13 @@ export const unfollowUser = createAsyncThunk<interfaces.followUserResponse, inte
     }
 )
 
-type ToastType = 'warning' | 'error' | 'success' | 'info';
+type ToastType =  'error' | 'success';
 
 const toastify: (type: ToastType, message: string) => void = (type, message) => {
     toast[type](message,
         {
-            autoClose: 1000,
-            position: 'top-center',
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
+            duration: 1000,
+            position: 'top-right',
         }
     )
 };

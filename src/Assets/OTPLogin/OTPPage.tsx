@@ -6,7 +6,7 @@ import { FormInput } from '../Components/Input';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../Store/Store';
 import { AuthUser, OTPLogin, resendOtp } from '../../Store/UserStore/Authentication/AuthSlice';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { decryptUserID } from '../../Common';
 import Preloader from '../Components/Preloader';
@@ -43,23 +43,16 @@ const OTPPage: React.FC = () => {
             }
             toastify(state.payload.message, {
                 position: 'top-center',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: false,
-                onClose: function () {
-                    if (state.payload.status === 200) {
-                        navigate('/')
-                    }
-                }
+                duration: 2000,  
             })
+            if (state.payload.status === 200) {
+                navigate('/')
+            }
         })
     }
     return (
         <>
             <Offcanvas />
-            <ToastContainer />
             {loading && <Preloader />}
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>

@@ -8,13 +8,12 @@ import { AppDispatch, RootState } from '../../Store/Store';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthUser, login } from '../../Store/UserStore/Authentication/AuthSlice';
 import Preloader from '../Components/Preloader';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { encryptUserID } from '../../Common';
 import Google from '../Components/Google';
 import LinkedIn from '../Components/LinkedIn';
-
 
 const LoginForm: React.FC = () => {
     const [Form, SetForm] = useState<LoginFormInterface>({
@@ -26,16 +25,22 @@ const LoginForm: React.FC = () => {
         Password: "",
         Main: ""
     });
+
+    const { loading } = useSelector((state: RootState) => state.auth);
+    const navigate = useNavigate();
+    const dispatch: AppDispatch = useDispatch();
+
     useEffect(() => {
-        const token = Cookies.get('token')
+        const token = Cookies.get('token');
         if (token) {
             dispatch(AuthUser({ token })).then((state: any) => {
                 if (state.payload.user) {
-                    navigate('/')
+                    navigate('/');
                 }
-            })
+            });
         }
-    }, [])
+    }, [dispatch, navigate]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         SetForm({
             ...Form,
@@ -47,6 +52,7 @@ const LoginForm: React.FC = () => {
             Main: ""
         });
     };
+
     const socialMedia = (data: {
         type: string;
         user: LoginFormInterface;
@@ -54,81 +60,57 @@ const LoginForm: React.FC = () => {
         const { Email, Password } = data.user;
         dispatch(login({ Email, Password, Type: data.type })).then((state: any) => {
             let userId = '';
-            let toastify = toast.error
+            let toastify = toast.error;
             if (state.payload.status === 200) {
+                toastify(state.payload.message, {
+                    position: 'top-center',
+                    duration: 1000,
+                });
                 userId = state.payload.user._id ? encryptUserID(state.payload.user._id) : '';
-                toastify = toast.success
+                toastify = toast.success;
+                navigate('/otp/' + userId);
             }
             if (state.payload.status === 210) {
-                Cookies.set('token', state.payload.message)
-                navigate('/')
+                Cookies.set('token', state.payload.message);
+                navigate('/');
             }
-            toastify(state.payload.message, {
-                position: 'top-center',
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: false,
-                progress: undefined,
-                onClose: state.payload.status === 200 ? () => navigate('/otp/' + userId) : undefined,
-                style: {
-                    minWidth: '400px',
-                    fontSize: '14px'
-                }
-            });
-        })
-
+        });
     };
 
-    const { loading } = useSelector((state: RootState) => state.auth)
-    const navigate = useNavigate()
-    const dispatch: AppDispatch = useDispatch()
     const userLogin = async () => {
-        const response: LoginValidation = LoginValidate(Form)
+        const response: LoginValidation = LoginValidate(Form);
         if (!response.status) {
-            const error: ErrorForm = response.ErrorForm
+            const error: ErrorForm = response.ErrorForm;
             if (error.Main) {
-                setErrors({ ...errors, Main: error.Main })
-                return false
+                setErrors({ ...errors, Main: error.Main });
+                return false;
             }
-            setErrors(error)
-            return false
+            setErrors(error);
+            return false;
         }
-        const { Email, Password } = Form
+        const { Email, Password } = Form;
         dispatch(login({ Email, Password, Type: 'Email' })).then((state: any) => {
             let userId = '';
-            let toastify = toast.error
+            let toastify = toast.error;
             if (state.payload.status === 200) {
                 userId = state.payload.user._id ? encryptUserID(state.payload.user._id) : '';
-                toastify = toast.success
+                toastify = toast.success;
+                navigate('/otp/' + userId);
             }
             if (state.payload.status === 210) {
-                Cookies.set('token', state.payload.message)
-                navigate('/')
+                Cookies.set('token', state.payload.message);
+                navigate('/');
             }
             toastify(state.payload.message, {
-                position: 'top-center',
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: false,
-                progress: undefined,
-                onClose: state.payload.status === 200 ? () => navigate('/otp/' + userId) : undefined,
-                style: {
-                    minWidth: '400px',
-                    fontSize: '14px'
-                }
+                position: 'top-right',
+                duration: 2000,
             });
-        })
-    }
-
+        });
+    };
 
     return (
         <>
             <Offcanvas />
-            <ToastContainer />
             {loading && <Preloader />}
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
@@ -170,7 +152,6 @@ const LoginForm: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </>

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { getUsers, updateUser, updateUserData } from '../../Store/AdminStore/Management/UserManagement/AdminUserSlice';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { OffcanvasAdmin } from '../Components/AdminHeader';
 import { setAdmin } from '../../Store/AdminStore/Authentication/AuthSlice';
 import Preloader from '../Components/Preloader';
@@ -43,18 +43,13 @@ const UserManagement: React.FC = memo(() => {
         { value: 21, label: '21 Days' }
     ];
 
-    type ToastType = 'info' | 'success' | 'warning' | 'error';
+    type ToastType = 'success' | 'error';
 
     const toastify = (message: string, type: ToastType): void => {
         toast[type](message, {
-            position: 'top-center',
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
+            duration: 2000,
+            position: 'top-right'
+        })
     };
 
     useEffect(() => {
@@ -117,7 +112,6 @@ const UserManagement: React.FC = memo(() => {
     return (
         <Fragment>
             <OffcanvasAdmin />
-            <ToastContainer />
             <div className='mt-40'>
                 <center>
                     <table className="table-auto text-black font-semibold border-2 bg-gray-100 rounded-lg">
@@ -153,6 +147,9 @@ const UserManagement: React.FC = memo(() => {
                     open={edit ? true : false}
                     size='sm'
                     className='bg-black shadow-sm shadow-gray-200 border-2 text-white border-white z-10'
+                    placeholder={undefined} handler={function (value: any): void {
+                        throw new Error('Function not implemented.');
+                    }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}
                 >
                     <div className='w-full h-11'>
                         <button className='float-right p-2 pr-3' onClick={() => setEdit(null)}><i className='fa fa-close text-red-700'></i></button>

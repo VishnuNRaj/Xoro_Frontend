@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Offcanvas } from '../Components/Canvas';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 interface selectVideoProps {
     Video: File | null;
@@ -74,12 +74,7 @@ const SelectVideo: React.FC<selectVideoProps> = ({ setVideo, Video, setThumbnail
             } else {
                 toast.error('Please Select Video File', {
                     position: 'top-right',
-                    autoClose: 1000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: false,
-                    progress: undefined,
+                    duration: 1000,
                 });
             }
         }
@@ -113,7 +108,6 @@ const SelectVideo: React.FC<selectVideoProps> = ({ setVideo, Video, setThumbnail
             <div className='h-[70px] w-full inline-block'>
                 <Offcanvas />
             </div>
-            <ToastContainer />
             <div className=" sm:px-8 md:px-16 sm:py-8 flex" onDragOver={handleDragOver} onDrop={handleDrop}>
                 <main className="md:w-1/2 iteflexms-center justify-center mx-auto max-w-screen-lg h-full">
                     <article aria-label="File Upload Modal" className="relative h-full flex flex-col bg-white shadow-xl rounded-md">

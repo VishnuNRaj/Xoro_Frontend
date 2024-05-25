@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ErrorForm, LoginFormInterface, LoginValidation } from './adminLoginInterface'
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { FormInput } from '../Components/Input';
 import Logo from '/Logo.png'
 import { LoginValidate } from './ValidateAdmin';
@@ -28,20 +28,11 @@ const AdminLogin: React.FC = () => {
                 if (state.payload.admin) {
                     navigate('/admin')
                 } else {
-                toast.error(state.payload.message, {
-                    position: 'top-center',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    onClose: state.payload.status === 200 ? () => navigate('/admin/otp/' + state.payload.admin._id) : undefined,
-                    style: {
-                        minWidth: '80%',
-                        fontSize: '14px'
-                    }
-                });
+                    toast.error(state.payload.message, {
+                        position: 'top-center',
+                        duration: 3000,
+                    });
+                    if(state.payload.status == 200) return navigate('/')
                 }
             })
         }
@@ -100,7 +91,6 @@ const AdminLogin: React.FC = () => {
 
     return (
         <>
-            <ToastContainer />
             {/* <Offcanvas /> */}
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>

@@ -5,7 +5,7 @@ import { FormInput } from '../Components/Input';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../Store/Store';
 import { adminOTP, adminVerifyAuth, resendOTP } from '../../Store/AdminStore/Authentication/AuthSlice';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import Preloader from '../Components/Preloader';
 
@@ -38,22 +38,14 @@ const AdminLoginOTP: React.FC = () => {
         }
         if (UserId) {
             dispatch(adminOTP({ OTP, RememberMe, UserId })).then((state: any) => {
-                if (state.payload.status === 200) {
-                    Cookies.set('admin', state.payload.token)
-                }
                 toast.success(state.payload.message, {
                     position: 'top-center',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: false,
-                    onClose: function () {
-                        if (state.payload.status === 200) {
-                            navigate('/admin')
-                        }
-                    }
+                    duration: 2000,
                 })
+                if (state.payload.status === 200) {
+                    Cookies.set('admin', state.payload.token)
+                    navigate('/admin')
+                }
             })
         }
     }
@@ -62,8 +54,7 @@ const AdminLoginOTP: React.FC = () => {
     }
     return (
         <>
-            <ToastContainer />
-            <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
+             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">
