@@ -4,14 +4,11 @@ import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png';
 import { FormInput } from '../Components/Input';
 import { validateForm } from './Validation';
-import { useDispatch, useSelector } from 'react-redux';
 import { AuthUser, register } from '../../Store/UserStore/Authentication/AuthSlice';
-import { AppDispatch, RootState } from '../../Store/Store';
 import Preloader from '../Components/Preloader';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import Google from '../Components/Google';
 import LinkedIn from '../Components/LinkedIn';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 
 
 const Validate: Function = ({ Form, errors, setErrors }: any) => {
@@ -29,9 +26,9 @@ const Validate: Function = ({ Form, errors, setErrors }: any) => {
 }
 
 const SignUpForm: React.FC = () => {
-    const navigate = useNavigate()
+    const { navigate, dispatch, auth } = useEssentials()
     useEffect(() => {
-        const token = Cookies.get('token')
+        const token: string | undefined = getCookie('token')
         if (token) {
             dispatch(AuthUser({ token })).then((state: any) => {
                 if (state.payload.user) {
@@ -56,7 +53,7 @@ const SignUpForm: React.FC = () => {
         Main: ""
     });
 
-    const { loading, message } = useSelector((state: RootState) => state.auth)
+    const { loading, message } = auth;
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         SetForm({
             ...Form,
@@ -68,7 +65,6 @@ const SignUpForm: React.FC = () => {
             Main: ""
         });
     };
-    const dispatch: AppDispatch = useDispatch()
     const userRegister = () => {
         const response: boolean = Validate({ Form, errors, setErrors });
         if (!response) return false
@@ -108,13 +104,13 @@ const SignUpForm: React.FC = () => {
         })
     };
 
-    
+
 
     return (
         <>
             <Offcanvas />
             {loading && <Preloader />}
-            <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-20 text-white '>
+            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-20 text-white '>
                 <div className='p-0'>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">

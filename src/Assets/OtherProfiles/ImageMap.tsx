@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
-// import { AppDispatch, RootState } from '../../Store/Store';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
-// import Preloader from '../Components/Preloader';
-// import Cookies from 'js-cookie';
-// import { deletePost, setPosts } from '../../Store/UserStore/Post-Management/PostSlice';
-// import { useNavigate } from 'react-router-dom';
 import { PostImage } from '../../Store/UserStore/Post-Management/Interfaces';
 
 const ImgComponent: React.FC<{ post: PostImage[] }> = ({ post }) => {
-    // const navigate = useNavigate()
-    // const dispatch: AppDispatch = useDispatch()
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-    // const [menuOpen, setMenuOpen] = useState<number | null>(null);
-    // const menuRef = useRef<HTMLDivElement>(null);
 
     if (!post || post.length === 0) {
         return <div className="text-center font-semibold text-xl">Upload Feeds</div>;
@@ -34,7 +23,6 @@ const ImgComponent: React.FC<{ post: PostImage[] }> = ({ post }) => {
                         }} className='object-cover border-2 border-gray-400 overflow-hidden aspect-square cursor-pointer rounded-md' />
                     ) : (
                         <video className='cursor-pointer' onClick={() => {
-                            // setShow(post[index])
                         }} src={item.Images[0].link} controls></video>
                     )}
                     {hoverIndex === index && (

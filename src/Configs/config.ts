@@ -6,6 +6,7 @@ interface configuration {
     PORT: number;
     SECRET: string;
     PROFILE:string;
+    VIDEO:string;
 }
 
 
@@ -17,6 +18,7 @@ const config: configuration = {
     PORT: parseInt(import.meta.env.VITE_APP_PORT),
     SECRET: import.meta.env.VITE_APP_SECRET,
     PROFILE:import.meta.env.VITE_APP_PROFILE_API_URL,
+    VIDEO:import.meta.env.VITE_APP_VIDEO_API_URL,
 }
 
 export default config;

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Logo from '/Logo.png'
 import { FormInput } from '../Components/Input';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../Store/Store';
+import { useEssentials, getCookie, setCookie } from '../../Functions/CommonFunctions';
 import { adminOTP, adminVerifyAuth, resendOTP } from '../../Store/AdminStore/Authentication/AuthSlice';
 import { toast } from 'react-hot-toast';
-import Cookies from 'js-cookie';
 import Preloader from '../Components/Preloader';
 
 interface Params {
@@ -19,11 +17,10 @@ const AdminLoginOTP: React.FC = () => {
     const [OTP, setOTP] = useState<string>('')
     const [RememberMe, setRememberMe] = useState<boolean>(false)
     const { UserId } = useParams<Params>();
-    const dispatch: AppDispatch = useDispatch()
-    const navigate = useNavigate()
-    const { loading } = useSelector((state: RootState) => state.admin)
+    const { dispatch, navigate, Admin } = useEssentials()
+    const { loading } = Admin
     useEffect(() => {
-        const token = Cookies.get('admin')
+        const token: string | undefined = getCookie('admin')
         if (token) {
             dispatch(adminVerifyAuth({ token })).then((state: any) => {
                 if (state.payload.admin) {
@@ -43,7 +40,7 @@ const AdminLoginOTP: React.FC = () => {
                     duration: 2000,
                 })
                 if (state.payload.status === 200) {
-                    Cookies.set('admin', state.payload.token)
+                    setCookie('admin', state.payload.token)
                     navigate('/admin')
                 }
             })
@@ -54,7 +51,7 @@ const AdminLoginOTP: React.FC = () => {
     }
     return (
         <>
-             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
+            <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">

@@ -90,3 +90,17 @@ export interface followUserResponse {
     message:string;
     status:number;
 }
+
+
+export interface createChannel {
+    Name:string;
+    Description:string;
+    Type:string[];
+    Logo:File;
+    token:string;
+}
+
+export interface createChannelResponse {
+    message:string;
+    status:number;
+}

@@ -3,7 +3,6 @@ import * as interfaces from './interfaces';
 import * as chatService from './ChatService';
 
 export const chatInitialState = <interfaces.ChatState>{
-    allChats:[],
     chat:[],
     loadingChat:false,
     Notifications:[]
@@ -19,7 +18,8 @@ export const chatSlice = createSlice({
     },
     extraReducers:(builder)=>{
 
-    }
+    },
+    
 })
 
 

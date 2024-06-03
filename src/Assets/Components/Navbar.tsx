@@ -1,9 +1,6 @@
 import React, { memo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../Store/Store";
+import { useEssentials } from '../../Functions/CommonFunctions';
 import Search from './Search'
-import Preloader from "./Preloader";
 import { Dialog } from '@material-tailwind/react'
 import { User } from "../../Store/UserStore/Authentication/Interfaces";
 import { PostImage } from "../../Store/UserStore/Post-Management/Interfaces";
@@ -15,9 +12,9 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
-    const navigate = useNavigate()
+    const { navigate, auth } = useEssentials()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { user, loading } = useSelector((state: RootState) => state.auth)
+    const { user } = auth
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -35,10 +32,6 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
         live: []
     })
     const [chatWindow, setChatwindow] = useState<boolean>(false)
-    if (loading) {
-        return <Preloader />
-    }
-
     return (
         <>
             {chatWindow && (
@@ -47,20 +40,20 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                 </div>
             )}
             {user && !chatWindow && (
-                <div onClick={() => {
-                    setChatwindow(!chatWindow)
-                }} className="fixed bottom-0 right-0 mb-4 mr-4 w-[40px] h-[40px] rounded-full flex items-center z-50 justify-center bg-blue-700">
-                    <button className="bg-transparent w-full h-full rounded-full text-xl text-white flex items-center justify-center">
+                <div className="fixed bottom-0 right-0 mb-4 mr-4 w-[40px] h-[40px] rounded-full flex items-center z-50 justify-center bg-blue-700">
+                    <button onClick={() => {
+                        setChatwindow(!chatWindow)
+                    }} className="bg-transparent w-[40px] fixed h-[40px] rounded-full text-xl text-white flex items-center justify-center">
                         <i className="fa fa-comments"></i>
                     </button>
                 </div>
             )}
-            <Dialog open={search} size="xs" className="rounded-md" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} handler={function (value: any): void {
+            <Dialog open={search} size="xs" className="rounded-md bg-[#111] bg-opacity-80 border-2  border-blue-700" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} handler={function (): void {
                 throw new Error("Function not implemented.");
-            } }>
+            }}>
                 <div className="w-full font-semibold float-left">
                     <div className="w-full float-left flex justify-center items-center">
-                        <div className="w-[60%] mr-3 p-2 flex justify-center items-center float-left">
+                        <div className="w-[60%] p-2 flex justify-center items-center float-left">
                             {user && <Search data={data} setData={setData} />}
                         </div>
                         <div onClick={() => {
@@ -84,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                                 <center><button className="bg-transparent">Live</button></center>
                             </div>
                         </div>
-                        <div className="min-w-full ml-10">
+                        <div className="min-w-full">
                             {show === 'user' && <UserMap user={data.users} />}
                         </div>
                     </div>
@@ -94,7 +87,11 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between p-4 pl-0">
                     <span className="flex items-center w-[10%] px-5 rtl:space-x-reverserounded-full">
                         <center>
-                            <button className=" h-8 w-8 shadow-lg shadow-red-700 rounded-full  border-2 border-white"> <i onClick={openDrawerLeft} className="text-white fa fa-bars w-full"></i></button>
+                            <button className=" h-9 w-9 shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white" onClick={openDrawerLeft} >
+                                <svg className="w-5 h-5 font-semibold" stroke="white" aria-hidden="true" fill="white"  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd" fontWeight={'900'} fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+                                </svg>
+                            </button>
                         </center>
                     </span>
                     <div className="flex w-auto md:order-2 space-x-2 md:space-x-0 rtl:space-x-reverse">
@@ -120,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                         <ul className="flex ml-2 w-full flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:border-gray-700 float-left">
                             <center>
                                 <li className="w-full">
-                                    {user && <button onClick={() => setSearch(!search)} className="text-white border-0 md:p-1 px-2 md:px-3 md:rounded-full md:bg-green-700 font-medium">Search</button>}
+                                    {user && <button onClick={() => setSearch(!search)} className="text-white border-0 md:p-1 px-2 md:px-3 md:rounded-full font-semibold">Search</button>}
                                 </li>
                             </center>
                         </ul>

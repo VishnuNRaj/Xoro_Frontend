@@ -27,7 +27,7 @@ export interface AllChatState {
 export interface ChatState {
     chat: Chat[] | null;
     loadingChat: boolean;
-    allChats: AllChatState[];
+    // allChats: AllChatState[];
     Notifications: Notification[];
 }
 
@@ -40,3 +40,4 @@ export interface getChatsResponse {
     status: number;
     allChat:AllChatState[];
 }
+

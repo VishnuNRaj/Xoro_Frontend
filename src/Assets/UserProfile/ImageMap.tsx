@@ -1,21 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
-import Preloader from '../Components/Preloader';
-import Cookies from 'js-cookie';
 import { deletePost, setPosts } from '../../Store/UserStore/Post-Management/PostSlice';
-import { useNavigate } from 'react-router-dom';
 import { PostImage } from '../../Store/UserStore/Post-Management/Interfaces';
+import { useEssentials, getCookie, } from '../../Functions/CommonFunctions';
 
 const ImgComponent: React.FC = () => {
-    const { post } = useSelector((state: RootState) => state.post);
-    const navigate = useNavigate()
-    const dispatch: AppDispatch = useDispatch()
+    const { navigate, dispatch, Post } = useEssentials()
+    const { post } = Post;
+
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const [menuOpen, setMenuOpen] = useState<number | null>(null);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const [show, setShow] = useState<PostImage | null>(null)
+    const menuRef = useRef<HTMLUListElement | null>(null);
+    const [, setShow] = useState<PostImage | null>(null)
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -60,23 +56,23 @@ const ImgComponent: React.FC = () => {
                             <MenuHandler>
                                 <i className="fa fa-ellipsis-v" onClick={() => handleMenuOpen(index)}></i>
                             </MenuHandler>
-                            <MenuList ref={menuRef} className='font-semibold bg-black rounded-xl'>
-                                <MenuItem className='text-white hover:bg-green-700 '>Edit <i className='fa fa-edit float-right'></i></MenuItem>
+                            <MenuList ref={menuRef} className='font-semibold bg-black rounded-xl' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                                <MenuItem className='text-white hover:bg-green-700 ' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Edit <i className='fa fa-edit float-right'></i></MenuItem>
                                 <MenuItem className='text-red-700 hover:bg-red-700 hover:text-white' onClick={() => {
-                                    const token = Cookies.get('token')
+                                    const token: string | undefined = getCookie('token');
                                     if (token) {
                                         dispatch(deletePost({ token, PostId: item._id })).then((state: any) => {
                                             if (state.payload.status === 202) {
-                                                navigate('/')
+                                                navigate('/');
                                             }
                                             dispatch(setPosts(post.filter((item, i) => {
-                                                return index !== i
-                                            })))
-                                        })
+                                                return index !== i;
+                                            })));
+                                        });
                                     }
-                                }}>Delete <i className='fa fa-trash float-right'></i></MenuItem>
-                                <MenuItem className='text-white hover:bg-green-700 '>{item.Hidden ? 'Unhide' : 'Hide'} <i className={`${item.Hidden ? 'fa fa-eye-slash' : 'fa fa-eye'} float-right`}></i></MenuItem>
-                                <MenuItem className='text-white hover:bg-green-700 '>{item.CommentsOn ? 'Comments Off' : 'Comments On'} <i className='fa fa-comments float-right'></i></MenuItem>
+                                }} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Delete <i className='fa fa-trash float-right'></i></MenuItem>
+                                <MenuItem className='text-white hover:bg-green-700 ' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>{item.Hidden ? 'Unhide' : 'Hide'} <i className={`${item.Hidden ? 'fa fa-eye-slash' : 'fa fa-eye'} float-right`}></i></MenuItem>
+                                <MenuItem className='text-white hover:bg-green-700 ' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>{item.CommentsOn ? 'Comments Off' : 'Comments On'} <i className='fa fa-comments float-right'></i></MenuItem>
                             </MenuList>
                         </Menu>
 

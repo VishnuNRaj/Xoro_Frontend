@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react'
 import { Offcanvas } from '../Components/Canvas'
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { useDispatch, useSelector } from 'react-redux';
 import { AuthUser } from '../../Store/UserStore/Authentication/AuthSlice';
-import { AppDispatch, RootState } from '../../Store/Store';
 import Preloader from '../Components/Preloader';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 
 
 const Home: React.FC = () => {
-    const { loading } = useSelector((state: RootState) => state.auth)
-    const dispatch: AppDispatch = useDispatch()
-    const navigate = useNavigate()
+    const { dispatch, navigate, auth } = useEssentials()
+    const { loading } = auth;
+
     useEffect(() => {
-        const token = Cookies.get('token')
+        const token = getCookie('token')
         if (token) {
             dispatch(AuthUser({ token })).then((state: any) => {
                 if (!state.payload.user) {
@@ -22,7 +19,7 @@ const Home: React.FC = () => {
             })
         }
     }, [])
-    
+
     return (
         <>
             {loading && <Preloader />}

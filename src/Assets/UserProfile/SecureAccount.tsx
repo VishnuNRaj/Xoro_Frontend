@@ -1,9 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Dialog } from '@material-tailwind/react';
-import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
-import { AppDispatch, RootState } from '../../Store/Store';
-import Cookies from 'js-cookie'
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 import Preloader from '../Components/Preloader';
 import { editProfile, profileSettings } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
@@ -14,10 +11,9 @@ interface SecureAccountProps {
 }
 
 export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen }) => {
-    const dispatch: AppDispatch = useDispatch()
-    const navigate = useNavigate()
-    const { user, loading } = useSelector((state: RootState) => state.auth)
-    const { loadingProfile } = useSelector((state: RootState) => state.profile)
+    const { dispatch, navigate, auth, profile } = useEssentials()
+    const { user, loading } = auth
+    const { loadingProfile } = profile
     const [state, setState] = useState<string>('Edit')
     const [Settings, setSettings] = useState({
         Private: false,
@@ -59,7 +55,7 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
         }
     }, [])
     const handleUpdate = () => {
-        const token = Cookies.get('token')
+        const token = getCookie('token')
         if (token) {
             const { Private, Notification, ProfileLock } = Settings
             dispatch(profileSettings({ token, Private, Notification, ProfileLock })).then((state: any) => {
@@ -80,7 +76,9 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
     }
     return (
         <div>
-            <Dialog open={open} size='xs' className='bg-[#111]'>
+            <Dialog open={open} size='xs' className='bg-[#111]' handler={function (): void {
+                throw new Error('Function not implemented.');
+            }} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                 <div className="flex justify-between bg-[#111]">
                     <div className="float-left w-full bg-[#111] ">
                         <button onClick={() => setOpen(false)} className='hover:bg-red-700 hover:text-white w-[50px] h-[50px] float-left'>
@@ -176,7 +174,7 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
                                 <center>
                                     <button className='p-2 px-3 text-white font-semibold inline-block bg-blue-700 rounded-md mt-5' onClick={() => {
                                         if (edit.Name && edit.Username && edit.Name.length > 0 && edit.Username.length > 0) {
-                                            const token = Cookies.get('token');
+                                            const token = getCookie('token');
                                             if (token) {
                                                 dispatch(editProfile({ token, Name: edit.Name, Username: edit.Username, Description })).then((state: any) => {
                                                     dispatch(setUser(state.payload.user))

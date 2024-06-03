@@ -135,7 +135,7 @@ const authSlice = createSlice({
         resetState: (state) => {
             Object.assign(state, initialState);
         },
-        setUser:(state,action:PayloadAction<interfaces.User>) => {
+        setUser: (state, action: PayloadAction<interfaces.User>) => {
             state.user = action.payload;
         }
     },
@@ -151,12 +151,12 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action: PayloadAction<interfaces.loginResponse>) => {
                 state.loading = false;
-                if(action.payload.status === 204) {
+                if (action.payload.status === 204) {
                     toast.success(action.payload.message, {
                         position: 'top-right',
                         duration: 3000,
                     });
-                    return ;
+                    return;
                 }
                 state.error = action.payload.errors;
                 state.user = action.payload.status === 210 ? action.payload.user : null;
@@ -236,16 +236,16 @@ const authSlice = createSlice({
                     duration: 3000,
                 });
             })
-            .addCase(getTwoStep.pending,(state)=>{
+            .addCase(getTwoStep.pending, (state) => {
                 state.loading = true
                 state.message = ''
             })
-            .addCase(getTwoStep.fulfilled,(state,action:PayloadAction<interfaces.getTwoStepResponse>)=>{
+            .addCase(getTwoStep.fulfilled, (state, action: PayloadAction<interfaces.getTwoStepResponse>) => {
                 state.loading = false
                 state.message = action.payload.message
-                                
+
             })
     },
 });
-export const { resetState,setUser } = authSlice.actions;
+export const { resetState, setUser } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
-import Cookies from 'js-cookie'
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
 import Preloader from '../Components/Preloader';
+import { useEssentials } from '../../Functions/CommonFunctions';
 
 interface postDetail {
     index: number;
 }
 
 const PostDetails: React.FC<postDetail> = ({ index }) => {
-    const dispatch: AppDispatch = useDispatch()
-    const { loadingPost, post } = useSelector((state: RootState) => state.post)
+    const { Post } = useEssentials()
+    const { loadingPost, post } = Post;
     useEffect(() => {
         window.scrollTo({
             top: 400 * index,

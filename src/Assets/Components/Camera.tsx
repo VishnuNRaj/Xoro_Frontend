@@ -107,7 +107,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                     <Webcam
                         audio={false}
                         ref={webcamRef}
-                        className='rounded-lg border-4 border-green-700 sticky'
+                        className='rounded-lg border-4 border-blue-700 sticky'
                         videoConstraints={{
                             facingMode: cam,
                         }}
@@ -115,7 +115,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                     <div className={`sticky -mt-16 left-0 right-0 flex justify-center`}>
                         {!recording ? (
                             <>
-                                <button className='bg-green-700 w-10 h-10 m-2 border-2 text-white rounded-full'  onClick={() => document.getElementById('profile-upload')?.click()}><i className='fa fa-image'></i></button>
+                                <button className='bg-blue-700 w-10 h-10 m-2 border-2 text-white rounded-full'  onClick={() => document.getElementById('profile-upload')?.click()}><i className='fa fa-image'></i></button>
                                 <input multiple id="profile-upload" onChange={handleFileChange} type="file" className="hidden" />
                                 <button className='text-blue-700 w-10 h-10 m-2 bg-white rounded-full' onClick={() => {
                                     setCam(cam === 'user' ? 'enviourment' : 'user')

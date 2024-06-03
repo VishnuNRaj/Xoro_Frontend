@@ -2,23 +2,20 @@ import React, { useState, Fragment, memo } from "react";
 import Navbar from "./Navbar";
 import Buttons from "./Buttons";
 import { Drawer } from "@material-tailwind/react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../Store/Store";
-import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 import { resetState } from "../../Store/UserStore/Authentication/AuthSlice";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faDisplay, faAward, faFeed, faHome, faComments } from '@fortawesome/free-solid-svg-icons'
+import { useEssentials, removeCookie } from '../../Functions/CommonFunctions';
+
+
 
 export const Offcanvas: React.FC = memo(() => {
     const [openLeft, setOpenLeft] = useState<boolean>(false);
     const openDrawerLeft = () => setOpenLeft(true);
     const closeDrawerLeft = () => setOpenLeft(false);
-    const { user } = useSelector((state: RootState) => state.auth)
-    const navigate = useNavigate()
-    const dispatch: AppDispatch = useDispatch()
+    const { navigate, dispatch, auth } = useEssentials()
+    const { user } = auth
+
     const logout = () => {
-        Cookies.remove('token');
+        removeCookie('token');
         dispatch(resetState())
         navigate('/login')
     }
@@ -27,47 +24,20 @@ export const Offcanvas: React.FC = memo(() => {
             <div className="flex flex-wrap gap-4">
                 <Navbar openDrawerLeft={openDrawerLeft} />
             </div>
-            {/* {!openLeft && (
-                <div>
-                    <div className="w-[70px] mt-[70px] min-h-full z-10 fixed float-left bg-[#000] border-r-2 rounded-lg">
-                        <div className="h-auto snap-center font-medium">
-                            <center>
-                                <button className="text-white text-2xl font-semibold w-full">
-                                    <FontAwesomeIcon icon={faHome}/>
-                                </button>
-                            </center>                        </div>
-                        <div className="mt-3 h-auto snap-center font-medium">
-                            <center><button className="text-white text-2xl font-semibold w-full"><i className="fa fa-play"></i></button></center>
-                        </div>
-                        <div className="mt-3 h-auto snap-center font-medium">
-                            <center><button className="text-white text-2xl font-semibold w-full">
-                                <i className="fa fa-video-camera"></i>
-                            </button></center>
-                        </div>
-                        <div className="mt-3 h-auto snap-center font-medium">
-                            <center><button className="text-white text-2xl font-semibold w-full"><FontAwesomeIcon icon={faFeed} className="text-white" /></button></center>
-                        </div>
-                        <div className="mt-3 h-auto snap-center font-medium">
-                            <center><button className="text-white text-2xl font-semibold w-full"><FontAwesomeIcon icon={faDisplay} className="text-white" /></button></center>
-                        </div>
-                        <div className="mt-3 h-auto snap-center font-medium">
-                            <center><button className="text-white text-2xl font-semibold w-full"><FontAwesomeIcon icon={faAward} /></button></center>
-                        </div>
-                        <div className="mt-3 h-auto snap-center font-medium">
-                            <center><button className="text-white text-2xl font-semibold w-full"><FontAwesomeIcon icon={faComments} /></button></center>
-                        </div>
-                    </div>
-                </div>
-            )} */}
             <Drawer
                 placement="left"
                 open={openLeft}
                 onClose={closeDrawerLeft}
-                className="p-0 bg-black" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}            >
+                className="p-0 mb-10 bg-black" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}            >
                 <div>
-                    <button className="px-4 pt-4" onClick={closeDrawerLeft}><i className="fa fa-close text-blue-700 hover:text-gray-600"></i></button>
+                    <button className="mr-4 border-2 p-1 mt-4 float-right mb-2 flex items-center aspect-square w-9 h-9 justify-center rounded-full hover:bg-red-700 text-white" onClick={closeDrawerLeft}>
+                        <svg className="w-5 h-5 font-semibold rotate-180" stroke="white" aria-hidden="true" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd" fontWeight={'900'} fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+                        </svg>
+                    </button>                     
+
                 </div>
-                <div className="mt-5 font-semibold h-auto snap-center py-5">
+                <div className="mt-8 font-semibold h-auto snap-center py-5">
                     <Buttons text={'Home'} route={'/'} />
                     <Buttons text={'Videos'} route={'/videos'} />
                     <Buttons text={'Shorts'} route={'/shorts'} />

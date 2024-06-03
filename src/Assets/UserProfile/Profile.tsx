@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { useEssentials,getCookie } from '../../Functions/CommonFunctions';
 import Preloader from '../Components/Preloader';
 import { Offcanvas } from '../Components/Canvas';
 import { showPost } from '../../Store/UserStore/Post-Management/PostSlice';
@@ -16,18 +13,18 @@ import {
     MenuItem,
 } from "@material-tailwind/react";
 import SecureAccount from './SecureAccount';
+import CreateChannnel from './CreateChannnel';
 
 
 const Profile: React.FC = () => {
-    const navigate = useNavigate();
-    const dispatch: AppDispatch = useDispatch();
+    const {navigate,dispatch,auth,post,profile} = useEssentials()
 
-    const { user, loading } = useSelector((state: RootState) => state.auth);
-    const { loadingPost } = useSelector((state: RootState) => state.post);
-    const { loadingProfile } = useSelector((state: RootState) => state.profile);
+    const { user, loading } = auth;
+    const { loadingPost } = post;
+    const { loadingProfile } = profile;
     const [type, setType] = useState<string>('Images')
 
-    const [profile, setProfile] = useState<{
+    const [Profile, setProfile] = useState<{
         Image: File | null;
         Show: string;
     }>({
@@ -44,13 +41,13 @@ const Profile: React.FC = () => {
     })
 
     useEffect(() => {
-        const token = Cookies.get('token');
+        const token = getCookie('token');
         if (token) {
             dispatch(showPost({ token })).then((state: any) => {
                 if (!state.payload.user) {
                     navigate('/login');
                 }
-                setProfile({ ...profile, Show: state.payload.user.Profile })
+                setProfile({ ...Profile, Show: state.payload.user.Profile })
                 setBanner({ ...banner, Show: state.payload.user.Banner })
                 dispatch(setUser(state.payload.user))
             });
@@ -58,41 +55,46 @@ const Profile: React.FC = () => {
     }, []);
 
     const [open, setOpen] = useState(false)
+    const [channel, setChannel] = useState(false)
+
 
     return (
         <div className='font-semibold'>
-            <Offcanvas />
- 
+            <div className="w-full h-[70px]">
+                <Offcanvas />
+            </div>
+
             {open && <SecureAccount open={open} setOpen={setOpen} />}
+            {channel && <CreateChannnel open={channel} setOpen={setChannel} />}
             {loadingPost || loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}
             <center>
-                <div className="container h-screen rounded-xl bg-[#000] mt-24 relative">
+                <div className="container animate-slideInFromLeft h-screen rounded-xl bg-[#000] mt-6 relative">
                     {/* Banner */}
                     <div className=''>
                         {user?.Banner && (
                             <div>
-                                <img src={banner.Show} className="absolute top-0 left-0 w-full h-40 object-cover rounded-t-xl" alt="Banner" />
+                                <img src={banner.Show} className="absolute top-0 left-0 w-full h-40 object-cover mt-2 rounded-t-xl" alt="Banner" />
                                 <div className="absolute -mt-5 left-[90%] right-0 flex justify-center cursor-pointer">
                                     <Menu>
                                         <MenuHandler>
-                                            <button className='w-8 h-8 rounded-full bg-blue-700 text-white'><i className="fa fa-gear"></i></button>
+                                            <button className='w-8 h-8 md:mt-1 border-white border-2 rounded-full bg-transparent text-white'><i className="fa fa-gear hover:animate-spin text-xl"></i></button>
                                         </MenuHandler>
-                                        <MenuList className='space-y-2' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                                            <MenuItem className='hover:bg-blue-500 rounded-full hover:text-white' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                                        <MenuList className='bg-gray-300 font-medium space-y-2' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                                            <MenuItem className='hover:bg-blue-500 rounded-md hover:text-white' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                                 <label htmlFor="banner-upload" className="cursor-pointer">
                                                     <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2 mr-3"></i> Change Banner
                                                     <input id="banner-upload" onChange={(e) => handleBanner(e, banner, setBanner, user, dispatch)} type="file" className="hidden" />
                                                 </label>
                                             </MenuItem>
-                                            <MenuItem className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-lock bg-blue-500 rounded-full p-2 px-3 mr-4'></i>Secure Account</MenuItem>
-                                            <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Profile Settings</MenuItem>
+                                            <MenuItem className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-lock bg-blue-500 rounded-md p-2 px-3 mr-4'></i>Secure Account</MenuItem>
+                                            <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Profile Settings</MenuItem>
                                             {!user.Channel ? (
-                                                <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Create Channel</MenuItem>
+                                                <MenuItem onClick={() => setChannel(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-television bg-blue-500 rounded-full p-2 mr-4'></i>Create Channel</MenuItem>
 
                                             ) : (
-                                                <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-full' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Edit Channel</MenuItem>
+                                                <MenuItem onClick={() => setChannel(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-television bg-blue-500 rounded-full p-2 mr-4'></i>Edit Channel</MenuItem>
                                             )}
                                         </MenuList>
                                     </Menu>
@@ -108,12 +110,12 @@ const Profile: React.FC = () => {
                                         <i className="fa fa-lock w-8 h-8 cursor-pointer text-white bg-green-700 rounded-full p-2"></i>
                                     </div>
                                 )}
-                                <div className="rounded-full flex-auto w-40 h-40 mt-10 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${profile.Show})` }} ></div>
+                                <div className="rounded-full flex-auto w-40 h-40 mt-10 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${Profile.Show})` }} ></div>
                                 <div className="absolute -mt-2 left-0 right-0 flex justify-center">
                                     <label htmlFor="profile-upload" className="cursor-pointer">
                                         <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2"></i>
                                     </label>
-                                    <input id="profile-upload" onChange={(e) => handleImages(e, profile, setProfile, user, dispatch)} type="file" className="hidden" />
+                                    <input id="profile-upload" onChange={(e) => handleImages(e, Profile, setProfile, user, dispatch)} type="file" className="hidden" />
                                 </div>
                             </div>
 
@@ -190,7 +192,7 @@ const Profile: React.FC = () => {
                                         )}
                                     </div>
                                 </center>
-                                <div className="w-full float-left mt-20 bg-[#111] text-xl font-bold">
+                                <div className="w-full md:w-[50%]  float-left mt-20 bg-[#111] ml-0 md:ml-[25%] text-xl font-bold">
                                     <div className={`w-1/4 float-left ${type === 'Images' ? 'bg-green-700 ' : 'bg-transparent'}`} onClick={() => setType('Images')}>
                                         <center><button className='bg-transparent text-white'><i className='fa fa-image'></i></button></center>
                                     </div>

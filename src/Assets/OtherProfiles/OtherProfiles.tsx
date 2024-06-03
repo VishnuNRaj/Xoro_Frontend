@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import {  useParams } from 'react-router-dom';
 import Preloader from '../Components/Preloader';
 import { Offcanvas } from '../Components/Canvas';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
@@ -11,18 +8,18 @@ import { User } from '../../Store/UserStore/Authentication/Interfaces';
 import { followUser, getProfile, unfollowUser } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 import { PostImage } from '../../Store/UserStore/Post-Management/Interfaces';
 import { useSocket } from '../../Socket';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 
 
 const OtherProfiles: React.FC = () => {
-    const navigate = useNavigate();
-    const dispatch: AppDispatch = useDispatch();
+    const { navigate, dispatch, auth, profile } = useEssentials()
     const socket = useSocket()
     const [userData, setUserData] = useState<User | null>(null)
     const [post, setPost] = useState<{
         Images: PostImage[]
     } | null>(null)
-    const { loading, user } = useSelector((state: RootState) => state.auth);
-    const { loadingProfile } = useSelector((state: RootState) => state.profile);
+    const { loading, user } = auth;
+    const { loadingProfile } = profile;
     const [type, setType] = useState<string>('Images')
     const [Connection, setConnection] = useState<{
         Following: boolean;
@@ -33,7 +30,7 @@ const OtherProfiles: React.FC = () => {
     })
     const { ProfileLink } = useParams()
     useEffect(() => {
-        const token = Cookies.get('token');
+        const token = getCookie('token')
         if (token && ProfileLink) {
             dispatch(getProfile({ token, ProfileLink })).then((state: any) => {
                 if (!state.payload.user) {
@@ -62,7 +59,7 @@ const OtherProfiles: React.FC = () => {
                 <Preloader />
             ) : <></>}
             <center>
-                <div className="container h-screen rounded-xl bg-[#000] mt-24 relative">
+                <div className="container animate-slideInFromLeft h-screen rounded-xl bg-[#000] mt-24 relative">
                     {/* Banner */}
                     <div className=''>
                         {userData?.Banner && (
@@ -87,24 +84,24 @@ const OtherProfiles: React.FC = () => {
                                         <div className="w-[220px] flex">
                                             <div className='w-[100px] mt-5'>
                                                 <button onClick={() => {
-                                                    const token = Cookies.get('token');
+                                                    const token: string | undefined = getCookie('token');
                                                     if (token) dispatch(unfollowUser({ token, UserId: userData._id })).then((() => {
-                                                        setConnection({...Connection,Follower:false})
+                                                        setConnection({ ...Connection, Follower: false })
                                                     }))
                                                 }} className='w-full py-2 flex items-center justify-center bg-pink-700 rounded-full'>Unfollow</button>
                                             </div>
                                             <div className='w-[100px] mt-5 ml-[20px]'>
-                                            <button className='w-full py-2 flex items-center justify-center bg-blue-700 rounded-full'>Message</button>
-                                        </div>
+                                                <button className='w-full py-2 flex items-center justify-center bg-blue-700 rounded-full'>Message</button>
+                                            </div>
                                         </div>
                                     )}
                                     {userData && !Connection.Follower && (
                                         <div className='w-[100px] mt-5'>
                                             <button onClick={() => {
-                                                const token = Cookies.get('token');
-                                                if (token) dispatch(followUser({ token, UserId: userData._id })).then((state:any)=>{
-                                                    if(!userData.Settings.Private) setConnection({...Connection,Follower:true})
-                                                    if(socket) socket.emit('notification',{data:state.payload.notification,UserId:userData._id})
+                                                const token: string | undefined = getCookie('token');
+                                                if (token) dispatch(followUser({ token, UserId: userData._id })).then((state: any) => {
+                                                    if (!userData.Settings.Private) setConnection({ ...Connection, Follower: true })
+                                                    if (socket) socket.emit('notification', { data: state.payload.notification, UserId: userData._id })
                                                 })
                                                 else navigate('/login')
                                             }} className='w-full py-2 flex items-center justify-center bg-green-700 rounded-full'>Follow</button>
@@ -120,7 +117,7 @@ const OtherProfiles: React.FC = () => {
                                             <li>
                                                 <div className="p-2 float-left w-full">
                                                     <div className="text-lg w-full float-left font-semibold align-middle">
-                                                        <h1 className='text-black'>{userData?.Name} <button className='bg-blue-700  text-black p-1 px-2 rounded-full'><center><i className='fa fa-edit font-semibold'></i></center></button>
+                                                        <h1 className='text-black'>{userData?.Name} 
                                                         </h1>
                                                     </div>
                                                 </div>
@@ -169,7 +166,6 @@ const OtherProfiles: React.FC = () => {
                                         {/* <h1 className='underline p-5'>Description</h1> */}
                                         {userData?.Description.length === 0 ? (
                                             <>
-                                                <button className='p-2 px-3 bg-pink-700'> <i className='fa fa-plus'></i> Add Description</button>
                                             </>
                                         ) : (
                                             <>

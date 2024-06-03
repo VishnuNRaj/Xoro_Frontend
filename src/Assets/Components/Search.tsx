@@ -1,9 +1,6 @@
 import React, { memo, useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../Store/Store';
-import { resetStateProfile, searchUsers } from "../../Store/UserStore/ProfileManagement/ProfileSlice";
+import { searchUsers } from "../../Store/UserStore/ProfileManagement/ProfileSlice";
+import { useEssentials,getCookie } from '../../Functions/CommonFunctions'
 import { User } from "../../Store/UserStore/Authentication/Interfaces";
 import { PostImage } from "../../Store/UserStore/Post-Management/Interfaces";
 import debounce from 'lodash/debounce';
@@ -21,13 +18,12 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = memo(({ data,setData }) => {
-  const navigate = useNavigate();
+  const {navigate,dispatch} = useEssentials();
   const [search, setSearch] = useState<string>('');
-  const dispatch: AppDispatch = useDispatch();
 
   const handleSearch = useCallback(
     debounce(async (search: string) => {
-      const token = Cookies.get('token');
+      const token = getCookie('token');
       if (token) {
         if (search.length > 0) {
           const state:any = await dispatch(searchUsers({ token, search }));
@@ -56,7 +52,7 @@ const Search: React.FC<SearchProps> = memo(({ data,setData }) => {
     <div className="w-full">
       <div className="relative w-full h-10">
         <input
-          className="text-black font-medium border-2 shadow-md shadow-black border-gray-900 focus:border-2 placeholder:font-normal focus:border-black w-full p-2 px-3 rounded-lg"
+          className="text-white font-medium border-2 shadow-md shadow-black border-gray-900 focus:border-2 placeholder:font-normal bg-gray-700 focus:border-black w-full p-2 px-3 rounded-lg"
           placeholder="Search..."
           value={search}
           onChange={(e) => {

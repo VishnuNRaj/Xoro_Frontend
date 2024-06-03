@@ -1,6 +1,9 @@
-import React, { useRef, useState, memo } from 'react'
+import React, { useRef, useState, memo, useEffect } from 'react'
 import VideoInput from './VideoInput'
+import { getCookie, useEssentials, useToast } from '../../Functions/CommonFunctions'
 import { Offcanvas } from '../Components/Canvas'
+import { uploadVideo } from '../../Store/UserStore/Video-Management/VideoSlice'
+import { Toaster } from 'react-hot-toast'
 interface detailsProps {
     Video: File,
     Thumbnail: string[],
@@ -8,21 +11,23 @@ interface detailsProps {
 }
 const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnail }) => {
     const thumbRef = useRef<HTMLInputElement>(null)
+    const videoRef = useRef<HTMLVideoElement | null>(null)
+    const { auth, dispatch, navigate } = useEssentials()
+    const { user } = auth;
     const handleThumbnailButtonClick = () => {
         thumbRef.current?.click()
     }
+    const [progress, setProgress] = useState<number | null>(null)
     const [data, setData] = useState({
         Caption: '',
         Description: '',
         Thumbnail: '',
         Hashtags: '',
-        CommentsOn: false,
-        Hidden: false,
+        CommentsOn: true,
         PremiumContent: false,
         ListedContent: true,
         RelatedTags: '',
-        Restriction: '',
-        Duration: '',
+        Restriction: '18',
     })
     const [Hashtags, setHashtags] = useState<string[]>([])
     const addThumbnail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,21 +53,53 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
         })
     }
 
+    const upload = () => {
+        const token: string | undefined = getCookie('token')
+        if (token) {
+            const { Caption, CommentsOn, Description, ListedContent, PremiumContent, RelatedTags, Restriction, Thumbnail } = data
+            const complete = {
+                Caption,
+                Description,
+                Duration: videoRef.current ? videoRef.current.duration.toString() : '',
+                RelatedTags,
+                Restriction: parseInt(Restriction),
+                Thumbnail,
+                Hashtags,
+                Settings: {
+                    CommentsOn,
+                    ListedContent,
+                    PremiumContent,
+                },
+                Video: Video,
+                token: token,
+                setProgress
+            }
+            dispatch(uploadVideo(complete)).then((state: any) => {
+                console.log(state.payload)
+                if (state.payload.status === 202) navigate('/login')
+                useToast(state.payload.message, (state.payload.status === 200 ? 'success' : 'error'))
+                state.payload.status === 200 ? navigate('/profile') : undefined
+            })
+        }
+    }
+
     return (
         <div>
             <div className="h-[70px] w-full">
                 <Offcanvas />
             </div>
-            <div className="sm:px-8 md:px-16 sm:py-8 flex justify-center">
-                <div className="md:w-2/3 w-full bg-gray-400 p-3">
+            <Toaster />
+            <div className="sm:px-8 md:px-16 sm:py-8 flex justify-center ">
+                <div className="md:w-2/3 w-full bg-gray-400 p-3 rounded-md">
                     <div className="md:flex justify-between">
                         <div className="md:pr-2 md:w-1/2">
                             {React.useMemo(() => (
                                 <video
                                     src={URL.createObjectURL(Video)}
-                                    className="rounded-lg w-full h-full object-cover"
+                                    className="rounded-lg w-full aspect-video h-full object-cover"
                                     controls={true}
                                     poster={data.Thumbnail}
+                                    ref={videoRef}
                                 >
                                 </video>
                             ), [data.Thumbnail])}
@@ -79,7 +116,7 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
                                                             ...data,
                                                             Thumbnail: img
                                                         })
-                                                    }} alt="" className={`rounded-lg w-full ${data.Thumbnail === img ? 'border-4 border-white ' : ''}`} />
+                                                    }} alt="" className={`rounded-lg w-full aspect-video object-cover ${data.Thumbnail === img ? 'border-4 border-white ' : ''}`} />
                                                 </div>
                                             </>
                                         ), [Thumbnail, data.Thumbnail])}
@@ -156,10 +193,44 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
                                 ))}
                             </div>
 
-                            {/* <div className="w-full">
-                                <VideoInput label={''} placeholder='Caption' value={data.Caption} onChange={handleChange} name={'Caption'} />
-                            </div> */}
                         </div>
+                        <div className="p-3 md:w-1/2 grid grid-cols-1">
+                            <div className="w-full">
+                                <div className="w-[90%] mt-3 flex items-center space-x-3 font-semibold">
+                                    <label className="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked={data.CommentsOn} onChange={() => setData({ ...data, CommentsOn: !data.CommentsOn })} className="sr-only peer" />
+                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span className={`ms-3 text-sm ${data.CommentsOn ? 'text-blue-700 shadow-md' : 'text-black'}`}>Comments</span>
+                                    </label>
+                                    <label className="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked={data.ListedContent} onChange={() => setData({ ...data, ListedContent: !data.ListedContent })} className="sr-only peer" />
+                                        <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                        <span className={`ms-3 text-sm ${data.ListedContent ? 'text-blue-700 shadow-md' : 'text-black'}`}>Listed</span>
+                                    </label>
+                                    {user && user.VIP && (
+                                        <label className="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" checked={data.PremiumContent} onChange={() => setData({ ...data, PremiumContent: !data.PremiumContent })} className="sr-only peer" />
+                                            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                            <span className={`ms-3 text-sm ${data.PremiumContent ? 'text-blue-700 shadow-md' : 'text-black'}`}>Premium</span>
+                                        </label>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="w-full">
+                                <VideoInput label={'Type'} placeholder='Type' value={data.RelatedTags} onChange={handleChange} name={'RelatedTags'} />
+                            </div>
+                            <div className="w-full">
+                                <select onChange={(e) => setData({ ...data, Restriction: e.target.value })} name="Restriction" className='text-black h-[40px] font-medium border-1 shadow-md shadow-black border-gray-900 focus:border-2 placeholder:font-normal focus:border-black w-full p-2 px-3 rounded-lg ' id="">
+                                    <option value="18">18 +</option>
+                                    <option value="16">16 +</option>
+                                    <option value="14">14 +</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <button onClick={upload} className='p-2 px-4 rounded-md shadow-md text-white bg-green-700 shadow-black'>Upload</button>
                     </div>
                 </div>
             </div>

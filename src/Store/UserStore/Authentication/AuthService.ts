@@ -124,4 +124,3 @@ export const getTwoStep: Function = async (data: interfaces.getTwoStep): Promise
         }
     }
 }
-

@@ -67,7 +67,7 @@ export const searchUsers: Function = async (data: interfaces.searchUsers) => {
 
 export const editProfile: Function = async (data: interfaces.editProfile) => {
     try {
-        const response = await axios.post(`${config.PROFILE}/edit-profile/`,data, {
+        const response = await axios.post(`${config.PROFILE}/edit-profile/`, data, {
             headers: {
                 'Authorization': data.token,
             }
@@ -93,7 +93,7 @@ export const getProfile: Function = async (data: interfaces.getProfile) => {
 
 export const followUser: Function = async (data: interfaces.followUser) => {
     try {
-        const response = await axios.post(`${config.PROFILE}/follow/${data.UserId}`,null ,{
+        const response = await axios.post(`${config.PROFILE}/follow/${data.UserId}`, null, {
             headers: {
                 'Authorization': data.token,
             }
@@ -107,7 +107,7 @@ export const followUser: Function = async (data: interfaces.followUser) => {
 export const unFollowUser: Function = async (data: interfaces.followUser) => {
     try {
         console.log(data)
-        const response = await axios.post(`${config.PROFILE}/unfollow/${data.UserId}`,null, {
+        const response = await axios.post(`${config.PROFILE}/unfollow/${data.UserId}`, null, {
             headers: {
                 'Authorization': data.token,
             }
@@ -115,5 +115,29 @@ export const unFollowUser: Function = async (data: interfaces.followUser) => {
         return response.data;
     } catch (e) {
         return { message: 'Internal Server Error' }
+    }
+}
+
+
+export const createChannel: Function = async (data: interfaces.createChannel): Promise<interfaces.createChannelResponse> => {
+    try {
+        const form = new FormData()
+        form.append('Logo',data.Logo)
+        form.append('Name',data.Name)
+        form.append('Description',data.Description)
+        data.Type.forEach((type)=>{
+            form.append('Type',type)
+        })
+        const response = await axios.post(`${config.PROFILE}/createChannel`, form, {
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data
+    } catch (e) {
+        return {
+            message: 'Internal Server Error',
+            status: 500
+        }
     }
 }

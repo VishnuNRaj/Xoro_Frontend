@@ -1,23 +1,17 @@
 import React, { memo, useState } from 'react';
-import { Offcanvas } from '../Components/Canvas';
-import Cookies from 'js-cookie';
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { resetState } from '../../Store/UserStore/Authentication/AuthSlice';
 import { addPost } from '../../Store/UserStore/Post-Management/PostSlice';
 import { FormInput } from '../Components/Input';
-import { toast } from 'react-hot-toast';
 import Preloader from '../Components/Preloader';
 import { resetStateProfile, searchUsers } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
-// import { User } from '../../Store/UserStore/Authentication/Interfaces';
+import { useEssentials, getCookie, useToast, } from '../../Functions/CommonFunctions';
 
-const MediaMap: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
+const MediaMap: React.FC<uploadProps> = memo(({ Media }) => {
   const [show, setShow] = useState<File>(Media[0])
 
   return (
     <>
-      <div>
+      <div className=''>
         {Media.length > 0 && (
           <>
             {
@@ -64,10 +58,9 @@ interface uploadProps {
 
 const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
 
-  const dispatch: AppDispatch = useDispatch()
-  const navigate = useNavigate()
-  const { loadingPost } = useSelector((state: RootState) => state.post)
-  const { loadingProfile, users } = useSelector((state: RootState) => state.profile)
+  const { dispatch, navigate, post, profile } = useEssentials()
+  const { loadingPost } = post
+  const { loadingProfile, users } = profile
   const [hashTag, setHash] = useState<string[]>([])
   const [Tag, setTag] = useState<{
     Username: string;
@@ -97,11 +90,10 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
 
 
   const searchUserData: Function = async (search: string) => {
-    const token = Cookies.get('token');
+    const token: string | undefined = getCookie('token');
     if (token) {
       if (search.length > 0) {
         dispatch(searchUsers({ token, search })).then((state: any) => {
-          console.log(state)
           if (state.payload.status === 202) {
             return navigate('/login')
           }
@@ -117,22 +109,18 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
 
   const upload = () => {
     const { Caption, CommentsOn, Hidden } = Form
-    const token = Cookies.get('token')
+    const token: string | undefined = getCookie('token')
     if (token) {
       dispatch(addPost({
         Caption, CommentsOn, Hidden, Tags: Tag.map((tag) => {
           return tag._id
         }), Hashtags: hashTag, Images: Media, token
       })).then((state: any) => {
-        console.log(state)
         if (state.payload.status === 202) {
           dispatch(resetState())
           navigate('/login')
         } else {
-          toast.success(state.payload.message, {
-            position: 'top-center',
-            duration: 1000,
-          });
+          useToast(state.payload.message, 'success')
           return state.payload.status === 200 ? () => navigate('/profile') : null
         }
       })
@@ -144,7 +132,6 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
 
   return (
     <div>
-      <Offcanvas />
       {loadingPost && <Preloader />}
       {Media.length > 0 && (
         <center>

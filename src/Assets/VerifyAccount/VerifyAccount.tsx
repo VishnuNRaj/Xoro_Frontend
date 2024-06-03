@@ -1,14 +1,12 @@
 import React, { useEffect, useState, ChangeEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { Offcanvas } from "../Components/Canvas";
+import { useEssentials, useToast } from '../../Functions/CommonFunctions';
 import Preloader from "../Components/Preloader";
-import { RootState, AppDispatch } from "../../Store/Store";
 import { verifyAccount } from "../../Store/UserStore/Authentication/AuthSlice";
-import { toast } from 'react-hot-toast';
 import Logo from '/Logo.png';
 import { FormInput } from './../Components/Input';
 import { AddProfilePic } from '../../Store/UserStore/Authentication/AuthSlice';
+import { useParams } from "react-router-dom";
+import { Offcanvas } from "../Components/Canvas";
 interface Params {
     [key: string]: string;
 }
@@ -17,22 +15,19 @@ interface Params {
     VerificationLink: string;
 }
 const VerifyAccount: React.FC = () => {
-    const { loading, message, user } = useSelector((state: RootState) => state.auth);
+    const { navigate, dispatch, auth } = useEssentials()
+    const { loading, message, user } = auth
     const { UserId, VerificationLink } = useParams<Params>();
     const [Profile, setProfile] = useState<File | null>(null);
     const [RememberMe, setRememberMe] = useState<boolean>(true);
     const [show, setShow] = useState<string>('');
     const [Username, setUsername] = useState<string>('');
     const [error] = useState<string>('');
-    const navigate = useNavigate()
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file: File = e.target.files[0];
             if (!file.type.startsWith('image/')) {
-                return toast.error('Please Upload Image Files', {
-                    position: 'top-right',
-                    duration: 2000,
-                });
+                return useToast('Please Upload Image Files', "error");
             }
             setProfile(file);
             const reader = new FileReader();
@@ -46,7 +41,6 @@ const VerifyAccount: React.FC = () => {
         }
     };
 
-    const dispatch: AppDispatch = useDispatch();
 
     useEffect(() => {
         if (UserId && VerificationLink) {
@@ -56,10 +50,7 @@ const VerifyAccount: React.FC = () => {
                     setUsername(data.Username)
                     setShow(data.Profile)
                 } else {
-                    toast.error(state.payload.message, {
-                        position: 'top-right',
-                        duration: 2000,
-                    });
+                    useToast(state.payload.message, 'error');
                 }
 
             })
@@ -68,12 +59,9 @@ const VerifyAccount: React.FC = () => {
 
     const updateAll = async () => {
         try {
-            const usernameRegex = /^[a-z0-9_.]+$/;
+            const usernameRegex = /^[a-z0-9_.-]+$/;
             if (!usernameRegex.test(Username)) {
-                return toast.error('Enter Username Properly', {
-                    position: 'top-right',
-                    duration: 2000,
-                });
+                return useToast('Enter Username Properly', "error");
             }
             const data = {
                 Username: Username,
@@ -83,16 +71,13 @@ const VerifyAccount: React.FC = () => {
             }
             if (Username && show && UserId) {
                 dispatch(AddProfilePic(data)).then((state: any) => {
-                    let toastify = toast.error;
+                    let toastify = 'error';
                     if (state.payload.status === 200) {
-                        toastify = toast.success;
+                        toastify = 'success';
                     }
-                    return toastify(state.payload.message, {
-                        position: 'top-right',
-                        duration: 2000,
-                    });
+                    useToast(state.payload.message, toastify);
                     if (state.payload.status === 200) {
-                        navigate('/')
+                        return navigate('/')
                     }
                 })
             }

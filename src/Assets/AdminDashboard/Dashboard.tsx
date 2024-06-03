@@ -1,18 +1,14 @@
 import React, { useEffect } from 'react';
 import { OffcanvasAdmin } from '../Components/AdminHeader';
-import { useNavigate } from 'react-router-dom';
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
 import Preloader from '../Components/Preloader';
-import Cookies from 'js-cookie';
 import { adminVerifyAuth } from '../../Store/AdminStore/Authentication/AuthSlice';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 
 const Dashboard: React.FC = () => {
-    const navigate = useNavigate()
-    const dispatch: AppDispatch = useDispatch()
-    const { loading, admin } = useSelector((state: RootState) => state.admin)
+    const { navigate, dispatch, Admin } = useEssentials()
+    const { loading, admin } = Admin
     useEffect(() => {
-        const token = Cookies.get('admin')
+        const token: string | undefined = getCookie('admin')
         if (token) {
             dispatch(adminVerifyAuth({ token })).then((state: any) => {
                 if (!state.payload.admin) {

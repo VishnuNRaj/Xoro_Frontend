@@ -4,12 +4,9 @@ import { toast } from 'react-hot-toast';
 import { FormInput } from '../Components/Input';
 import Logo from '/Logo.png'
 import { LoginValidate } from './ValidateAdmin';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../Store/Store';
 import { adminLogin, adminVerifyAuth } from '../../Store/AdminStore/Authentication/AuthSlice';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import Preloader from '../Components/Preloader';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 
 const AdminLogin: React.FC = () => {
     const [Form, SetForm] = useState<LoginFormInterface>({
@@ -22,7 +19,7 @@ const AdminLogin: React.FC = () => {
         Main: ""
     });
     useEffect(() => {
-        const token = Cookies.get('admin')
+        const token: string | undefined = getCookie('admin')
         if (token) {
             dispatch(adminVerifyAuth({ token })).then((state: any) => {
                 if (state.payload.admin) {
@@ -32,7 +29,7 @@ const AdminLogin: React.FC = () => {
                         position: 'top-center',
                         duration: 3000,
                     });
-                    if(state.payload.status == 200) return navigate('/')
+                    if (state.payload.status == 200) return navigate('/')
                 }
             })
         }
@@ -48,9 +45,8 @@ const AdminLogin: React.FC = () => {
             Main: ""
         });
     };
-    const dispatch: AppDispatch = useDispatch()
-    const navigate = useNavigate()
-    const { loading } = useSelector((state: RootState) => state.admin)
+    const { dispatch, navigate, Admin } = useEssentials()
+    const { loading } = Admin
     const admin = async () => {
         const response: LoginValidation = LoginValidate(Form)
         if (!response.status) {

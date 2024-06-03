@@ -4,16 +4,13 @@ import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png';
 import { FormInput } from '../Components/Input';
 import { LoginValidate } from './Validation';
-import { AppDispatch, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
 import { AuthUser, login } from '../../Store/UserStore/Authentication/AuthSlice';
 import Preloader from '../Components/Preloader';
-import {  toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
 import { encryptUserID } from '../../Common';
 import Google from '../Components/Google';
 import LinkedIn from '../Components/LinkedIn';
+import { useEssentials, getCookie, useToast, setCookie } from '../../Functions/CommonFunctions';
+
 
 const LoginForm: React.FC = () => {
     const [Form, SetForm] = useState<LoginFormInterface>({
@@ -26,12 +23,11 @@ const LoginForm: React.FC = () => {
         Main: ""
     });
 
-    const { loading } = useSelector((state: RootState) => state.auth);
-    const navigate = useNavigate();
-    const dispatch: AppDispatch = useDispatch();
+    const { navigate, dispatch, auth } = useEssentials()
+    const { loading } = auth
 
     useEffect(() => {
-        const token = Cookies.get('token');
+        const token = getCookie('token');
         if (token) {
             dispatch(AuthUser({ token })).then((state: any) => {
                 if (state.payload.user) {
@@ -60,18 +56,14 @@ const LoginForm: React.FC = () => {
         const { Email, Password } = data.user;
         dispatch(login({ Email, Password, Type: data.type })).then((state: any) => {
             let userId = '';
-            let toastify = toast.error;
+            let toastify = 'error'
             if (state.payload.status === 200) {
-                toastify(state.payload.message, {
-                    position: 'top-center',
-                    duration: 1000,
-                });
-                userId = state.payload.user._id ? encryptUserID(state.payload.user._id) : '';
-                toastify = toast.success;
+                toastify = 'success'
+                useToast(state.payload.message, toastify)
                 navigate('/otp/' + userId);
             }
             if (state.payload.status === 210) {
-                Cookies.set('token', state.payload.message);
+                setCookie(state.payload.message,'token');
                 navigate('/');
             }
         });
@@ -91,20 +83,18 @@ const LoginForm: React.FC = () => {
         const { Email, Password } = Form;
         dispatch(login({ Email, Password, Type: 'Email' })).then((state: any) => {
             let userId = '';
-            let toastify = toast.error;
+            let toastify = 'error'
             if (state.payload.status === 200) {
+                toastify = 'success';
                 userId = state.payload.user._id ? encryptUserID(state.payload.user._id) : '';
-                toastify = toast.success;
                 navigate('/otp/' + userId);
             }
             if (state.payload.status === 210) {
-                Cookies.set('token', state.payload.message);
+                setCookie(state.payload.message,'token');
+                console.log(getCookie('token'))
                 navigate('/');
             }
-            toastify(state.payload.message, {
-                position: 'top-right',
-                duration: 2000,
-            });
+            state.payload.status !== 210 && useToast(state.payload.message, toastify)
         });
     };
 
@@ -112,7 +102,7 @@ const LoginForm: React.FC = () => {
         <>
             <Offcanvas />
             {loading && <Preloader />}
-            <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
+            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">

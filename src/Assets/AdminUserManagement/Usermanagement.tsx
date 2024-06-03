@@ -1,8 +1,6 @@
 import React, { Fragment, memo, useEffect, useState } from 'react';
-import { AppDispatch, resetAdminStates, RootState } from '../../Store/Store';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { resetAdminStates } from '../../Store/Store';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 import { getUsers, updateUser, updateUserData } from '../../Store/AdminStore/Management/UserManagement/AdminUserSlice';
 import { toast } from 'react-hot-toast';
 import { OffcanvasAdmin } from '../Components/AdminHeader';
@@ -31,9 +29,8 @@ interface users {
 }
 
 const UserManagement: React.FC = memo(() => {
-    const navigate = useNavigate();
-    const dispatch: AppDispatch = useDispatch();
-    const { loadingUsers, users } = useSelector((state: RootState) => state.adminuser);
+    const {navigate,adminuser,dispatch} = useEssentials()
+    const { loadingUsers, users } = adminuser
     const [edit, setEdit] = useState<users | null>(null);
     const [error] = useState<string>('');
 
@@ -53,7 +50,7 @@ const UserManagement: React.FC = memo(() => {
     };
 
     useEffect(() => {
-        const token = Cookies.get('admin');
+        const token = getCookie('admin');
         if (token) {
             dispatch(getUsers({ token })).then((action: any) => {
                 console.log(action);
@@ -78,7 +75,7 @@ const UserManagement: React.FC = memo(() => {
             toastify('Suspension Date is required', 'error');
             return;
         }
-        const token = Cookies.get('admin');
+        const token = getCookie('admin');
         if (token && edit) {
             dispatch(updateUser({
                 Suspended: edit.SetSuspension,

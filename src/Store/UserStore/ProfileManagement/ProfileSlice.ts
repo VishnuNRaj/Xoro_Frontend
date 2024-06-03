@@ -2,6 +2,7 @@ import { createAsyncThunk, PayloadAction, createSlice } from "@reduxjs/toolkit";
 import * as interfaces from "./interfaces";
 import * as profileService from "./ProfileService";
 import { toast } from "react-hot-toast";
+
 const profileState: interfaces.profileState = {
     loadingProfile: false,
     users: [],
@@ -128,6 +129,21 @@ const toastify: (type: ToastType, message: string) => void = (type, message) => 
     )
 };
 
+export const createChannel = createAsyncThunk<interfaces.createChannelResponse, interfaces.createChannel>(
+    'auth/createChannel',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.createChannel(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.createChannelResponse>{
+                message: 'Internal Server Error',
+            })
+        }
+    }
+)
+
+
 const profileSlice = createSlice({
     name: 'profile',
     initialState: profileState,
@@ -186,6 +202,12 @@ const profileSlice = createSlice({
             })
             .addCase(unfollowUser.fulfilled, (state) => {
                 state.loadingProfile = false;
+            })
+            .addCase(createChannel.pending,(state)=>{
+                state.loadingProfile = true
+            })
+            .addCase(createChannel.fulfilled,(state)=>{
+                state.loadingProfile = true
             })
     }
 })

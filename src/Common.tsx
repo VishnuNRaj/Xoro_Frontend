@@ -10,11 +10,3 @@ export const decryptUserID = (UserId: string | any) => {
     return decrypted;
 };
 
-// export const decodeData = async (data: string) => {
-//     const decrypted = {
-//         users:[],
-//         message:'Set',
-//         status:200
-//     }
-//     return decrypted;
-// }

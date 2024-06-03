@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Offcanvas } from '../Components/Canvas';
 import { toast } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useEssentials } from '../../Functions/CommonFunctions'
 interface selectVideoProps {
     Video: File | null;
     setVideo: React.Dispatch<React.SetStateAction<File | null>>;
@@ -54,7 +54,8 @@ const generateThumbnails = async (videoSrc: string) => {
 
 const SelectVideo: React.FC<selectVideoProps> = ({ setVideo, Video, setThumbnail }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const navigate = useNavigate()
+    const { navigate } = useEssentials
+        ()
 
     const handleThumbnails = async () => {
         if (!Video) return;

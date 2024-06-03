@@ -1,20 +1,27 @@
 import React, { useState } from 'react'
 import { User } from '../../Store/UserStore/Authentication/Interfaces'
-import { useNavigate } from 'react-router-dom'
+import { useEssentials } from '../../Functions/CommonFunctions'
+import Preloader from "./Preloader";
+
 const UserMap: React.FC<{ user: User[] }> = ({ user }) => {
     const [show, setShow] = useState<boolean>(false)
-    const navigate = useNavigate()
+    const { navigate, auth, profile } = useEssentials()
+    const { loading } = auth
+    const { loadingProfile } = profile
     return (
-        <div className='mt-4 float-left'>
+        <div className='mt-4 float-left text-white'>
+            {loading || loadingProfile ? (
+                <Preloader />
+            ) : <></>}
             {user.length > 0 && user.map((user, index) => (
                 <>
                     {show || index < 5 && (
-                        <div onClick={() => navigate(`/profile/${user.ProfileLink}`)} className="min-w-full p-2 border-t-2 flex float-left">
-                            <div onClick={() => navigate(`/profile/${user.ProfileLink}`)} className='w-[10%] float-left'>
+                        <div onClick={() => navigate(`/profile/${user.ProfileLink}`)} className="w-[80%] ml-[10%] py-2 border-t-2  flex float-left">
+                            <div  onClick={() => navigate(`/profile/${user.ProfileLink}`)} className='w-[10%] cursor-pointer float-left'>
                                 <img src={user.Profile} className=' aspect-square float-left rounded-full' />
                             </div>
-                            <div onClick={() => navigate(`/profile/${user.ProfileLink}`)} style={{ overflowX: 'scroll', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }} className="w-full float-left ml-10 overflow-x-scroll">
-                                <p className='text-gray-900 mt-2 font-semibold'>{user.Username}</p>
+                            <div onClick={() => navigate(`/profile/${user.ProfileLink}`)} style={{ overflowX: 'scroll', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }} className="w-full cursor-pointer float-left ml-10 overflow-x-scroll">
+                                <p className=' mt-2 font-semibold'>{user.Username}</p>
                             </div>
                         </div>
                     )}

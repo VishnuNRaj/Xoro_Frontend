@@ -58,6 +58,7 @@ export interface User {
     Channel:boolean;
     connections: Connections[];
     notifications: Notification[];
+    VIP:boolean;
 }
 
 
@@ -164,3 +165,4 @@ export interface getTwoStepResponse {
     user: User;
     TwoStepVerification: boolean;
 }
+

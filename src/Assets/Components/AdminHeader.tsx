@@ -1,13 +1,9 @@
 import React, { Fragment, memo, useState } from "react";
 import Logo from '/Logo.png';
-import Search from "./Search";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../Store/Store";
+import { useEssentials, removeCookie } from '../../Functions/CommonFunctions';
 import { resetState } from "../../Store/UserStore/Authentication/AuthSlice";
 import Preloader from "./Preloader";
 import Buttons from "./Buttons";
-import Cookies from 'js-cookie';
 import { Drawer } from "@material-tailwind/react";
 
 interface NavbarProps {
@@ -16,7 +12,8 @@ interface NavbarProps {
 
 const NavbarAdmin: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { admin } = useSelector((state: RootState) => state.admin)
+    const { Admin } = useEssentials();
+    const { admin } = Admin;
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
@@ -42,7 +39,7 @@ const NavbarAdmin: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                     <div className={`items-center justify-between w-full min-w-[300px] md:flex md:w-auto md:order-1 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-sticky">
                         <ul className="flex w-full flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:border-gray-700 float-left">
                             <li className="w-full">
-                                <Search />
+                                {/* <Search /> */}
                             </li>
                         </ul>
                     </div>
@@ -57,11 +54,11 @@ export const OffcanvasAdmin: React.FC = memo(() => {
     const [openLeft, setOpenLeft] = useState<boolean>(false);
     const openDrawerLeft = () => setOpenLeft(true);
     const closeDrawerLeft = () => setOpenLeft(false);
-    const { user, loading } = useSelector((state: RootState) => state.auth)
-    const navigate = useNavigate()
-    const dispatch: AppDispatch = useDispatch()
+    const { navigate, dispatch, auth } = useEssentials()
+    const { user, loading } = auth
+
     const logout = () => {
-        Cookies.remove('admin');
+        removeCookie()
         dispatch(resetState())
         navigate('/admin/login')
     }
@@ -77,8 +74,7 @@ export const OffcanvasAdmin: React.FC = memo(() => {
                 placement="left"
                 open={openLeft}
                 onClose={closeDrawerLeft}
-                className="p-0 bg-black"
-            >
+                className="p-0 bg-black" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}            >
                 <div>
                     <button className="px-4 pt-4" onClick={closeDrawerLeft}><i className="fa fa-close text-blue-700 hover:text-purple-800"></i></button>
                 </div>

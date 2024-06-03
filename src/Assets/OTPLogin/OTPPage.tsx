@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png'
 import { FormInput } from '../Components/Input';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../Store/Store';
 import { AuthUser, OTPLogin, resendOtp } from '../../Store/UserStore/Authentication/AuthSlice';
-import { toast } from 'react-hot-toast';
-import Cookies from 'js-cookie';
 import { decryptUserID } from '../../Common';
 import Preloader from '../Components/Preloader';
+import { useEssentials, getCookie, useToast, setCookie } from '../../Functions/CommonFunctions';
+
+
 interface Params {
     [key: string]: string | undefined;
 }
+
 const OTPPage: React.FC = () => {
     const [error, setError] = useState<string>('')
     const [OTP, setOTP] = useState<string>('')
     const [RememberMe, setRememberMe] = useState<boolean>(false)
     let { UserId } = useParams<Params>();
-    const dispatch: AppDispatch = useDispatch()
-    const { loading } = useSelector((state: RootState) => state.auth)
-    const navigate = useNavigate()
+    const {dispatch,navigate,auth} = useEssentials()
+    const { loading } = auth;
     useEffect(() => {
-        const token = Cookies.get('token')
+        const token:string | undefined = getCookie('token')
         if (token) {
             dispatch(AuthUser({ token })).then((state: any) => {
                 if (state.payload.user) {
@@ -37,11 +36,11 @@ const OTPPage: React.FC = () => {
         }
         UserId = decryptUserID(UserId)
         dispatch(OTPLogin({ OTP, RememberMe, UserId })).then((state: any) => {
-            let toastify = toast.error;
+            let toastify = 'error';
             if (state.payload.status === 200) {
-                toastify = toast.success;
+                toastify = 'success';
             }
-            toastify(state.payload.message, {
+            useToast(state.payload.message, {
                 position: 'top-center',
                 duration: 2000,  
             })
