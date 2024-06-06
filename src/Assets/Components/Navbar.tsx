@@ -86,14 +86,18 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
             <nav className="fixed w-full z-20 top-0 start-0 black-varient-1">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between p-4 pl-0">
                     <span className="flex items-center w-[10%] px-5 rtl:space-x-reverserounded-full">
-                        <center>
-                            <button className=" h-9 w-9 shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white" onClick={openDrawerLeft} >
+                        {/* <center> */}
+                            <button className=" h-9 w-9 aspect-square shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white" onClick={openDrawerLeft} >
                                 <svg className="w-5 h-5 font-semibold" stroke="white" aria-hidden="true" fill="white"  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path clip-rule="evenodd" fontWeight={'900'} fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                                 </svg>
                             </button>
-                        </center>
+                            <button className=" h-9 w-9 aspect-square ml-3 shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white text-white" onClick={()=>navigate(-1)} >
+                                <i className="fa fa-arrow-left"></i>
+                            </button>
+                        {/* </center> */}
                     </span>
+                    
                     <div className="flex w-auto md:order-2 space-x-2 md:space-x-0 rtl:space-x-reverse">
 
                         {!user && (

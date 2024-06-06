@@ -13,6 +13,7 @@ import SocketToast from "../Other/SocketToast";
 import StartStream from "../Assets/LiveStream/StartStream";
 import Videos from "../Assets/Videos/Videos";
 import ShowVideos from "../Assets/Videos/ShowVideos";
+import ViewStream from "../Assets/LiveStream/ViewStream";
 
 const UserRoutes: React.FC = () => {
 
@@ -30,7 +31,8 @@ const UserRoutes: React.FC = () => {
                     <Route path="/profile/:ProfileLink" element={<OtherProfiles />} />
                     <Route path="/post/" element={<UploadCamera />} />
                     <Route path="/videos/upload" element={<VideoUpload />} />
-                    <Route path="/test" element={<StartStream />} />
+                    <Route path="/test/" element={<StartStream />} />
+                    <Route path="/test/view" element={<ViewStream />} />
                     <Route path="/videos" element={<Videos />} />
                     <Route path="/videos/watch/:VideoLink" element={<ShowVideos />} />
                     {/* <Route path="*" element={<Preloader/>} /> */}
