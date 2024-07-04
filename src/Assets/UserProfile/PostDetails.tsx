@@ -19,7 +19,7 @@ const PostDetails: React.FC<postDetail> = ({ index }) => {
         <>
             {loadingPost && <Preloader />}
             <div className='mt-40'>
-                {post.map((item, index) => (
+                {post.map((_item, _index) => (
                     <>
                         <div className='w-full md:w-[50%] h-[400px] float-left'>
                             <div className=''></div>

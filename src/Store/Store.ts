@@ -11,6 +11,9 @@ import { profileState } from './UserStore/ProfileManagement/interfaces';
 import profileSlice from './UserStore/ProfileManagement/ProfileSlice';
 import { videoState } from './UserStore/Video-Management/Interfaces';
 import VideoSlice from './UserStore/Video-Management/VideoSlice';
+import ChatSlice from './UserStore/Chat-Management/ChatSlice';
+
+import { ChatState } from './UserStore/Chat-Management/interfaces';
 
 interface RootReducerInterface {
   auth: AuthState;
@@ -18,7 +21,8 @@ interface RootReducerInterface {
   adminuser:UserManage;
   post:PostState;
   profile:profileState;
-  video:videoState
+  video:videoState,
+  chat:ChatState,
 }
 
 const rootReducer: Reducer<RootReducerInterface> = combineReducers({
@@ -27,7 +31,8 @@ const rootReducer: Reducer<RootReducerInterface> = combineReducers({
   adminuser:AdminUserSlice,
   post:postSlice,
   profile:profileSlice,
-  video:VideoSlice
+  video:VideoSlice,
+  chat:ChatSlice,
 });
 
 

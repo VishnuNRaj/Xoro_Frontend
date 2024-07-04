@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AddDetails from './AddDetails'
 import SelectVideo from './VideoSelect'
-import { getCookie, useEssentials } from '../../Functions/CommonFunctions'
+import { getCookie, useEssentials, useToast } from '../../Functions/CommonFunctions'
 import { AuthUser } from '../../Store/UserStore/Authentication/AuthSlice'
 import { useProgress } from '../../Functions/ProgressContext'
 import Preloader from '../Components/Preloader'
@@ -9,20 +9,23 @@ const VideoUpload: React.FC = () => {
     const { dispatch, navigate } = useEssentials()
     const [Video, setVideo] = useState<File | null>(null)
     const [Thumbnail, setThumbnail] = useState<string[]>([])
-    const {progress} = useProgress()
+    const { progress } = useProgress()
     console.log(progress)
     useEffect(() => {
         const token: string | undefined = getCookie('token')
         if (token) {
-            dispatch(AuthUser({ token })).then(({payload}:any)=>{
-                if(!payload.user) return navigate('/login')
+            dispatch(AuthUser({ token })).then(({ payload }: any) => {
+                if (!payload.user) return navigate('/login')
+                if (!payload.user.Channel) {
+                    useToast("Please Create a Channel", "error")
+                    return navigate("/profile")
+                }
             })
         } else navigate('/login')
     }, [])
-    console.log(Video, Thumbnail)
     return (
         <div>
-            {progress && <Preloader/>}
+            {progress && <Preloader />}
             {Thumbnail.length === 0 && <SelectVideo Video={Video} setVideo={setVideo} setThumbnail={setThumbnail} />}
             {Thumbnail.length > 0 && Video && <AddDetails Video={Video} Thumbnail={Thumbnail} setThumbnail={setThumbnail} />}
         </div>

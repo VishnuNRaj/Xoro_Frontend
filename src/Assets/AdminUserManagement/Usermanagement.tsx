@@ -144,7 +144,7 @@ const UserManagement: React.FC = memo(() => {
                     open={edit ? true : false}
                     size='sm'
                     className='bg-black shadow-sm shadow-gray-200 border-2 text-white border-white z-10'
-                    placeholder={undefined} handler={function (value: any): void {
+                    placeholder={undefined} handler={function (): void {
                         throw new Error('Function not implemented.');
                     }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}
                 >

@@ -4,7 +4,7 @@ interface dropDownProps {
         value: number,
         label: string,
     }[];
-    onSelect: Function;
+    onSelect: any;
     Label: string;
 }
 

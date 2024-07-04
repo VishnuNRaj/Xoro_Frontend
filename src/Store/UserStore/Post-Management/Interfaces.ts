@@ -1,4 +1,6 @@
 import { User } from "../Authentication/Interfaces";
+import { Comments } from "../CommonManagements/interfaces";
+import { Reactions } from "../Video-Management/Interfaces";
 
 export interface PostImage {
     _id:string;
@@ -16,6 +18,10 @@ export interface PostImage {
     ShareLink: string;
     PostDate: Date;
     CommentsOn:boolean;
+    user:User;
+    tags:User[];
+    reactions:Reactions;
+    comments:Comments[];
 }
 
 export interface PostState {
@@ -57,6 +63,28 @@ export interface deletePost {
 }
 
 export interface deletePostResponse {
+    message:string;
+    status:number;
+}
+
+export interface getPosts {
+    token:string;
+    skip:number;
+}
+export interface getPostsResponse {
+    post:PostImage[];
+    user:User;
+    status:number;
+    message:string;
+}
+
+export interface likeDislikeRemove {
+    token:string;
+    postId:string;
+    type:string;
+}
+
+export interface likeDislikeRemoveResponse {
     message:string;
     status:number;
 }

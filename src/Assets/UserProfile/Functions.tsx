@@ -69,6 +69,14 @@ export const updateImage = async (profile: File, dispatch: AppDispatch) => {
         }
     }
 };
+export const updateBanner = async (banner: File, dispatch: AppDispatch) => {
+    const token = Cookies.get('token');
+    if (token) {
+        if (banner) {
+            dispatch(editBanner({ token, Image: banner }))
+        }
+    }
+};
 
 export const handleBanner = async (e: React.ChangeEvent<HTMLInputElement>, banner: { Image: File | null; Show: string; }, setBanner: React.Dispatch<React.SetStateAction<{ Image: File | null; Show: string; }>>, user: User | null, dispatch: AppDispatch) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -98,15 +106,15 @@ export const handleBanner = async (e: React.ChangeEvent<HTMLInputElement>, banne
                         <div className="flex border-l border-gray-200">
                             <button
                                 onClick={() => {
-                                    updateImage(file, dispatch)
                                     toast.dismiss(t.id)
+                                    updateBanner(file, dispatch)
                                 }}
                                 className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             >
                                 Yes
                             </button>
                             <button
-                                onClick={() => {
+                                onClick={() => { 
                                     setBanner({ ...banner, Show: user ? user.Banner : '' });
                                     toast.dismiss(t.id)
                                 }}
@@ -125,13 +133,3 @@ export const handleBanner = async (e: React.ChangeEvent<HTMLInputElement>, banne
     }
 };
 
-export const updateBanner = async (banner: { Image: File | null; Show: string; }, dispatch: AppDispatch) => {
-    const token = Cookies.get('token');
-    if (token) {
-        if (banner.Image) {
-            console.log(Image)
-            console.log('hi')
-            dispatch(editBanner({ token, Image: banner.Image }))
-        }
-    }
-};

@@ -3,11 +3,10 @@
 @tailwind utilities;
 
 
-
 body {
   margin: 0;
   padding: 0;
-  background: #000;
+  background: #222;
   /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
   font-family: 'inter',sans-serif;
 }

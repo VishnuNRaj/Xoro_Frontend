@@ -14,7 +14,10 @@ export interface Reactions {
     PostId:string;
     Views:string[];
     Likes:string[];
+    users:User[];
     Dislikes:string[];
+    LikesDetails:User[];
+    DislikesDetails:User[];
 }
 export interface Video {
     _id: string;
@@ -34,7 +37,7 @@ export interface Video {
     RelatedTags: string;
     Views: number;
     Description: string;
-    VideoLInk: string;
+    VideoLink: string;
     Uploaded: boolean
     Channel: Channel[];
     Reactions:Reactions[]
@@ -59,7 +62,7 @@ export interface uploadVideo {
     Video: File;
     Duration: string;
     RelatedTags: string;
-    token: String;
+    token: string;
     setProgress:React.Dispatch<SetStateAction<number | null>>
 }
 
@@ -70,12 +73,24 @@ export interface uploadVideoResponse {
 export interface getVideos {
     random:number;
     skip:number;
-    token:string | undefined;
+    token?:string;
 }
 
 export interface getVideosResponse {
     status: number;
-    message: String;
+    message: string;
     user: User;
     Videos: Video[];
+}
+
+export interface getVideo {
+    VideoLink:string;
+    token?:string;
+}
+
+export interface getVideoResponse {
+    status: number;
+    message: string;
+    user: User;
+    Video: Video;
 }

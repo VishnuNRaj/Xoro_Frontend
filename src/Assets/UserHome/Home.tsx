@@ -1,29 +1,32 @@
-import React, { useEffect } from 'react'
-import { Offcanvas } from '../Components/Canvas'
-import { AuthUser } from '../../Store/UserStore/Authentication/AuthSlice';
+import React from 'react'
 import Preloader from '../Components/Preloader';
-import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
-
+import { useEssentials } from '../../Functions/CommonFunctions';
+import useHooks from './Hooks';
+import PostShowComponent from './PostShowComponent';
+import Recommendations from './Recommendations';
+import { useOnline } from '../../Other/Hooks';
 
 const Home: React.FC = () => {
-    const { dispatch, navigate, auth } = useEssentials()
+    const { auth } = useEssentials()
+    const { post } = useHooks()
     const { loading } = auth;
-
-    useEffect(() => {
-        const token = getCookie('token')
-        if (token) {
-            dispatch(AuthUser({ token })).then((state: any) => {
-                if (!state.payload.user) {
-                    navigate('/login')
-                }
-            })
-        }
-    }, [])
+    const { online } = useOnline()
+    console.log(online, "______")
 
     return (
         <>
             {loading && <Preloader />}
-            <Offcanvas />
+            <div className='w-full flex p-1 md:pl-20'>
+                <div className='grid grid-cols-1 space-y-8 w-full md:w-2/5 h-auto'>
+                    {post && post.length > 0 && post?.map((item) => (
+                        <div key={item._id} ><PostShowComponent postData={item} /></div>
+                    ))}
+                </div>
+                <div className='md:w-3/6 block'>
+                    <Recommendations users={online} />
+                </div>
+            </div>
+
         </>
     )
 }

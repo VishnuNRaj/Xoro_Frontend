@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { Offcanvas } from '../Components/Canvas';
 import { toast } from 'react-hot-toast';
 import { useEssentials } from '../../Functions/CommonFunctions'
 interface selectVideoProps {
@@ -106,9 +105,6 @@ const SelectVideo: React.FC<selectVideoProps> = ({ setVideo, Video, setThumbnail
 
     return (
         <div>
-            <div className='h-[70px] w-full inline-block'>
-                <Offcanvas />
-            </div>
             <div className=" sm:px-8 md:px-16 sm:py-8 flex" onDragOver={handleDragOver} onDrop={handleDrop}>
                 <main className="md:w-1/2 iteflexms-center justify-center mx-auto max-w-screen-lg h-full">
                     <article aria-label="File Upload Modal" className="relative h-full flex flex-col bg-white shadow-xl rounded-md">

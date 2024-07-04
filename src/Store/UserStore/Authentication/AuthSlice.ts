@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as authService from './AuthService';
 import * as interfaces from './Interfaces';
 import { toast } from 'react-hot-toast';
-import Cookies from 'js-cookie';
-
+import { setCookie,removeCookie } from '../../../Functions/CommonFunctions';
 
 
 export const login = createAsyncThunk<interfaces.loginResponse, interfaces.LoginCredentials>(
@@ -151,6 +150,9 @@ const authSlice = createSlice({
             })
             .addCase(login.fulfilled, (state, action: PayloadAction<interfaces.loginResponse>) => {
                 state.loading = false;
+                if(action.payload.refresh) {
+                    setCookie(action.payload.refresh,"refresh")
+                }
                 if (action.payload.status === 204) {
                     toast.success(action.payload.message, {
                         position: 'top-right',
@@ -175,7 +177,8 @@ const authSlice = createSlice({
                 state.message = action.payload.message
                 if (action.payload.status === 200) {
                     state.user = action.payload.user
-                    Cookies.set('token', action.payload.token)
+                    setCookie(action.payload.token,'token')
+                    setCookie( action.payload.refresh,'refresh')
                 }
                 else {
                     state.user = null
@@ -189,7 +192,8 @@ const authSlice = createSlice({
                 state.message = action.payload.message;
                 state.loading = false
                 if (action.payload.status === 200) {
-                    Cookies.set('token', action.payload.token)
+                    setCookie( action.payload.token,'token')
+                    setCookie( action.payload.refresh,'refresh')
                 }
             })
             .addCase(OTPLogin.pending, (state) => {
@@ -200,7 +204,8 @@ const authSlice = createSlice({
                 state.message = action.payload.message;
                 state.loading = false
                 if (action.payload.status === 200) {
-                    Cookies.set('token', action.payload.token)
+                    setCookie( action.payload.token,'token')
+                    setCookie( action.payload.refresh,'refresh')
                 }
             })
             .addCase(AuthUser.pending, (state) => {
@@ -213,7 +218,8 @@ const authSlice = createSlice({
                         position: 'top-right',
                         duration: 2000,
                     });
-                    Cookies.remove('token')
+                    removeCookie('token')
+                    removeCookie('refresh')
                 }
                 state.message = action.payload.message;
                 state.loading = false

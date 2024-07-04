@@ -3,12 +3,15 @@ import { User } from "../Authentication/Interfaces";
 
 export interface Chat {
     Message: string;
+    Seen:string[];
     FileLink: string;
     FileType: string;
     SenderId: string;
-    ReceiverId: string;
+    RoomId: string;
     Time: Date;
-    User: User
+    user: User
+    Username:string;
+    _id:string;
 }
 
 export interface Notification {
@@ -18,17 +21,31 @@ export interface Notification {
     Type: string;
     Seen: boolean;
     Time: Date;
+    _id:string;
 }
 
 export interface AllChatState {
-    UserId: string[];
-    Message: Chat[];
+    _id:string;
+    Users: {
+        UserId:string;
+        Admin:boolean;
+    }[];
+    users:User[];
+    LastClear:{
+        UserId:string;
+        Time:Date;
+    };
+    GroupName: string;
+    Profile:string;
+    RoomId:string;
+    messages:Chat[];
+    latestMessage:Chat;
 }
 export interface ChatState {
-    chat: Chat[] | null;
+    chat: AllChatState | null;
     loadingChat: boolean;
-    // allChats: AllChatState[];
     Notifications: Notification[];
+    RoomId:string;
 }
 
 export interface getChats {
@@ -41,3 +58,27 @@ export interface getChatsResponse {
     allChat:AllChatState[];
 }
 
+export interface startChat {
+    UserId:string[];
+    token:string;
+    GroupName?:string;
+    Profile?:string;
+}
+
+export interface startChatResponse {
+    message:string;
+    status:number;
+    newChat:AllChatState;
+    users:User[];
+}
+
+export interface getChat {
+    RoomId:string;
+    token:string;
+}
+
+export interface getChatResponse {
+    Chat:AllChatState;
+    status:number;
+    message:string;
+}

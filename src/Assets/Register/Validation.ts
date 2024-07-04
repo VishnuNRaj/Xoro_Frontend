@@ -4,7 +4,7 @@ import { ErrorForm, RegisterForm, RegisterValidate } from "./RegisterInterface";
 export const validateForm = (form: RegisterForm): RegisterValidate => {
     const { Name, Email, Password, Phone, ConfirmPassword,type } = form;
     console.log(form)
-    let ErrorForm = <ErrorForm>{
+    const ErrorForm = <ErrorForm>{
         Name: "",
         Email: "",
         Password: "",

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ErrorForm, LoginFormInterface, LoginValidation } from './LoginInterface';
-import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png';
 import { FormInput } from '../Components/Input';
 import { LoginValidate } from './Validation';
@@ -55,7 +54,7 @@ const LoginForm: React.FC = () => {
     }) => {
         const { Email, Password } = data.user;
         dispatch(login({ Email, Password, Type: data.type })).then((state: any) => {
-            let userId = '';
+            const userId = '';
             let toastify = 'error'
             if (state.payload.status === 200) {
                 toastify = 'success'
@@ -100,7 +99,7 @@ const LoginForm: React.FC = () => {
 
     return (
         <>
-            <Offcanvas />
+            
             {loading && <Preloader />}
             <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>

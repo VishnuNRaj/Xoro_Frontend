@@ -93,7 +93,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
     };
 
     const deleteMedia = (index: number) => {
-        setMediaFiles(prevFiles => prevFiles.filter((file, i) => i !== index));
+        setMediaFiles(prevFiles => prevFiles.filter((_file, i) => i !== index));
     };
 
     const clearAllMedia = () => {
@@ -101,13 +101,13 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-[80vh] relative">
+        <div className="flex flex-col items-center justify-center relative">
             {mediaFiles.length < 5 && (
                 <>
                     <Webcam
                         audio={false}
                         ref={webcamRef}
-                        className='rounded-lg border-4 border-blue-700 sticky'
+                        className='rounded-lg border-4 border-blue-700'
                         videoConstraints={{
                             facingMode: cam,
                         }}
@@ -128,7 +128,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                                 <button className='bg-red-700 animate-pulse w-10 h-10 border-2 border-white p-1 m-2 text-white rounded-full' onClick={stopRecording}><i className='fa fa-stop-circle w-4 h-4 '></i></button>
                             </>
                         )}
-                        {mediaFiles.length > 0 && <button className='text-red-700 p-2 px-3 m-2 bg-white rounded-full' onClick={clearAllMedia}><i className='fa fa-trash'></i> Clear All</button>}
+                        {mediaFiles.length > 0 && <button className='text-red-700 w-10 h-10 aspect-square m-2 bg-white rounded-full' onClick={clearAllMedia}><i className='fa fa-trash'></i> </button>}
                     </div>
                 </>
             )}
@@ -138,14 +138,14 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                     {mediaFiles.length > 0 && <button className='text-red-700 p-2 px-3 m-2 bg-white rounded-full' onClick={clearAllMedia}><i className='fa fa-trash'></i> Clear All</button>}
                 </>
             )}
-            <div className="w-[80%] media-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-32 sticky">
+            <div className="w-[80%] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mt-5">
                 {mediaFiles.map((file, index) => (
                     <div key={index} className='rounded-md p-3 media-item relative' data-index={index} onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
                         {
                             file.type.startsWith('image') ?
                                 (
                                     <div>
-                                        <img src={URL.createObjectURL(file)} className='w-full rounded-md border-2' alt={file.name} draggable onDragStart={(e) => handleDragStart(e, index)} />
+                                        <img src={URL.createObjectURL(file)} className='w-40 h-40 aspect-square object-cover rounded-md' alt={file.name} draggable onDragStart={(e) => handleDragStart(e, index)} />
                                         <div className="absolute top-4 right-4">
                                             <button className='text-red-700 w-6 h-6 m-1 bg-white rounded-full' onClick={() => deleteMedia(index)}><i className='fa fa-trash'></i></button>
                                         </div>

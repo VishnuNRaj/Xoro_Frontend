@@ -7,6 +7,7 @@ interface configuration {
     SECRET: string;
     PROFILE:string;
     VIDEO:string;
+    CHAT:string;
 }
 
 
@@ -19,6 +20,7 @@ const config: configuration = {
     SECRET: import.meta.env.VITE_APP_SECRET,
     PROFILE:import.meta.env.VITE_APP_PROFILE_API_URL,
     VIDEO:import.meta.env.VITE_APP_VIDEO_API_URL,
+    CHAT:import.meta.env.VITE_APP_CHAT_API_URL,
 }
 
 export default config;

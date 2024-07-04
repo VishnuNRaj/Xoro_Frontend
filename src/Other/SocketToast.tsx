@@ -69,7 +69,28 @@ const SocketToast: React.FC = () => {
         console.log(socket ? socket : 'blah blah blah')
     }, [socket]);
 
+    // useEffect(() => {
+    //     axios.interceptors.response.use(
+    //         (response: AxiosResponse<any>) => {
+    //             console.log(response)
+    //             // if (response.data.user.notifications.length > 0) {
+    //             //     const { notifications } = response.data.user;
+    //             //     // notifications.forEach(async (msg: any) => {
+    //             //     //     const Link = msg.Type === "Auth" || msg.Type === "Official" ? msg.Link : msg
+    //             //     //     // await toastFunction({})
+    //             //     // });
+    //             // }
+    //             return response;
+    //         },
+    //         (error) => {
+    //             return Promise.reject(error);
+    //         }
+    //     );
+    // }, [axios])
+
     return <Toaster />;
 }
+
+
 
 export default SocketToast;

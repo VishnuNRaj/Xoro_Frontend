@@ -128,7 +128,7 @@ const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
                                             </div>
                                             <div className='flex-shrink-0'>
                                                 <button className='bg-red-700 h-8 w-8 aspect-square  text-white p-1 rounded-md' onClick={() => {
-                                                    const arr = state.Type.filter((val, idx) => idx !== index)
+                                                    const arr = state.Type.filter((_val, idx) => idx !== index)
                                                     setState({ ...state, Type: arr })
                                                 }} >
                                                     <i className='fa fa-times'></i>

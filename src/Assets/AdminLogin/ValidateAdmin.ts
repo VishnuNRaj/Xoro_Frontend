@@ -1,10 +1,10 @@
 import { ErrorForm, LoginFormInterface, LoginValidation } from "./adminLoginInterface";
 
-export const LoginValidate: Function = (data: LoginFormInterface): LoginValidation => {
+export const LoginValidate = (data: LoginFormInterface): LoginValidation => {
     try {
         const { Email, Password } = data
         let check: boolean = true
-        let ErrorForm = <ErrorForm>{
+        const ErrorForm = <ErrorForm>{
             Email: '',
             Password: '',
             Main: ''

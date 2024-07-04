@@ -47,7 +47,7 @@ const ImgComponent: React.FC = () => {
                             setShow(post[index])
                         }} className='object-cover border-2 border-gray-400 overflow-hidden aspect-square cursor-pointer rounded-md' />
                     ) : (
-                        <video className='cursor-pointer' onClick={() => {
+                        <video className='cursor-pointer aspect-square' onClick={() => {
                             setShow(post[index])
                         }} src={item.Images[0].link} controls></video>
                     )}
@@ -65,7 +65,7 @@ const ImgComponent: React.FC = () => {
                                             if (state.payload.status === 202) {
                                                 navigate('/');
                                             }
-                                            dispatch(setPosts(post.filter((item, i) => {
+                                            dispatch(setPosts(post.filter((_item, i) => {
                                                 return index !== i;
                                             })));
                                         });

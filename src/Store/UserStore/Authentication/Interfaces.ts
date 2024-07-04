@@ -5,6 +5,9 @@ export interface Connections {
     Following: string[];
     FollowRequest: string[];
     FollowRequests: string[];
+    follow?: User[];
+    following?: User[];
+    mutual:User[];
 }
 
 export interface Notification {
@@ -55,10 +58,10 @@ export interface User {
     }
     Banner: string;
     ProfileLock: boolean;
-    Channel:boolean;
+    Channel: boolean;
     connections: Connections[];
     notifications: Notification[];
-    VIP:boolean;
+    VIP: boolean;
 }
 
 
@@ -89,6 +92,7 @@ export interface loginResponse {
     errors: string[] | [];
     status: number;
     user?: any;
+    refresh: string;
 }
 
 export interface registerResponse {
@@ -106,7 +110,8 @@ export interface verifyAccountResponse {
     message: string;
     status: number;
     token: string;
-    user: any
+    user: any;
+    refresh: string;
 }
 
 export interface AddProfilePic {
@@ -121,6 +126,7 @@ export interface addProfileResponse {
     token: string;
     status: number;
     user?: any;
+    refresh:string;
 }
 
 export interface OTPVerify {
@@ -134,6 +140,7 @@ export interface OTPVerifyResponse {
     user?: any;
     status: number;
     token: string;
+    refresh:string;
 }
 
 export interface AuthVerifyUser {

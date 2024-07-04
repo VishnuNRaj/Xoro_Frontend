@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png'
 import { FormInput } from '../Components/Input';
 import { AuthUser, OTPLogin, resendOtp } from '../../Store/UserStore/Authentication/AuthSlice';
 import { decryptUserID } from '../../Common';
 import Preloader from '../Components/Preloader';
-import { useEssentials, getCookie, useToast, setCookie } from '../../Functions/CommonFunctions';
+import { useEssentials, getCookie, useToast } from '../../Functions/CommonFunctions';
 
 
 interface Params {
@@ -40,10 +39,7 @@ const OTPPage: React.FC = () => {
             if (state.payload.status === 200) {
                 toastify = 'success';
             }
-            useToast(state.payload.message, {
-                position: 'top-center',
-                duration: 2000,  
-            })
+            useToast(state.payload.message,toastify)
             if (state.payload.status === 200) {
                 navigate('/')
             }
@@ -51,7 +47,6 @@ const OTPPage: React.FC = () => {
     }
     return (
         <>
-            <Offcanvas />
             {loading && <Preloader />}
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>

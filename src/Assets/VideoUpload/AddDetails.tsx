@@ -1,7 +1,6 @@
 import React, { useRef, useState, memo, useEffect } from 'react'
 import VideoInput from './VideoInput'
 import { getCookie, useEssentials, useToast } from '../../Functions/CommonFunctions'
-import { Offcanvas } from '../Components/Canvas'
 import { uploadVideo } from '../../Store/UserStore/Video-Management/VideoSlice'
 import { Toaster } from 'react-hot-toast'
 interface detailsProps {
@@ -53,6 +52,11 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
         })
     }
 
+    useEffect(() => {
+        if (progress) {
+
+        }
+    }, [progress])
     const upload = () => {
         const token: string | undefined = getCookie('token')
         if (token) {
@@ -77,17 +81,14 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
             dispatch(uploadVideo(complete)).then((state: any) => {
                 console.log(state.payload)
                 if (state.payload.status === 202) navigate('/login')
-                useToast(state.payload.message, (state.payload.status === 200 ? 'success' : 'error'))
-                state.payload.status === 200 ? navigate('/profile') : undefined
+                useToast(state.payload.message, (state.payload.status !== 201 && state.payload.status !== 500 ? 'success' : 'error'))
+                state.payload.status !== 201 && state.payload.status !== 500 ? navigate('/profile') : undefined
             })
         }
     }
 
     return (
         <div>
-            <div className="h-[70px] w-full">
-                <Offcanvas />
-            </div>
             <Toaster />
             <div className="sm:px-8 md:px-16 sm:py-8 flex justify-center ">
                 <div className="md:w-2/3 w-full bg-gray-400 p-3 rounded-md">
@@ -183,7 +184,7 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
                                             </div>
                                             <div className='ml-[10%]'>
                                                 <button onClick={() => {
-                                                    setHashtags(Hashtags.filter((tag, index) => index !== i))
+                                                    setHashtags(Hashtags.filter((_tag, index) => index !== i))
                                                 }} className='w-full hover:bg-red-700 px-1.5 bg-transparent  hover:text-white text-black'>
                                                     <i className='fa fa-times'></i>
                                                 </button>

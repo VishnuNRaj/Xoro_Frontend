@@ -11,15 +11,15 @@ import { ProgressProvider } from './Functions/ProgressContext.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <GoogleOAuthProvider clientId={googleConfig.CliendID}>
-    <ThemeProvider>
-      <ProgressProvider>
-        <SocketProvider>
+    <SocketProvider>
+      <ThemeProvider>
+        <ProgressProvider>
           <Provider store={store}>
             <App />
           </Provider>
-        </SocketProvider>
-      </ProgressProvider>
-    </ThemeProvider>
+        </ProgressProvider>
+      </ThemeProvider>
+    </SocketProvider>
   </GoogleOAuthProvider>
 
 );

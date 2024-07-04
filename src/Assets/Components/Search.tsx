@@ -1,24 +1,24 @@
 import React, { memo, useState, useEffect, useCallback } from "react";
-import { searchUsers } from "../../Store/UserStore/ProfileManagement/ProfileSlice";
-import { useEssentials,getCookie } from '../../Functions/CommonFunctions'
+import { search as searchData } from "../../Store/UserStore/CommonManagements/CommonService";
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions'
 import { User } from "../../Store/UserStore/Authentication/Interfaces";
 import { PostImage } from "../../Store/UserStore/Post-Management/Interfaces";
 import debounce from 'lodash/debounce';
+import { Channel } from "../../Store/UserStore/Video-Management/Interfaces";
 
 interface DataInterface {
   users: User[],
   post: PostImage[],
-  video: any[],
+  channel: Channel[],
   live: any[]
 }
 
 interface SearchProps {
-  data: DataInterface;
   setData: React.Dispatch<React.SetStateAction<DataInterface>>;
 }
 
-const Search: React.FC<SearchProps> = memo(({ data,setData }) => {
-  const {navigate,dispatch} = useEssentials();
+const Search: React.FC<SearchProps> = memo(({ setData }) => {
+  const { navigate, dispatch } = useEssentials();
   const [search, setSearch] = useState<string>('');
 
   const handleSearch = useCallback(
@@ -26,18 +26,20 @@ const Search: React.FC<SearchProps> = memo(({ data,setData }) => {
       const token = getCookie('token');
       if (token) {
         if (search.length > 0) {
-          const state:any = await dispatch(searchUsers({ token, search }));
+          const state: any = await dispatch(searchData({ token, search }));
           if (state.payload.status === 202) {
             navigate('/login');
           }
-          setData({...data,users:state.payload.users})
+          console.log(state)
+          const data: DataInterface = state.payload.data
+          setData(data)
         } else {
-          setData({...data,users:[]})
+          setData({ channel: [], live: [], post: [], users: [] })
         }
       } else {
         navigate('/login');
       }
-    }, 300),
+    }, 100),
     []
   );
 

@@ -4,7 +4,7 @@ export const LoginValidate: Function = (data: LoginFormInterface): LoginValidati
     try {
         const { Email, Password } = data
         let check: boolean = true
-        let ErrorForm = <ErrorForm>{
+        const ErrorForm = <ErrorForm>{
             Email: '',
             Password: '',
             Main: ''

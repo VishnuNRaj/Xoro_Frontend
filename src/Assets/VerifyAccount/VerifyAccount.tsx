@@ -6,7 +6,6 @@ import Logo from '/Logo.png';
 import { FormInput } from './../Components/Input';
 import { AddProfilePic } from '../../Store/UserStore/Authentication/AuthSlice';
 import { useParams } from "react-router-dom";
-import { Offcanvas } from "../Components/Canvas";
 interface Params {
     [key: string]: string;
 }
@@ -90,7 +89,6 @@ const VerifyAccount: React.FC = () => {
     if (user) {
         return (
             <>
-                <Offcanvas />
                 {loading && <Preloader />}
                 <div className='mt-[100px]'>
                     <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-10 text-white '>
@@ -143,7 +141,6 @@ const VerifyAccount: React.FC = () => {
     return (
         <div>
             {loading && <Preloader />}
-            <Offcanvas />
             <center>
                 <img src={Logo} className='w-24 h-24 mt-[200px] rounded-full border-violet shadow-lg bg-white justify-center shadow-red-700 inline-block' alt="" />
                 <h1 className="text-violet-700 font-medium mt-20 text-4xl">!! {message} !!</h1>

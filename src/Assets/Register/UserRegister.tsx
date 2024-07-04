@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ErrorForm, RegisterForm, RegisterValidate } from './RegisterInterface';
-import { Offcanvas } from '../Components/Canvas';
 import Logo from '/Logo.png';
 import { FormInput } from '../Components/Input';
 import { validateForm } from './Validation';
@@ -108,7 +107,6 @@ const SignUpForm: React.FC = () => {
 
     return (
         <>
-            <Offcanvas />
             {loading && <Preloader />}
             <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-20 text-white '>
                 <div className='p-0'>

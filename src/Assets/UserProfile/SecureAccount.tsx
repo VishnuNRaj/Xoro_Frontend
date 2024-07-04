@@ -154,7 +154,7 @@ export const SecureAccount: React.FC<SecureAccountProps> = memo(({ open, setOpen
                                             <div key={index} className='bg-gray-200 mt-2 float-left p-2 px-3 rounded-md text-gray-900'>
                                                 <p className='float-left'>{tag}</p>
                                                 <button onClick={() => {
-                                                    setDescription(Description.filter((item, i) => i !== index))
+                                                    setDescription(Description.filter((_item, i) => i !== index))
                                                 }} className='bg-red-700 w-7 h-7 text-white float-left mx-2 rounded-md'><i className='fa fa-times'></i></button>
                                             </div>
                                         ))}

@@ -32,7 +32,7 @@ const StreamViewer: React.FC<{ match: any }> = ({ match }) => {
       {stream && (
         <video
           ref={videoRef}
-          src={stream}
+          src={""}
           autoPlay
           controls
           className='w-52 h-52'

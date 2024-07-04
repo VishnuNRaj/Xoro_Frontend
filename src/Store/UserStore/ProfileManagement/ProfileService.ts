@@ -104,6 +104,19 @@ export const followUser: Function = async (data: interfaces.followUser) => {
     }
 }
 
+export const RemovefollowUser: Function = async (data: interfaces.followUser) => {
+    try {
+        const response = await axios.post(`${config.PROFILE}/remove/${data.UserId}`, null, {
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data;
+    } catch (e) {
+        return { message: 'Internal Server Error' }
+    }
+}
+
 export const unFollowUser: Function = async (data: interfaces.followUser) => {
     try {
         console.log(data)

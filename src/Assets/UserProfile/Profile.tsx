@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useEssentials,getCookie } from '../../Functions/CommonFunctions';
+import React, { useEffect, useRef, useState } from 'react';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 import Preloader from '../Components/Preloader';
-import { Offcanvas } from '../Components/Canvas';
 import { showPost } from '../../Store/UserStore/Post-Management/PostSlice';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
 import ImgComponent from './ImageMap';
@@ -14,14 +13,17 @@ import {
 } from "@material-tailwind/react";
 import SecureAccount from './SecureAccount';
 import CreateChannnel from './CreateChannnel';
+import { Connections } from '../../Store/UserStore/Authentication/Interfaces';
+import ShowConnections from './ShowConnections';
 
 
 const Profile: React.FC = () => {
-    const {navigate,dispatch,auth,post,profile} = useEssentials()
+    const { navigate, dispatch, auth, post, profile } = useEssentials()
 
     const { user, loading } = auth;
     const { loadingPost } = post;
     const { loadingProfile } = profile;
+    const [connections, setConnections] = useState<Connections | null>(null)
     const [type, setType] = useState<string>('Images')
 
     const [Profile, setProfile] = useState<{
@@ -44,49 +46,50 @@ const Profile: React.FC = () => {
         const token = getCookie('token');
         if (token) {
             dispatch(showPost({ token })).then((state: any) => {
+                console.log(state.payload)
                 if (!state.payload.user) {
                     navigate('/login');
                 }
                 setProfile({ ...Profile, Show: state.payload.user.Profile })
                 setBanner({ ...banner, Show: state.payload.user.Banner })
                 dispatch(setUser(state.payload.user))
+                setConnections(state.payload.connections)
             });
         } else navigate('/login')
     }, []);
 
     const [open, setOpen] = useState(false)
     const [channel, setChannel] = useState(false)
-
-
+    const bannerRef = useRef<HTMLInputElement | null>(null)
+    const profileRef = useRef<HTMLInputElement | null>(null)
+    const [state, setState] = useState(false)
     return (
         <div className='font-semibold'>
-            <div className="w-full h-[70px]">
-                <Offcanvas />
-            </div>
-
+            {state && connections && <ShowConnections setConnection={setConnections} setOpen={setState} open={state} connections={connections} />}
             {open && <SecureAccount open={open} setOpen={setOpen} />}
             {channel && <CreateChannnel open={channel} setOpen={setChannel} />}
             {loadingPost || loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}
             <center>
+                <input ref={bannerRef} id="profile-upload" onChange={(e) => handleBanner(e, Profile, setBanner, user, dispatch)} type="file" className="hidden" hidden />
                 <div className="container animate-slideInFromLeft h-screen rounded-xl bg-[#000] mt-6 relative">
                     {/* Banner */}
-                    <div className=''>
+                    <div className='h-full'>
                         {user?.Banner && (
-                            <div>
-                                <img src={banner.Show} className="absolute top-0 left-0 w-full h-40 object-cover mt-2 rounded-t-xl" alt="Banner" />
+                            <div className=''>
+                                <img src={banner.Show} className="absolute top-0 left-0 w-full h-40 object-cover rounded-t-xl" alt="Banner" />
                                 <div className="absolute -mt-5 left-[90%] right-0 flex justify-center cursor-pointer">
                                     <Menu>
                                         <MenuHandler>
                                             <button className='w-8 h-8 md:mt-1 border-white border-2 rounded-full bg-transparent text-white'><i className="fa fa-gear hover:animate-spin text-xl"></i></button>
                                         </MenuHandler>
                                         <MenuList className='bg-gray-300 font-medium space-y-2' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                                            <MenuItem className='hover:bg-blue-500 rounded-md hover:text-white' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                                                <label htmlFor="banner-upload" className="cursor-pointer">
-                                                    <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2 mr-3"></i> Change Banner
-                                                    <input id="banner-upload" onChange={(e) => handleBanner(e, banner, setBanner, user, dispatch)} type="file" className="hidden" />
-                                                </label>
+                                            <MenuItem onClick={() => {
+                                                bannerRef?.current?.click();
+                                            }} className="hover:bg-blue-500 rounded-md hover:text-white" placeholder={""} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}                                            >
+                                                <span><i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2 mr-3"></i>
+                                                    Change Banner</span>
                                             </MenuItem>
                                             <MenuItem className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-lock bg-blue-500 rounded-md p-2 px-3 mr-4'></i>Secure Account</MenuItem>
                                             <MenuItem onClick={() => setOpen(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-gears bg-blue-500 rounded-full p-2 mr-4'></i>Profile Settings</MenuItem>
@@ -102,7 +105,7 @@ const Profile: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="row p-8 gap-8 text-white font-semibold relative">
+                        <div className="row p-8 text-white font-semibold relative">
                             {/* Profile Image */}
                             <div className="h-full w-2/4 lg:w-1/6 relative">
                                 {user && user.ProfileLock && (
@@ -112,10 +115,8 @@ const Profile: React.FC = () => {
                                 )}
                                 <div className="rounded-full flex-auto w-40 h-40 mt-10 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${Profile.Show})` }} ></div>
                                 <div className="absolute -mt-2 left-0 right-0 flex justify-center">
-                                    <label htmlFor="profile-upload" className="cursor-pointer">
-                                        <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2"></i>
-                                    </label>
-                                    <input id="profile-upload" onChange={(e) => handleImages(e, Profile, setProfile, user, dispatch)} type="file" className="hidden" />
+                                    <i onClick={() => profileRef?.current?.click()} className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2"></i>
+                                    <input ref={profileRef} id="profile-upload" onChange={(e) => handleImages(e, Profile, setProfile, user, dispatch)} type="file" className="hidden" />
                                 </div>
                             </div>
 
@@ -127,8 +128,7 @@ const Profile: React.FC = () => {
                                             <li>
                                                 <div className="p-2 float-left w-full">
                                                     <div className="text-lg w-full float-left font-semibold align-middle">
-                                                        <h1 className='text-black'>{user?.Name} <button className='bg-blue-700  text-black p-1 px-2 rounded-full'><center><i className='fa fa-edit font-semibold'></i></center></button>
-                                                        </h1>
+                                                        <h1 className='text-black'>{user?.Name}</h1>
                                                     </div>
                                                 </div>
                                                 <div className=" float-left  w-full rounded-full mt-4">
@@ -149,17 +149,17 @@ const Profile: React.FC = () => {
                                                     <div className="w-full float-left font-bold px-[15%]">
                                                         <center>
                                                             <div className="flex justify-around space-x-4">
-                                                                <div className="text-center">
+                                                                <div onClick={() => setState(!state)} className="text-center">
                                                                     <h1>Followers</h1>
-                                                                    <p>{user?.Followers}</p>
+                                                                    <p>{connections?.follow?.length}</p>
                                                                 </div>
-                                                                <div className="text-center">
+                                                                <div onClick={() => setState(!state)} className="text-center">
                                                                     <h1>Following</h1>
-                                                                    <p>{user?.Following}</p>
+                                                                    <p>{connections?.following?.length}</p>
                                                                 </div>
-                                                                <div className="text-center">
+                                                                <div onClick={() => setState(!state)} className="text-center">
                                                                     <h1>Posts</h1>
-                                                                    <p>{user?.Posts}</p>
+                                                                    <p>{post.post?.length}</p>
                                                                 </div>
                                                             </div>
                                                         </center>
@@ -192,21 +192,17 @@ const Profile: React.FC = () => {
                                         )}
                                     </div>
                                 </center>
-                                <div className="w-full md:w-[50%]  float-left mt-20 bg-[#111] ml-0 md:ml-[25%] text-xl font-bold">
-                                    <div className={`w-1/4 float-left ${type === 'Images' ? 'bg-green-700 ' : 'bg-transparent'}`} onClick={() => setType('Images')}>
-                                        <center><button className='bg-transparent text-white'><i className='fa fa-image'></i></button></center>
-                                    </div>
-                                    <div className={`w-1/4 float-left ${type === 'Videos' ? 'bg-green-700 ' : 'bg-transparent'}`} onClick={() => setType('Videos')}>
-                                        <center><button className='bg-transparent text-white'><i className='fa fa-video-camera'></i></button></center>
-                                    </div>
-                                    <div className={`w-1/4 float-left ${type === 'Shorts' ? 'bg-green-700 ' : 'bg-transparent'}`} onClick={() => setType('Shorts')}>
-                                        <center><button className='bg-transparent text-white'><i className='fa fa-youtube-play'></i></button></center>
-                                    </div>
-                                    <div className={`w-1/4 float-left ${type === 'Live' ? 'bg-green-700 ' : 'bg-transparent'}`} onClick={() => setType('Live')}>
-                                        <center><button className='bg-transparent text-white'><i className='fa fa-television'></i></button></center>
+                                <div className='flex w-full items-center justify-center'>
+                                    <div className="w-full md:w-[100px]  float-left mt-20 bg-gray-800  text-xl font-bold">
+                                        <div className={`w-2/4 float-left ${type === 'Images' ? 'bg-blue-700 ' : 'bg-transparent'}`} onClick={() => setType('Images')}>
+                                            <center><button className='bg-transparent text-white'><i className='fa fa-image'></i></button></center>
+                                        </div>
+                                        <div className={`w-2/4 float-left ${type === 'Videos' ? 'bg-blue-700 ' : 'bg-transparent'}`} onClick={() => setType('Videos')}>
+                                            <center><button className='bg-transparent text-white'><i className='fa fa-bookmark'></i></button></center>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="w-full p-5 float-left mt-10 bg-[#111]">
+                                <div className="w-full rounded-md p-5 float-left mt-10 bg-[#111]">
                                     {type === 'Images' && <ImgComponent />}
                                 </div>
                             </div>

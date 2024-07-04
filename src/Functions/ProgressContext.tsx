@@ -1,5 +1,6 @@
 import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 import axios from 'axios'
+// import { useEssentials,useToast } from './CommonFunctions';
 interface ProgressContextType {
     progress: number | null;
     setProgress: React.Dispatch<React.SetStateAction<number | null>> | null;
@@ -21,6 +22,7 @@ interface ProgressProviderProps {
 
 export const ProgressProvider: React.FC<ProgressProviderProps> = ({ children }) => {
     const [progress, setProgress] = useState<number | null>(null);
+    // const {navigate} = useEssentials()
     useEffect(() => {
         axios.interceptors.request.use(config => {
             config.onUploadProgress = (e) => {
@@ -31,7 +33,7 @@ export const ProgressProvider: React.FC<ProgressProviderProps> = ({ children }) 
             };
             return config;
         });
-        axios.interceptors.response.use(config=>{
+        axios.interceptors.response.use((config)=>{
             setProgress(null)
             return config
         });

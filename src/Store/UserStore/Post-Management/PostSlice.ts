@@ -32,6 +32,38 @@ export const showPost = createAsyncThunk<interfaces.showPostResponse, interfaces
     }
 )
 
+
+
+export const LikeDislikeRemoveThunk = createAsyncThunk<interfaces.likeDislikeRemoveResponse, interfaces.likeDislikeRemove>(
+    "post/LikeDislikeRemoveThunk",
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const response = await postService.LikeDislikeRemove(credentials)
+            return response;
+        } catch (e) {
+            return rejectWithValue(<interfaces.likeDislikeRemoveResponse>{
+                message: 'Internal Server Error',
+                status: 500
+            })
+        }
+    }
+)
+
+export const getPosts = createAsyncThunk<interfaces.getPostsResponse, interfaces.getPosts>(
+    'post/getPosts',
+    async (credentials: interfaces.showPost, { rejectWithValue }) => {
+        try {
+            const data = await postService.getPosts(credentials);
+            return data;
+        } catch (error) {
+            return rejectWithValue(<interfaces.addPostResponse>{
+                message: 'Internal Server Error',
+                status: 500
+            })
+        }
+    }
+)
+
 export const deletePost = createAsyncThunk<interfaces.deletePostResponse, interfaces.deletePost>(
     'post/deletePost',
     async (credentials: interfaces.deletePost, { rejectWithValue }) => {
@@ -59,7 +91,7 @@ const postSlice = createSlice({
         resetPostState: (state) => {
             Object.assign(state, initialState);
         },
-        setPosts: (state,action) =>{
+        setPosts: (state, action) => {
             state.post = action.payload
         }
     },
@@ -92,5 +124,5 @@ const postSlice = createSlice({
     },
 })
 
-export const { resetPostState,setPosts } = postSlice.actions
+export const { resetPostState, setPosts } = postSlice.actions
 export default postSlice.reducer

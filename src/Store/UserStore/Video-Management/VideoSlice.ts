@@ -30,6 +30,20 @@ export const getVideos = createAsyncThunk<interfaces.getVideosResponse, interfac
     }
 )
 
+export const getVideo = createAsyncThunk<interfaces.getVideoResponse, interfaces.getVideo>(
+    'video/getVideo',
+    async (credentials: interfaces.getVideo, { rejectWithValue }) => {
+        try {
+            const data = await videoService.getVideo(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.getVideoResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
 
 export const videoInitialState: interfaces.videoState = {
     Channel: null,
@@ -55,6 +69,12 @@ const videoSlice = createSlice({
             })
             .addCase(getVideos.fulfilled,(state,action:PayloadAction<interfaces.getVideosResponse>)=>{
                 state.Videos = action.payload.Videos;
+                state.loadingVideo = false;
+            })
+            .addCase(getVideo.pending,(state)=>{
+                state.loadingVideo = true
+            })
+            .addCase(getVideo.fulfilled,(state)=>{
                 state.loadingVideo = false;
             })
     },

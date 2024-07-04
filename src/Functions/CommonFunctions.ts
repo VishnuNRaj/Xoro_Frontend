@@ -9,7 +9,8 @@ import { PostState } from '../Store/UserStore/Post-Management/Interfaces';
 import { profileState } from '../Store/UserStore/ProfileManagement/interfaces';
 import { videoState } from '../Store/UserStore/Video-Management/Interfaces';
 import { toast } from 'react-hot-toast'
-import { SetStateAction, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { ChatState } from '../Store/UserStore/Chat-Management/interfaces';
 
 interface RootReducerInterface {
     navigate: NavigateFunction;
@@ -21,6 +22,7 @@ interface RootReducerInterface {
     profile: profileState;
     video: videoState
     Post:PostState,
+    chat:ChatState
     // progress:number;
     // setProgress:React.Dispatch<SetStateAction<number | null>>
 }
@@ -30,7 +32,7 @@ interface RootReducerInterface {
 export const useEssentials = (): RootReducerInterface => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const { auth, admin, adminuser, post, profile, video } = useSelector(
+    const { auth, admin, adminuser, post, profile, video,chat } = useSelector(
         (state: RootState) => ({
             auth: state.auth,
             admin: state.admin,
@@ -38,6 +40,7 @@ export const useEssentials = (): RootReducerInterface => {
             post: state.post,
             profile: state.profile,
             video: state.video,
+            chat:state.chat
             // progress,setProgress
         }),
         shallowEqual
@@ -52,8 +55,9 @@ export const useEssentials = (): RootReducerInterface => {
         post,
         Post: post,
         profile,
-        video
-    }), [dispatch, navigate, auth, admin, adminuser, post, profile, video]);
+        video,
+        chat
+    }), [dispatch, navigate, auth, admin, adminuser, post, profile, video,chat]);
 };
 
 

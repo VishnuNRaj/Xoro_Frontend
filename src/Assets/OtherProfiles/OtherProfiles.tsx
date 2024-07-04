@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {  useParams } from 'react-router-dom';
 import Preloader from '../Components/Preloader';
-import { Offcanvas } from '../Components/Canvas';
 import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
 import ImgComponent from './ImageMap';
 import { User } from '../../Store/UserStore/Authentication/Interfaces';
@@ -37,7 +36,7 @@ const OtherProfiles: React.FC = () => {
                     navigate('/login');
                 }
                 if (!state.payload.userData) navigate(-1)
-                let data: User = state.payload.userData
+                const data: User = state.payload.userData
                 console.log(state.payload.post)
                 dispatch(setUser(state.payload.user))
                 setUserData(data);
@@ -54,7 +53,6 @@ const OtherProfiles: React.FC = () => {
 
     return (
         <div className='font-semibold'>
-            <Offcanvas />
             {loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}

@@ -34,7 +34,7 @@ export const uploadVideo = async ({
         const response = await axios.post(`${config.VIDEO}/upload`, form, {
             headers: {
                 'Authorization': `${token}`
-            },
+            }
         })
         return response.data
     } catch (e) {
@@ -46,9 +46,26 @@ export const uploadVideo = async ({
     }
 };
 
-export const getVideos: Function = async ({ token, random, skip }: interfaces.getVideos) => {
+export const getVideos = async ({ token, random, skip }: interfaces.getVideos) => {
     try {
         const response = await axios.get(`${config.VIDEO}/${token ? '' : 'videos'}/${skip}?random=${random}`, {
+            headers: {
+                'Authorization': `${token}`
+            },
+        })
+        return response.data
+    } catch (e) {
+        console.error('Error Getting video:', e);
+        return {
+            status: 500,
+            message: 'Internal Server Error'
+        };
+    }
+}
+
+export const getVideo = async ({ token, VideoLink }: interfaces.getVideo) => {
+    try {
+        const response = await axios.get(`${config.VIDEO}/video/${VideoLink}`, {
             headers: {
                 'Authorization': `${token}`
             },

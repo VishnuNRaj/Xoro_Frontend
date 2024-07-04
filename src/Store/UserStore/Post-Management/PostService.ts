@@ -47,6 +47,21 @@ export const showPost: Function = async (data: interfaces.showPost): Promise<int
     }
 }
 
+export const getPosts: Function = async (data: interfaces.getPosts): Promise<interfaces.getPostsResponse> => {
+    try {
+        const response = await axios.get(`${config.POST}/${data.skip}`, {
+            headers: {
+                Authorization: `${data.token}`,
+            }
+        });
+        return response.data
+    } catch (e) {
+        return <interfaces.getPostsResponse>{
+            message: 'Internal Server Error',
+        }
+    }
+}
+
 export const deletePost: Function = async (data: interfaces.deletePost) => {
     try {
         const response = await axios.get(`${config.POST}/delete/${data.PostId}`, {
@@ -58,6 +73,22 @@ export const deletePost: Function = async (data: interfaces.deletePost) => {
     } catch (e) {
         return <interfaces.deletePostResponse>{
             message: 'Internal Server Error',
+            status: 500,
+        }
+    }
+}
+
+export const LikeDislikeRemove: Function = async ({ postId, type, token }: interfaces.likeDislikeRemove) => {
+    try {
+        const response = await axios.patch(`${config.POST}/${type}/${postId}`,null, {
+            headers: {
+                Authorization: token
+            },
+        })
+        return response.data
+    } catch (e) {
+        return {
+            message: "Internal Server Error",
             status: 500,
         }
     }

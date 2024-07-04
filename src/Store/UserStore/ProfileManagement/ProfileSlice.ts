@@ -104,6 +104,20 @@ export const followUser = createAsyncThunk<interfaces.followUserResponse, interf
     }
 )
 
+export const RemovefollowUser = createAsyncThunk<interfaces.followUserResponse, interfaces.followUser>(
+    'profile/RemovefollowUser',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.RemovefollowUser(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.followUserResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
 export const unfollowUser = createAsyncThunk<interfaces.followUserResponse, interfaces.followUser>(
     'profile/unfollowUser',
     async (credentials, { rejectWithValue }) => {
@@ -195,6 +209,12 @@ const profileSlice = createSlice({
                 state.loadingProfile = true;
             })
             .addCase(followUser.fulfilled, (state) => {
+                state.loadingProfile = false;
+            })
+            .addCase(RemovefollowUser.pending, (state) => {
+                state.loadingProfile = true;
+            })
+            .addCase(RemovefollowUser.fulfilled, (state) => {
                 state.loadingProfile = false;
             })
             .addCase(unfollowUser.pending, (state) => {
