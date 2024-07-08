@@ -7,6 +7,7 @@ import { setUser } from '../../Store/UserStore/Authentication/AuthSlice'
 import { searchUsers } from '../../Store/UserStore/ProfileManagement/ProfileSlice'
 import { addCommentThunk, getCommentThunk } from '../../Store/UserStore/CommonManagements/CommonService'
 import { Comments } from '../../Store/UserStore/CommonManagements/interfaces'
+import { PayloadAction } from '@reduxjs/toolkit'
 
 const useHooks = () => {
     const { dispatch, navigate } = useEssentials()
@@ -79,7 +80,7 @@ export const useComments = ({ PostId }: { PostId: string }) => {
         const token: string | undefined = getCookie("token")
         if (token) {
             dispatch(getCommentThunk({ token, PostId: PostId })).then((response: any) => {
-                setComments(response.payload.comments.filter((value:any,idx:number,arr:any[])=>arr.indexOf(value) === idx))
+                setComments(response.payload.comments.filter((value: any, idx: number, arr: any[]) => arr.indexOf(value) === idx))
             })
         }
     }, [])
@@ -88,9 +89,10 @@ export const useComments = ({ PostId }: { PostId: string }) => {
             const response = arr[idx - 1] === "@" ? tags.find((tag) => tag._id === data) : null;
             if (response) {
                 arr[idx] = "@" + response.Username;
-                arr[idx - 1] = " ";
+                arr[idx - 1] = "";
             }
-        });
+        })
+        return value.join(" ")
     };
 
     const addComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -150,16 +152,17 @@ export const useComments = ({ PostId }: { PostId: string }) => {
 
     const upload = async (PostId: string) => {
         const comment: string[] = setupTags()
-        console.log(comment)
         if (comment.length > 0) {
             const token: string | undefined = getCookie("token")
             if (token) {
-                dispatch(addCommentThunk({ token, PostId, Comment: comment })).then((response: any) => {
-                    setUsers(null)
+                const response: PayloadAction<any> = await dispatch(addCommentThunk({ token, PostId, Comment: comment }))
+                if (response.payload.status === 202) return navigate("/login")
+                if (response.payload.Comment) {
                     setText("")
+                    setUsers(null)
                     setTags([])
                     return response.payload.Comment
-                })
+                }
             }
         } else useToast("Add Something", "error")
     }

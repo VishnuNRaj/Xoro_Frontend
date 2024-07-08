@@ -108,7 +108,7 @@ const SignUpForm: React.FC = () => {
     return (
         <>
             {loading && <Preloader />}
-            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-20 text-white '>
+            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-3 text-white '>
                 <div className='p-0'>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">
@@ -121,23 +121,44 @@ const SignUpForm: React.FC = () => {
                         <div className="w-3/4 p-3 pt-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
                             <div>
                                 <div className='float-left w-full mb-4'>
+                                    <FormInput error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
+                                </div>
+                            </div>
+                            <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-2'>
+                                <div className='float-left w-full md:w-full mb-4'>
                                     <FormInput error={errors.Name} width={'w-full'} label={'Full Name'} name={'Name'} value={Form.Name} onChange={handleChange} placeholder={'Enter Full Name'} type={'text'} />
                                 </div>
-                            </div>
-                            <div className='float-left w-full md:w-full mb-4'>
-                                <FormInput error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
-                            </div>
-                            <div className='float-left w-full md:w-full mb-4'>
-                                <FormInput error={errors.Phone} width={'w-full'} label={'Phone NO'} name={'Phone'} value={Form.Phone ? Form.Phone.toString() : ''} onChange={handleChange} placeholder={'Enter Phone NO'} type={'text'} />
-                            </div>
-                            <div>
-                                <div className='float-left w-full ml-0 mb-4'>
-                                    <FormInput error={errors.Password} width={'w-full'} label={'Password'} name={'Password'} value={Form.Password} onChange={handleChange} placeholder={'Enter Password'} type={'password'} />
-                                </div>
-                                <div className='float-left w-full ml-0  mb-4'>
-                                    <FormInput error={errors.ConfirmPassword} width={'w-full'} label={'Confirm Password'} name={'ConfirmPassword'} value={Form.ConfirmPassword} onChange={handleChange} placeholder={'Confirm Password'} type={'password'} />
+                                <div className='float-left w-full md:w-full mb-4'>
+                                    <FormInput error={errors.Phone} width={'w-full'} label={'Phone NO'} name={'Phone'} value={Form.Phone ? Form.Phone.toString() : ''} onChange={handleChange} placeholder={'Enter Phone NO'} type={'text'} />
                                 </div>
                             </div>
+                            <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-2'>
+                                <div className='w-full mb-4'>
+                                    <FormInput
+                                        error={errors.Password}
+                                        width={'w-full'}
+                                        label={'Password'}
+                                        name={'Password'}
+                                        value={Form.Password}
+                                        onChange={handleChange}
+                                        placeholder={'Enter Password'}
+                                        type={'password'}
+                                    />
+                                </div>
+                                <div className='w-full mb-4'>
+                                    <FormInput
+                                        error={errors.ConfirmPassword}
+                                        width={'w-full'}
+                                        label={'Confirm Password'}
+                                        name={'ConfirmPassword'}
+                                        value={Form.ConfirmPassword}
+                                        onChange={handleChange}
+                                        placeholder={'Confirm Password'}
+                                        type={'password'}
+                                    />
+                                </div>
+                            </div>
+
                             <div className='float-left w-full md:w-full mb-4'>
                                 <center>
                                     <button onClick={userRegister} className='w-full md:w-[300px] h-10 rounded-md bg-green-700 text-white font-semibold text-sm px-4 py-2'>Sign Up</button>

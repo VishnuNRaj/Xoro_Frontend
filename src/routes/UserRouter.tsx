@@ -16,6 +16,8 @@ import ShowVideos from "../Assets/Videos/ShowVideos";
 import ViewStream from "../Assets/LiveStream/ViewStream";
 import SocketMessage from "../Other/SocketMessage";
 import { Offcanvas } from "../Assets/Components/Canvas";
+import Shorts from "../Assets/Shorts/Shorts";
+import MeteorEffect from "../Assets/Components/Meteor";
 
 const UserRoutes: React.FC = () => {
 
@@ -23,6 +25,7 @@ const UserRoutes: React.FC = () => {
         <>
             <SocketToast />
             <SocketMessage />
+            {/* <MeteorEffect /> */}
             <div className="w-full h-[70px]">
                 <Offcanvas />
             </div>
@@ -40,6 +43,7 @@ const UserRoutes: React.FC = () => {
                 <Route path="/test/view" element={<ViewStream />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />
+                <Route path="/feed" element={<Shorts />} />
                 {/* <Route path="*" element={<Preloader/>} /> */}
             </Routes>
             {/* </div> */}

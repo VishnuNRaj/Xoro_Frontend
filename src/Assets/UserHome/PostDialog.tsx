@@ -31,7 +31,7 @@ const PostDialog: React.FC<Props> = ({ post, open, setOpen, count, dislike, like
         <Dialog
             open={open}
             size="md"
-            className="animate-slideInFromLeft bg-gray-300 shadow-md shadow-red-400"
+            className="animate-slideInFromLeft bg-white shadow-md shadow-red-400"
             handler={() => setOpen(false)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}    >
             <div className="w-full rounded-md border-2 h-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 w-full">
@@ -163,7 +163,7 @@ const PostDialog: React.FC<Props> = ({ post, open, setOpen, count, dislike, like
                         </div>
                     </div>
                     <div className="flex-shrink-0 p-2 w-auto">
-                        <div className="h-full rounded-md bg-gray-400">
+                        <div className="h-full rounded-md bg-gray-300">
                             <div className="h-full">
                                 <CommentComponent PostId={post._id} comments={comments} setComments={setComments} />
                             </div>

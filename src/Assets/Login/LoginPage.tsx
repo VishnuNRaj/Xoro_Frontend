@@ -101,7 +101,7 @@ const LoginForm: React.FC = () => {
         <>
             
             {loading && <Preloader />}
-            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
+            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-5 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">

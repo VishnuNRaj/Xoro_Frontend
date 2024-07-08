@@ -8,6 +8,7 @@ import UserMap from "./UserMap";
 import ChannelMap from "./ChannelMap";
 import ChatPopup from "../Chat/ChatPopup";
 import { Channel } from "../../Store/UserStore/Video-Management/Interfaces";
+import useWindowDimensions from "../../Other/Hooks";
 
 interface NavbarProps {
     openDrawerLeft: () => void;
@@ -15,6 +16,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
     const { navigate, auth } = useEssentials()
+    const { width } = useWindowDimensions()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { user } = auth
     const toggleMenu = () => {
@@ -90,12 +92,12 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between h-[70px] pl-0">
                     <span className="flex items-center w-[10%] px-5 rtl:space-x-reverserounded-full">
                         {/* <center> */}
-                        <button className=" h-9 w-9 p-2 aspect-square shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white" onClick={openDrawerLeft} >
+                        <button className=" h-9 w-9 p-2 mt-2 aspect-square shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white" onClick={openDrawerLeft} >
                             <svg className="w-5 h-5 font-semibold" stroke="white" aria-hidden="true" fill="white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path clipRule="evenodd" fontWeight={'900'} fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                             </svg>
                         </button>
-                        <button className=" h-9 w-9 p-2 aspect-square ml-3 shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white text-white" onClick={() => navigate(-1)} >
+                        <button className="mt-2 h-9 w-9 p-2 aspect-square ml-3 shadow-lg shadow-red-700 rounded-full flex items-center justify-center border-2 border-white text-white" onClick={() => navigate(-1)} >
                             <i className="fa fa-arrow-left"></i>
                         </button>
                         {/* </center> */}
@@ -111,10 +113,10 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                                 <button onClick={() => navigate('/videos/upload')} className="bg-blue-700 text-white rounded-full hover:bg-blue-900 text-sm hover:z-50 hover:w-10 transition-all hover:h-10 font-semibold w-9 h-9 aspect-square mt-2"><i className="fa fa-upload"></i></button>
                                 <button onClick={() => navigate('/post/')} className="bg-blue-700 text-white rounded-full hover:bg-blue-900 text-sm hover:z-50 hover:w-10 transition-all hover:h-10 font-semibold w-9 h-9 aspect-square mt-2"><i className="fa fa-camera"></i></button>
                                 <img src={user && user.Profile} className="w-9 h-9 mt-2 cursor-pointer rounded-full border-2 border-white aspect-square hover:z-50 object-contain hover:w-10 hover:h-10 transition-all " onClick={() => navigate('/profile')} alt="" />
-                                <button type="button" className="text-white font-medium rounded-lg text-sm px-2 py-2 text-center cursor-pointer"><span className="text-blue-700 hover:z-50 hover:text-[16px] transition-all font-semibold text-md underline underline-offset-4" onClick={() => navigate('/profile')}>{user && user.Name}</span></button>
+                                {width > 400 && <button type="button" className="text-white font-medium rounded-lg text-sm px-2 py-2 text-center cursor-pointer"><span className="text-blue-700 hover:z-50 hover:text-[16px] transition-all font-semibold text-md underline underline-offset-4" onClick={() => navigate('/profile')}>{user && user.Name}</span></button>}
                             </div>
                         )}
-                        <button onClick={toggleMenu} type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+                        <button onClick={toggleMenu} type="button" className="inline-flex items-center p-2 mt-1 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
                             <span className="sr-only">Open main menu</span>
                             <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />

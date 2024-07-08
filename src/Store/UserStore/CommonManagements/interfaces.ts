@@ -29,10 +29,8 @@ export interface CommentReply {
 export interface Comments {
     PostId: string;
     Comment: string[];
-    comments:{
-        tags: User[];
-        user: User;
-    }
+    tags: User[];
+    user: User;
     UserId: string;
     _id: string;
     replies: CommentReply[];

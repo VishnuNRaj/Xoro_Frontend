@@ -40,7 +40,7 @@ const PostShowComponent: React.FC<props> = ({ postData }) => {
             {dialog && width > 768 && <PostDialog open={dialog} setPost={setPost} comments={comments} setComments={setComments} setOpen={setDialog} post={post} count={count} setCount={setCount} like={like} setLike={setLike} dislike={dislike} setDisLike={setDisLike} />}
             {dialog && width <= 768 && <Dialog className='w-full' open={dialog} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} handler={() => setDialog(false)}><CommentComponent PostId={postData._id} comments={comments} setComments={setComments} /></Dialog>}
 
-            <div className="bg-white border rounded-lg flex-shrink-0 max-w-md">
+            <div className="bg-white border rounded-lg flex-shrink-0 md:min-w-[400px] max-w-md">
                 <div className="flex items-center px-4 py-3 relative">
                     <img className="h-8 w-8 rounded-full object-cover" src={post.user.Profile} />
                     <div className="ml-3">
