@@ -95,7 +95,7 @@ const VerifyAccount: React.FC = () => {
                         <div>
                             <div className="mx-auto text-center w-1/2">
                                 <div className="w-full">
-                                    <img src={Logo} className='w-20 h-20 rounded-full border-violet shadow-lg bg-white justify-center shadow-red-700 inline-block' alt="" />
+                                    <img crossOrigin="anonymous" src={Logo} className='w-20 h-20 rounded-full border-violet shadow-lg bg-white justify-center shadow-red-700 inline-block' alt="" />
                                 </div>
                                 <h1 className='font-semibold md:text-2xl text-lg mt-5 text-pretty inline-block'>Upload Your Profile Image</h1>
                             </div>
@@ -103,7 +103,7 @@ const VerifyAccount: React.FC = () => {
                             <div className="w-full">
                                 <div className='float-left w-full md:w-full mb-4'>
                                     <center>
-                                        <img src={show} alt="" className="w-28 h-28 mt-10 rounded-full border-2 p-2 border-violet-700" />
+                                        <img crossOrigin="anonymous" src={show} alt="" className="w-28 h-28 mt-10 rounded-full border-2 p-2 border-violet-700" />
                                         <label htmlFor="fileInput" className="text-center">
                                             <i className="h-8 w-8 pt-[6px] mt-3 text-center fa fa-plus border-2 border-red-700 rounded-full"></i>
                                             <input
@@ -142,7 +142,7 @@ const VerifyAccount: React.FC = () => {
         <div>
             {loading && <Preloader />}
             <center>
-                <img src={Logo} className='w-24 h-24 mt-[200px] rounded-full border-violet shadow-lg bg-white justify-center shadow-red-700 inline-block' alt="" />
+                <img crossOrigin="anonymous" src={Logo} className='w-24 h-24 mt-[200px] rounded-full border-violet shadow-lg bg-white justify-center shadow-red-700 inline-block' alt="" />
                 <h1 className="text-violet-700 font-medium mt-20 text-4xl">!! {message} !!</h1>
             </center>
         </div>

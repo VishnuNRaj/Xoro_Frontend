@@ -3,7 +3,7 @@ import { resetAdminStates } from '../../Store/Store';
 import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 import { getUsers, updateUser, updateUserData } from '../../Store/AdminStore/Management/UserManagement/AdminUserSlice';
 import { toast } from 'react-hot-toast';
-import { OffcanvasAdmin } from '../Components/AdminHeader';
+// import { OffcanvasAdmin } from '../Components/AdminHeader';
 import { setAdmin } from '../../Store/AdminStore/Authentication/AuthSlice';
 import Preloader from '../Components/Preloader';
 import { Dialog } from '@material-tailwind/react';
@@ -108,8 +108,11 @@ const UserManagement: React.FC = memo(() => {
 
     return (
         <Fragment>
-            <OffcanvasAdmin />
-            <div className='mt-40'>
+            {/* <OffcanvasAdmin /> */}
+            <div className='w-full h-12 mt-5 flex items-center justify-center'>
+                <h1 className='text-2xl text-white font-semibold'>Manage Users</h1>
+            </div>
+            <div className='mt-2'>
                 <center>
                     <table className="table-auto text-black font-semibold border-2 bg-gray-100 rounded-lg">
                         <thead className='p-2 border-2'>
@@ -154,7 +157,7 @@ const UserManagement: React.FC = memo(() => {
                     </div>
                     <div className='w-full border-t-2 border-t-white font-semibold'>
                         <div className="w-full">
-                            <img src={edit?.Profile} className='w-52 p-5 h-52 rounded-full float-left' alt="" />
+                            <img crossOrigin="anonymous" src={edit?.Profile} className='w-52 p-5 h-52 object-cover rounded-full float-left' alt="" />
                             <div className="w-auto float-left ml-16 mt-5">
                                 <h1>Name : {edit?.Name}</h1>
                                 <h1>Username : {edit?.Username}</h1>

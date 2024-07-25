@@ -57,7 +57,7 @@ const OtherProfiles: React.FC = () => {
                 <Preloader />
             ) : <></>}
             <center>
-                <div className="container animate-slideInFromLeft h-screen rounded-xl bg-[#000] mt-24 relative">
+                <div className="container animate-slideInFromLeft h-screen rounded-xl bg-[#000] relative">
                     {/* Banner */}
                     <div className=''>
                         {userData?.Banner && (

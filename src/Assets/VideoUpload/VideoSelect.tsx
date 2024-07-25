@@ -145,13 +145,13 @@ const SelectVideo: React.FC<selectVideoProps> = ({ setVideo, Video, setThumbnail
                                 {!Video ? (
                                     <>
                                         <li id="empty" className="h-full w-full text-center flex flex-col items-center justify-center">
-                                            <img className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
+                                            <img crossOrigin="anonymous" className="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="no data" />
                                             <span className="text-small text-gray-500">No files selected</span>
                                         </li>
                                     </>
                                 ) : (
                                     <>
-                                        <video src={URL.createObjectURL(Video)} className='rounded-lg w-full' controls></video>
+                                        <video crossOrigin="anonymous" src={URL.createObjectURL(Video)} className='rounded-lg w-full' controls></video>
                                     </>
                                 )}
                             </ul>

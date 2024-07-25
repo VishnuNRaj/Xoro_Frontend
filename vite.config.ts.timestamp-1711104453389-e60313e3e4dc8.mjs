@@ -3,7 +3,6 @@ import { defineConfig } from "file:///C:/Users/vishn/OneDrive/Desktop/Xoro/Front
 import react from "file:///C:/Users/vishn/OneDrive/Desktop/Xoro/Frontend/node_modules/@vitejs/plugin-react-swc/index.mjs";
 var vite_config_default = defineConfig({
   plugins: [react()],
-  ser
 });
 export {
   vite_config_default as default

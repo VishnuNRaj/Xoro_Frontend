@@ -1,8 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ShortsUpload from './ShortsUpload'
+import { getCookie, useEssentials } from '../../Functions/CommonFunctions'
+import { AuthUser } from '../../Store/UserStore/Authentication/AuthSlice'
 
 const Shorts: React.FC = () => {
     const [open, setOpen] = useState(false)
+    const { dispatch, navigate } = useEssentials()
+    useEffect(() => {
+        const token: string | undefined = getCookie("token")
+        if (!token) navigate("/login")
+        if (token) {
+            dispatch(AuthUser({ token })).then(({payload}:any)=>{
+                if(!payload.user) navigate("/login")
+            })
+        }
+    }, [])
     return (
         <div>
             {open && <ShortsUpload open={open} setOpen={setOpen} />}

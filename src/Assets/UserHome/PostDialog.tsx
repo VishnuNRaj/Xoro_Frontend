@@ -23,7 +23,7 @@ interface Props {
 }
 
 const PostDialog: React.FC<Props> = ({ post, open, setOpen, count, dislike, like, setCount, setDisLike, setLike }) => {
-    const { dislikePost, likePost, removeReaction, handlePlayPause, videoRef, comments, setComments } = useFunctions();
+    const { dislikePost, likePost, removeReaction, handlePlayPause, videoRef, comments, setComments } = useFunctions({base:"post"});
     const [play, setPlay] = useState(false);
     const { auth } = useEssentials();
 
@@ -37,7 +37,7 @@ const PostDialog: React.FC<Props> = ({ post, open, setOpen, count, dislike, like
                 <div className="grid grid-cols-1 md:grid-cols-2 w-full">
                     <div className="flex-shrink-0 w-full">
                         <div className="flex items-center px-4 py-3 relative">
-                            <img className="h-8 w-8 rounded-full object-cover" src={post.user.Profile} />
+                            <img crossOrigin="anonymous" className="h-8 w-8 rounded-full object-cover" src={post.user.Profile} />
                             <div className="ml-3">
                                 <span className="text-sm font-semibold antialiased block leading-tight">{post.user.Name}</span>
                                 <span className="text-gray-600 text-xs block">{post.user.Username}</span>

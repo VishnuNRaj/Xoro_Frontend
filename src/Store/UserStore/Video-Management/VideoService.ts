@@ -48,7 +48,7 @@ export const uploadVideo = async ({
 
 export const getVideos = async ({ token, random, skip }: interfaces.getVideos) => {
     try {
-        const response = await axios.get(`${config.VIDEO}/${token ? '' : 'videos'}/${skip}?random=${random}`, {
+        const response = await axios.get(`${config.VIDEO}/${skip}?random=${random}`, {
             headers: {
                 'Authorization': `${token}`
             },

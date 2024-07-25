@@ -60,3 +60,10 @@ export interface addCommentResponse {
     status: number;
     Comment: Comments[];
 }
+
+export interface Category {
+    Name:string;
+    _id:string;
+    videos:number;
+    Listed:boolean;
+}

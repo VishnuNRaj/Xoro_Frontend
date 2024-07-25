@@ -1,19 +1,23 @@
 import React, { SetStateAction, useMemo } from "react";
 import { Dialog } from "@material-tailwind/react";
 import { useUploadShorts } from "./Hooks";
-
+import useSlider from "../Components/Slider";
+import { Slider } from "@mui/material";
+import { Toaster } from "sonner";
 interface Props {
     open: boolean;
     setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
-    const { video, selectVideo, inputRef, data, handleChange,clear } = useUploadShorts();
-
+    const { video, selectVideo, inputRef, data, handleChange, clear, handleUpload, } = useUploadShorts();
+    const { start, duration, handleSlide, end, valueText, trim, handleTrimVideo, setTrim } = useSlider({ video })
     const videoElement = useMemo(() => {
-        if (video) {
+        if (trim) {
             return (
-                <video controls className="md:w-[225px] w-full flex-shrink-0 rounded-md h-[300px] md:h-[400px]" src={URL.createObjectURL(video)}></video>
+                <>
+                    <video crossOrigin="anonymous" controls className="md:w-[225px] w-full flex-shrink-0 rounded-md h-[300px] md:h-[400px]" src={URL.createObjectURL(trim)}></video>
+                </>
             );
         }
         return (
@@ -23,14 +27,15 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
                 </div>
             </div>
         );
-    }, [video, inputRef]);
+    }, [video, inputRef,trim]);
 
     return (
         <Dialog className="" size="xs" open={open} handler={() => setOpen(!open)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-            <div className="w-full p-1 md:flex">
+            <Toaster richColors closeButton duration={2000} />
+            <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full p-1 md:flex overflow-y-scroll">
                 <div className="p-2 w-full border-2 rounded-lg md:flex border-gray-400">
-                    <div className="md:w-[225px] w-full flex-shrink-0 bg-gray-800 rounded-md h-[300px] md:h-[400px]">
-                        <input ref={inputRef} onChange={selectVideo} type="file" name="image" accept="video/*" hidden />
+                    <div className={`md:w-[225px] w-full flex-shrink-0 bg-gray-800 rounded-md h-[300px] md:h-[${"400px"}]`}>
+                        <input ref={inputRef} onChange={(e)=>selectVideo(e,setTrim)} type="file" name="image" accept="video/*" hidden />
                         {videoElement}
                     </div>
                     <div className="w-full p-1 h-full relative">
@@ -62,8 +67,31 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
                         />
                         <div className="bottom-1 mt-2 flex gap-2 items-center justify-center w-full h-14">
                             <button onClick={clear} className="bg-red-500 rounded-lg font-semibold text-white p-2 px-3">Clear</button>
-                            <button className="bg-blue-700 rounded-lg font-semibold text-white p-2 px-3">Upload</button>
+                            <button onClick={handleUpload} className="bg-blue-700 rounded-lg font-semibold text-white p-2 px-3">Upload</button>
                         </div>
+                        {video && (
+                            <div className="w-full h-20 p-3">
+                                <div className="h-full p-3">
+                                    <div className=" flex items-center justify-center">
+                                        <h1 className="flex-shrink-0 font-semibold">Trim Video</h1>
+                                    </div>
+                                    <Slider
+                                        className="p-3 bg-blue-100"
+                                        getAriaLabel={() => 'Temperature range'}
+                                        min={0}
+                                        max={duration || 2}
+                                        valueLabelFormat={valueText}
+                                        value={[start, end]}
+                                        onChange={handleSlide}
+                                        valueLabelDisplay="auto"
+                                        color="success"
+                                    />
+                                    <div className="flex items-center justify-center">
+                                        <button onClick={handleTrimVideo} className="p-2 px-3 rounded-md bg-blue-700 text-white text-sm font-semibold">Trim</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

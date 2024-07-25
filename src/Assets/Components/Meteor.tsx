@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import useWindowDimensions from "../../Other/Hooks";
+// import useWindowDimensions from "../../Other/Hooks";
 
 function MeteorEffect() {
     return (
@@ -8,7 +8,7 @@ function MeteorEffect() {
 }
 
 export const Meteors: React.FC<{ number: number }> = ({ number }) => {
-    const { width } = useWindowDimensions()
+    // const { width } = useWindowDimensions()
     return [...new Array(number || 20).fill(true)].map((_el, idx) => (
         <span>
             {/* <svg

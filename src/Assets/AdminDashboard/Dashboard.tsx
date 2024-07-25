@@ -9,6 +9,7 @@ const Dashboard: React.FC = () => {
     const { loading, admin } = Admin
     useEffect(() => {
         const token: string | undefined = getCookie('admin')
+        alert(token)
         if (token) {
             dispatch(adminVerifyAuth({ token })).then((state: any) => {
                 if (!state.payload.admin) {

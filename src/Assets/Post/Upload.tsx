@@ -16,10 +16,10 @@ const MediaMap: React.FC<uploadProps> = memo(({ Media }) => {
           <>
             {
               show.type.startsWith('image') ? (
-                <img className="h-60 w-72 object-cover aspect-square rounded-lg" src={URL.createObjectURL(show)} alt="" />
+                <img crossOrigin="anonymous" className="h-60 w-72 object-cover aspect-square rounded-lg" src={URL.createObjectURL(show)} alt="" />
 
               ) : (
-                <video src={URL.createObjectURL(show)} className='h-auto max-w-full rounded-lg' controls={false} onMouseOver={(e) => {
+                <video crossOrigin="anonymous" src={URL.createObjectURL(show)} className='h-auto max-w-full rounded-lg' controls={false} onMouseOver={(e) => {
                   e.currentTarget.controls = true;
                 }} onMouseOut={(e) => {
                   e.currentTarget.controls = false;
@@ -34,9 +34,9 @@ const MediaMap: React.FC<uploadProps> = memo(({ Media }) => {
           show.name !== img.name && (
             <div key={URL.createObjectURL(img)} className='aspect-square bg-black rounded-lg'>
               {img.type.startsWith('image') ? (
-                <img className="w-full aspect-square object-cover rounded-lg hover:p-2 animate-popup" onClick={() => setShow(img)} src={URL.createObjectURL(img)} alt="" />
+                <img crossOrigin="anonymous" className="w-full aspect-square object-cover rounded-lg hover:p-2 animate-popup" onClick={() => setShow(img)} src={URL.createObjectURL(img)} alt="" />
               ) : (
-                <video src={URL.createObjectURL(img)} className=' aspect-square h-auto max-w-full rounded-lg' controls={false} onClick={() => setShow(img)}></video>
+                <video crossOrigin="anonymous" src={URL.createObjectURL(img)} className=' aspect-square h-auto max-w-full rounded-lg' controls={false} onClick={() => setShow(img)}></video>
               )}
             </div>
           )
@@ -212,7 +212,7 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
                               }
                             }} >
                               <div className="float-left px-2 pt-1">
-                                <img src={user.Profile} className='w-8 h-8 rounded-full border-2 border-white' alt="" />
+                                <img crossOrigin="anonymous" src={user.Profile} className='w-8 h-8 rounded-full border-2 border-white' alt="" />
                               </div>
                               <h1 className='pt-4 font-semibold'>{user.Username}</h1>
                             </div>
@@ -226,7 +226,7 @@ const Upload: React.FC<uploadProps> = memo(({ Media, setMedia }) => {
                         <div key={index} className='bg-gray-200 w-full p-2 rounded-lg flex'>
                           <div className='w-[10%] mr-5 flex'>
                             <div className='flex-shrink-0'>
-                              <img src={tag.Profile} className='w-6 h-6 rounded-full' alt="" />
+                              <img crossOrigin="anonymous" src={tag.Profile} className='w-6 h-6 rounded-full' alt="" />
                             </div>
                           </div>
                           <div className="w-[60%]">

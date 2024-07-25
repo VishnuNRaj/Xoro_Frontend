@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ErrorForm, LoginFormInterface, LoginValidation } from './adminLoginInterface'
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'sonner';
 import { FormInput } from '../Components/Input';
 import Logo from '/Logo.png'
 import { LoginValidate } from './ValidateAdmin';
 import { adminLogin, adminVerifyAuth } from '../../Store/AdminStore/Authentication/AuthSlice';
 import Preloader from '../Components/Preloader';
 import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
+// import { OffcanvasAdmin } from '../Components/AdminHeader';
 
 const AdminLogin: React.FC = () => {
     const [Form, SetForm] = useState<LoginFormInterface>({
@@ -60,24 +61,14 @@ const AdminLogin: React.FC = () => {
         }
         const { Email, Password } = Form
         dispatch(adminLogin({ Email, Password })).then((state: any) => {
-            let toastify = state.error;
-            if (state.payload.status === 200) {
-                toastify = toast.success;
-            }
-            toastify(state.payload.message, {
-                position: 'top-center',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                onClose: state.payload.status === 200 ? () => navigate('/admin/otp/' + state.payload.admin._id) : undefined,
-                style: {
-                    minWidth: '80%',
-                    fontSize: '14px'
+            let toastify: "success" | "error" = state.payload.status === 200 ? "success" : "error";
+            toast[toastify](state.payload.message, {
+                position: "top-right",
+                duration: 2000,
+                onAutoClose: () => {
+                    if (toastify === "success") return navigate(`/admin/otp/${state.payload.admin._id}`)
                 }
-            });
+            })
         })
     }
 
@@ -87,11 +78,12 @@ const AdminLogin: React.FC = () => {
 
     return (
         <>
+            <Toaster richColors/>
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">
-                            <img src={Logo} className='w-24 h-24 rounded-full border-violet shadow-lg bg-white justify-center mt-4 shadow-red-700 inline-block' alt="" />
+                            <img crossOrigin="anonymous" src={Logo} className='w-24 h-24 rounded-full border-violet shadow-lg bg-white justify-center mt-4 shadow-red-700 inline-block' alt="" />
                         </div>
                         <h1 className='font-semibold md:text-2xl text-lg mt-5 text-pretty inline-block'>Welcome to Xoro Admin</h1>
                     </div>

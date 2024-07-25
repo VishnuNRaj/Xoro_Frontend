@@ -8,16 +8,16 @@ export interface Channel {
     Type: string;
     Subsribers: string[];
     Reports: number;
-    Logo:string;
+    Logo: string;
 }
 export interface Reactions {
-    PostId:string;
-    Views:string[];
-    Likes:string[];
-    users:User[];
-    Dislikes:string[];
-    LikesDetails:User[];
-    DislikesDetails:User[];
+    PostId: string;
+    Views: string[];
+    Likes: string[];
+    users: User[];
+    Dislikes: string[];
+    LikesDetails: User[];
+    DislikesDetails: User[];
 }
 export interface Video {
     _id: string;
@@ -36,11 +36,16 @@ export interface Video {
     Hashtags: string[];
     RelatedTags: string;
     Views: number;
+    Likes: number;
+    Dislikes: number;
+    Liked: boolean;
+    Disliked: boolean;
+    Viewed: boolean;
     Description: string;
     VideoLink: string;
     Uploaded: boolean
     Channel: Channel[];
-    Reactions:Reactions[]
+    reactions: Reactions[]
 }
 export interface videoState {
     Channel: Channel | null;
@@ -63,7 +68,7 @@ export interface uploadVideo {
     Duration: string;
     RelatedTags: string;
     token: string;
-    setProgress:React.Dispatch<SetStateAction<number | null>>
+    setProgress: React.Dispatch<SetStateAction<number | null>>
 }
 
 export interface uploadVideoResponse {
@@ -71,9 +76,9 @@ export interface uploadVideoResponse {
     message: string;
 }
 export interface getVideos {
-    random:number;
-    skip:number;
-    token?:string;
+    random: number;
+    skip: number;
+    token?: string;
 }
 
 export interface getVideosResponse {
@@ -84,8 +89,8 @@ export interface getVideosResponse {
 }
 
 export interface getVideo {
-    VideoLink:string;
-    token?:string;
+    VideoLink: string;
+    token?: string;
 }
 
 export interface getVideoResponse {

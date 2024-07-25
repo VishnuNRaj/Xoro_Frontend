@@ -72,7 +72,7 @@ const AnimatedTooltip: React.FC<props> = ({ users }) => {
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-                            <img onClick={()=>navigate(`/profile/${item.ProfileLink}`)}
+                            <img crossOrigin="anonymous" onClick={()=>navigate(`/profile/${item.ProfileLink}`)}
                                 onMouseMove={handleMouseMove}
                                 src={item.Profile}
                                 alt={item.Name}

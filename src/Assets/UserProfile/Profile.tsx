@@ -1,88 +1,67 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
+import React from 'react';
 import Preloader from '../Components/Preloader';
-import { showPost } from '../../Store/UserStore/Post-Management/PostSlice';
-import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
 import ImgComponent from './ImageMap';
-import { handleBanner, handleImages } from './Functions';
 import {
     Menu,
     MenuHandler,
     MenuList,
     MenuItem,
 } from "@material-tailwind/react";
-import SecureAccount from './SecureAccount';
+import AccountSettings from './SecureAccount';
 import CreateChannnel from './CreateChannnel';
-import { Connections } from '../../Store/UserStore/Authentication/Interfaces';
 import ShowConnections from './ShowConnections';
+import useProfileData, { } from './Hooks';
 
 
 const Profile: React.FC = () => {
-    const { navigate, dispatch, auth, post, profile } = useEssentials()
+    const {
+        user,
+        loading,
+        loadingPost,
+        loadingProfile,
+        connections,
+        type,
+        Profile,
+        banner,
+        open,
+        channel,
+        state,
+        bannerRef,
+        profileRef,
+        setConnections,
+        setType,
+        setProfile,
+        setBanner,
+        setOpen,
+        setChannel,
+        setState,
+        dispatch,
+        handleBanner,
+        handleImages,
+        post
+    } = useProfileData();
 
-    const { user, loading } = auth;
-    const { loadingPost } = post;
-    const { loadingProfile } = profile;
-    const [connections, setConnections] = useState<Connections | null>(null)
-    const [type, setType] = useState<string>('Images')
-
-    const [Profile, setProfile] = useState<{
-        Image: File | null;
-        Show: string;
-    }>({
-        Image: null,
-        Show: ''
-    })
-
-    const [banner, setBanner] = useState<{
-        Image: File | null;
-        Show: string;
-    }>({
-        Image: null,
-        Show: ''
-    })
-
-    useEffect(() => {
-        const token = getCookie('token');
-        if (token) {
-            dispatch(showPost({ token })).then((state: any) => {
-                console.log(state.payload)
-                if (!state.payload.user) {
-                    navigate('/login');
-                }
-                setProfile({ ...Profile, Show: state.payload.user.Profile })
-                setBanner({ ...banner, Show: state.payload.user.Banner })
-                dispatch(setUser(state.payload.user))
-                setConnections(state.payload.connections)
-            });
-        } else navigate('/login')
-    }, []);
-
-    const [open, setOpen] = useState(false)
-    const [channel, setChannel] = useState(false)
-    const bannerRef = useRef<HTMLInputElement | null>(null)
-    const profileRef = useRef<HTMLInputElement | null>(null)
-    const [state, setState] = useState(false)
+    // const { anchorEl, openMenu, handleMenuClick, handleMenuClose } = useMenu();
     return (
         <div className='font-semibold'>
             {state && connections && <ShowConnections setConnection={setConnections} setOpen={setState} open={state} connections={connections} />}
-            {open && <SecureAccount open={open} setOpen={setOpen} />}
+            {open && <AccountSettings open={open} setOpen={setOpen} />}
             {channel && <CreateChannnel open={channel} setOpen={setChannel} />}
             {loadingPost || loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}
             <center>
                 <input ref={bannerRef} id="profile-upload" onChange={(e) => handleBanner(e, Profile, setBanner, user, dispatch)} type="file" className="hidden" hidden />
-                <div className="container animate-slideInFromLeft h-screen rounded-xl bg-[#000] mt-6 relative">
+                <div className="container animate-slideInFromLeft min-h-[100vh] h-full rounded-xl bg-[#000] mt-0 relative">
                     {/* Banner */}
                     <div className='h-full'>
                         {user?.Banner && (
                             <div className=''>
                                 <img src={banner.Show} className="absolute top-0 left-0 w-full h-40 object-cover rounded-t-xl" alt="Banner" />
-                                <div className="absolute -mt-5 left-[90%] right-0 flex justify-center cursor-pointer">
+                                <div className="absolute right-0 flex justify-center cursor-pointer">
                                     <Menu>
                                         <MenuHandler>
-                                            <button className='w-8 h-8 md:mt-1 border-white border-2 rounded-full bg-transparent text-white'><i className="fa fa-gear hover:animate-spin text-xl"></i></button>
+                                            <button className='w-8 z-50 h-8 md:mt-1 border-white border-2 rounded-full bg-transparent text-white'><i className="fa fa-gear hover:animate-spin text-xl"></i></button>
                                         </MenuHandler>
                                         <MenuList className='bg-gray-300 font-medium space-y-2' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                                             <MenuItem onClick={() => {
@@ -123,12 +102,12 @@ const Profile: React.FC = () => {
                             <div className="w-full rounded-2xl mt-20 md:mt-0 bg-[#000] float-left">
                                 {/* names */}
                                 <div className="h-full w-full md:w-1/4 float-left">
-                                    <div className="w-full rounded-md p-2 bg-gray-400 float-left">
+                                    <div className="w-full rounded-md p-2 text-white float-left">
                                         <ul>
                                             <li>
                                                 <div className="p-2 float-left w-full">
                                                     <div className="text-lg w-full float-left font-semibold align-middle">
-                                                        <h1 className='text-black'>{user?.Name}</h1>
+                                                        <h1 className=''>{user?.Name}</h1>
                                                     </div>
                                                 </div>
                                                 <div className=" float-left  w-full rounded-full mt-4">
@@ -159,7 +138,7 @@ const Profile: React.FC = () => {
                                                                 </div>
                                                                 <div onClick={() => setState(!state)} className="text-center">
                                                                     <h1>Posts</h1>
-                                                                    <p>{post.post?.length}</p>
+                                                                    <p>{post?.length}</p>
                                                                 </div>
                                                             </div>
                                                         </center>
@@ -211,7 +190,7 @@ const Profile: React.FC = () => {
                 </div>
             </center>
         </div>
-    );
+    )
 };
 
 export default Profile;

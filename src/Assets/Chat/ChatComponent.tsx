@@ -89,7 +89,7 @@ const ChatComponent: React.FC<props> = ({ close }) => {
                                     <i className='fa fa-arrow-left'></i>
                                 </button>
                                 <a className="inline-flex items-start mr-3" href="#0"  >
-                                    <img className="rounded-full aspect-square w-10 h-10 object-cover" src={chat.chat?.Profile ? chat.chat?.Profile : chat.chat?.users.find((user) => user._id !== auth?.user?._id)?.Profile} width="48" height="48" alt="Lauren Marsano" />
+                                    <img crossOrigin="anonymous" className="rounded-full aspect-square w-10 h-10 object-cover" src={chat.chat?.Profile ? chat.chat?.Profile : chat.chat?.users.find((user) => user._id !== auth?.user?._id)?.Profile} width="48" height="48" alt="Lauren Marsano" />
                                 </a>
                                 <div className="pr-1">
                                     <a className="inline-flex" href="#0">
@@ -125,7 +125,7 @@ const ChatComponent: React.FC<props> = ({ close }) => {
                                     {chat.SenderId !== auth?.user?._id ? (
                                         <div key={chat._id} className="flex justify-start w-[75%] mt-2 space-x-3 max-w-xs">
                                             <div className="flex-shrink-0 h-8 w-8 rounded-full">
-                                                <img src={users.find((usr) => usr._id === chat.SenderId)?.Profile} className='rounded-full object-contain h-8 w-8' alt="" />
+                                                <img crossOrigin="anonymous" src={users.find((usr) => usr._id === chat.SenderId)?.Profile} className='rounded-full object-contain h-8 w-8' alt="" />
                                             </div>
                                             <div>
                                                 <div className="bg-gray-100 p-1 pl-2 rounded-r-lg rounded-bl-lg">
@@ -147,7 +147,7 @@ const ChatComponent: React.FC<props> = ({ close }) => {
                                                 <span className="text-xs ml-1 justify-end font-extralight leading-none"> <i className={`fa ${chat?.Seen.length === users.length ? "fa-check text-blue-700" : "fa-check text-white"} `}></i></span>
                                             </div>
                                             <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300">
-                                                <img src={users.find((usr) => usr._id === chat.SenderId)?.Profile} className='rounded-full object-contain h-8 w-8' alt="" />
+                                                <img crossOrigin="anonymous" src={users.find((usr) => usr._id === chat.SenderId)?.Profile} className='rounded-full object-contain h-8 w-8' alt="" />
                                             </div>
                                         </div>
                                     )}

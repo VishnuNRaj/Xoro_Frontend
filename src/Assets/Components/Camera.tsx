@@ -145,7 +145,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                             file.type.startsWith('image') ?
                                 (
                                     <div>
-                                        <img src={URL.createObjectURL(file)} className='w-40 h-40 aspect-square object-cover rounded-md' alt={file.name} draggable onDragStart={(e) => handleDragStart(e, index)} />
+                                        <img crossOrigin="anonymous" src={URL.createObjectURL(file)} className='w-40 h-40 aspect-square object-cover rounded-md' alt={file.name} draggable onDragStart={(e) => handleDragStart(e, index)} />
                                         <div className="absolute top-4 right-4">
                                             <button className='text-red-700 w-6 h-6 m-1 bg-white rounded-full' onClick={() => deleteMedia(index)}><i className='fa fa-trash'></i></button>
                                         </div>
@@ -153,6 +153,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                                 ) : (
                                     <div>
                                         <video
+                                            crossOrigin="anonymous"
                                             className='w-full rounded-md border-2'
                                             src={URL.createObjectURL(file)}
                                             controls={false}

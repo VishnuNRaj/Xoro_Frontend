@@ -3,7 +3,7 @@ import { Comments } from '../../Store/UserStore/CommonManagements/interfaces';
 import { useComments } from './Hooks';
 import { User } from '../../Store/UserStore/Authentication/Interfaces';
 import { useEssentials } from '../../Functions/CommonFunctions';
-import { Avatar, Dialog } from '@material-tailwind/react';
+import { Avatar } from '@material-tailwind/react';
 
 interface Props {
     setComments: React.Dispatch<SetStateAction<Comments[]>>;
@@ -97,7 +97,7 @@ const CommentComponent: React.FC<Props> = ({ PostId }) => {
                                 <div className='w-full h-12 p-2 gap-2 flex items-center justify-center bg-gray-400' key={usr._id}>
                                     <div onClick={() => addTag(usr.Username, usr._id)} className='flex items-center justify-center w-full h-10 bg-violet-200'>
                                         <div className='h-8 w-8'>
-                                            <img src={usr.Profile} className='w-8 h-8 rounded-full' alt="" />
+                                            <img crossOrigin="anonymous" src={usr.Profile} className='w-8 h-8 rounded-full' alt="" />
                                         </div>
                                         <div className='flex ml-3'>
                                             <h1 className='text-gray-900 font-semibold text-lg'>{usr.Username}</h1>
@@ -109,23 +109,30 @@ const CommentComponent: React.FC<Props> = ({ PostId }) => {
                             )}
                         </div>
                     ) : (
-                        comments.map((comment, idx) => (
-                            <div className='w-full flex flex-col-1 relative' key={idx}>
-                                <div className='p-2 w-[95%] flex items-center'>
-                                    <div className='w-[90%] rounded-md block'>
-                                        <div className='text-sm items-center flex w-full justify-between text-gray-900'>
-                                            <Comment comment={comment} />
+                        <>
+                            {comments.length > 0 ? comments.map((comment, idx) => (
+                                <div className='w-full flex flex-col-1 relative' key={idx}>
+                                    <div className='p-2 w-[95%] flex items-center'>
+                                        <div className='w-[90%] rounded-md block'>
+                                            <div className='text-sm items-center flex w-full justify-between text-gray-900'>
+                                                <Comment comment={comment} />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className=''></div>
-                            </div>
-                        ))
+                            )) : (
+                                <>
+                                    <div className='h-full flex w-full items-center justify-center'>
+                                        <h1 className='text-gray-600 shadow-sm text-sm font-semibold'>No Comments Yet</h1>
+                                    </div>
+                                </>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
-            <div className='p-2'>
-                <div className='flex flex-row justify-between space-x-5 h-12'>
+            <div className='py-2'>
+                <div className='flex flex-row justify-between gap-1 h-12'>
                     <div className='w-full'>
                         <textarea value={text} onChange={addComment} rows={2} style={{ overflowY: "auto", scrollbarWidth: "none" }} className='resize-none p-3 font-semibold w-full h-12 border-2 border-gray-700 rounded-md'></textarea>
                     </div>

@@ -62,7 +62,7 @@ const LoginForm: React.FC = () => {
                 navigate('/otp/' + userId);
             }
             if (state.payload.status === 210) {
-                setCookie(state.payload.message,'token');
+                setCookie(state.payload.message, 'token');
                 navigate('/');
             }
         });
@@ -89,7 +89,7 @@ const LoginForm: React.FC = () => {
                 navigate('/otp/' + userId);
             }
             if (state.payload.status === 210) {
-                setCookie(state.payload.message,'token');
+                setCookie(state.payload.message, 'token');
                 console.log(getCookie('token'))
                 navigate('/');
             }
@@ -99,45 +99,47 @@ const LoginForm: React.FC = () => {
 
     return (
         <>
-            
+
             {loading && <Preloader />}
-            <div className='animate-slideInFromLeft md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-5 text-white '>
-                <div>
-                    <div className="mx-auto text-center w-1/2">
-                        <div className="w-full">
-                            <img src={Logo} className='w-24 h-24 rounded-full border-violet shadow-lg bg-white justify-center mt-4 shadow-red-700 inline-block' alt="" />
-                        </div>
-                        <h1 className='font-semibold md:text-2xl text-lg mt-5 text-pretty inline-block'>Welcome to Xoro Online</h1>
-                    </div>
-                    <center><p className='text-red-700 text-lg font-semibold'>{errors.Main}</p></center>
-                    <div className="w-full">
-                        <div className="w-3/4 p-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
-                            <div className='float-left w-full md:w-full mb-4'>
-                                <FormInput error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
+            <div className='w-full flex items-center justify-center'>
+                <div className='animate-slideInFromLeft md:min-w-[600px] md:w-2/4 flex w-full justify-center ml-0 h-auto rounded-md mt-5 text-white '>
+                    <div className='w-full flex-shrink-0'>
+                        <div className="mx-auto text-center w-1/2">
+                            <div className="w-full">
+                                <img crossOrigin="anonymous" src={Logo} className='w-24 h-24 rounded-full border-violet shadow-lg bg-white justify-center mt-4 shadow-red-700 inline-block' alt="" />
                             </div>
-                            <div>
-                                <div className='float-left w-full ml-0 mb-4'>
-                                    <FormInput error={errors.Password} width={'w-full'} label={'Password'} name={'Password'} value={Form.Password} onChange={handleChange} placeholder={'Enter Password'} type={'password'} />
+                            <h1 className='font-semibold md:text-2xl text-lg mt-5 text-pretty inline-block'>Welcome to Xoro Online</h1>
+                        </div>
+                        <center><p className='text-red-700 text-lg font-semibold'>{errors.Main}</p></center>
+                        <div className="w-full">
+                            <div className="w-3/4 p-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
+                                <div className='float-left w-full md:w-full mb-4'>
+                                    <FormInput error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
+                                </div>
+                                <div>
+                                    <div className='float-left w-full ml-0 mb-4'>
+                                        <FormInput error={errors.Password} width={'w-full'} label={'Password'} name={'Password'} value={Form.Password} onChange={handleChange} placeholder={'Enter Password'} type={'password'} />
+                                    </div>
+                                </div>
+                                <div className='float-left w-full md:w-full mb-4'>
+                                    <center>
+                                        <button onClick={userLogin} className='w-[80%] md:w-[80%] h-10 rounded-md bg-green-700 text-white font-semibold text-sm px-4 py-2'>Login</button>
+                                    </center>
+                                </div>
+                                <div className="w-full md:w-1/2 float-left">
+                                    <center><span onClick={() => navigate('/register')} className='font-medium text-sm float-none md:float-left hover:text-green-700'>Don't have an account ?</span></center>
+                                </div>
+                                <div className="w-full md:w-1/2 float-left">
+                                    <center><span className='font-medium text-sm float-none md:float-right hover:text-green-700'>Forgot Password ?</span></center>
                                 </div>
                             </div>
-                            <div className='float-left w-full md:w-full mb-4'>
-                                <center>
-                                    <button onClick={userLogin} className='w-[80%] md:w-[80%] h-10 rounded-md bg-green-700 text-white font-semibold text-sm px-4 py-2'>Login</button>
-                                </center>
-                            </div>
-                            <div className="w-full md:w-1/2 float-left">
-                                <center><span onClick={() => navigate('/register')} className='font-medium text-sm float-none md:float-left hover:text-green-700'>Don't have an account ?</span></center>
-                            </div>
-                            <div className="w-full md:w-1/2 float-left">
-                                <center><span className='font-medium text-sm float-none md:float-right hover:text-green-700'>Forgot Password ?</span></center>
-                            </div>
-                        </div>
-                        <div className='w-full float-left' style={{ display: 'flex', justifyContent: 'center' }}>
-                            <div style={{ marginRight: '10px' }}> {/* Add margin-right to create space between the buttons */}
-                                <Google socialMedia={socialMedia} />
-                            </div>
-                            <div>
-                                <LinkedIn />
+                            <div className='w-full float-left' style={{ display: 'flex', justifyContent: 'center' }}>
+                                <div style={{ marginRight: '10px' }}> {/* Add margin-right to create space between the buttons */}
+                                    <Google socialMedia={socialMedia} />
+                                </div>
+                                <div>
+                                    <LinkedIn />
+                                </div>
                             </div>
                         </div>
                     </div>

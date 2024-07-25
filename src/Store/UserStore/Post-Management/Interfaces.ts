@@ -82,6 +82,7 @@ export interface likeDislikeRemove {
     token:string;
     postId:string;
     type:string;
+    base:string;
 }
 
 export interface likeDislikeRemoveResponse {

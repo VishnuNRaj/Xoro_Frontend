@@ -52,7 +52,7 @@ const OTPPage: React.FC = () => {
                 <div>
                     <div className="mx-auto text-center w-1/2">
                         <div className="w-full">
-                            <img src={Logo} className='w-24 h-24 rounded-full border-violet shadow-lg bg-white justify-center mt-4 shadow-red-700 inline-block' alt="" />
+                            <img crossOrigin="anonymous" src={Logo} className='w-24 h-24 rounded-full border-violet shadow-lg bg-white justify-center mt-4 shadow-red-700 inline-block' alt="" />
                         </div>
                         <h1 className='font-semibold md:text-2xl text-lg mt-5 text-pretty inline-block'>Welcome to Xoro Online</h1>
                     </div>

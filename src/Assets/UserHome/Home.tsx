@@ -5,6 +5,7 @@ import useHooks from './Hooks';
 import PostShowComponent from './PostShowComponent';
 import Recommendations from './Recommendations';
 import { useOnline } from '../../Other/Hooks';
+// import { DefaultSidebar } from '../Components/Sidebar';
 
 const Home: React.FC = () => {
     const { auth } = useEssentials()
@@ -16,14 +17,16 @@ const Home: React.FC = () => {
     return (
         <>
             {loading && <Preloader />}
-            <div className='w-full flex p-1 md:pl-20'>
-                <div className='grid grid-cols-1 space-y-8 w-full md:w-2/5 h-auto'>
-                    {post && post.length > 0 && post?.map((item) => (
-                        <div key={item._id} ><PostShowComponent postData={item} /></div>
-                    ))}
-                </div>
-                <div className='md:w-3/6 block'>
-                    <Recommendations users={online} />
+            <div className='flex'>
+                <div className='w-full flex p-1 md:pl-20'>
+                    <div className='grid grid-cols-1 space-y-8 w-full md:w-2/5 h-auto'>
+                        {post && post.length > 0 && post?.map((item) => (
+                            <div key={item._id} ><PostShowComponent postData={item} /></div>
+                        ))}
+                    </div>
+                    <div className='md:w-3/6 block'>
+                        <Recommendations users={online} />
+                    </div>
                 </div>
             </div>
 

@@ -12,27 +12,31 @@ import profileSlice from './UserStore/ProfileManagement/ProfileSlice';
 import { videoState } from './UserStore/Video-Management/Interfaces';
 import VideoSlice from './UserStore/Video-Management/VideoSlice';
 import ChatSlice from './UserStore/Chat-Management/ChatSlice';
+import CategoryAdmin from "./AdminStore/Management/CategoryManagement/CategorySlice"
+import { CategoryState } from "./AdminStore/Management/CategoryManagement/Interfaces"
 
 import { ChatState } from './UserStore/Chat-Management/interfaces';
 
 interface RootReducerInterface {
   auth: AuthState;
   admin: AdminAuth;
-  adminuser:UserManage;
-  post:PostState;
-  profile:profileState;
-  video:videoState,
-  chat:ChatState,
+  adminuser: UserManage;
+  post: PostState;
+  profile: profileState;
+  video: videoState,
+  chat: ChatState,
+  categoryadmin:CategoryState
 }
 
 const rootReducer: Reducer<RootReducerInterface> = combineReducers({
   auth: authReducer,
   admin: authSliceAdmin,
-  adminuser:AdminUserSlice,
-  post:postSlice,
-  profile:profileSlice,
-  video:VideoSlice,
-  chat:ChatSlice,
+  adminuser: AdminUserSlice,
+  post: postSlice,
+  profile: profileSlice,
+  video: VideoSlice,
+  chat: ChatSlice,
+  categoryadmin:CategoryAdmin
 });
 
 
@@ -48,6 +52,6 @@ export const resetAdminStates = () => (dispatch: AppDispatch) => {
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-}); 
+});
 
 export default store;

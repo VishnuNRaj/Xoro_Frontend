@@ -112,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                             <div className="flex flex-shrink-0 gap-2">
                                 <button onClick={() => navigate('/videos/upload')} className="bg-blue-700 text-white rounded-full hover:bg-blue-900 text-sm hover:z-50 hover:w-10 transition-all hover:h-10 font-semibold w-9 h-9 aspect-square mt-2"><i className="fa fa-upload"></i></button>
                                 <button onClick={() => navigate('/post/')} className="bg-blue-700 text-white rounded-full hover:bg-blue-900 text-sm hover:z-50 hover:w-10 transition-all hover:h-10 font-semibold w-9 h-9 aspect-square mt-2"><i className="fa fa-camera"></i></button>
-                                <img src={user && user.Profile} className="w-9 h-9 mt-2 cursor-pointer rounded-full border-2 border-white aspect-square hover:z-50 object-contain hover:w-10 hover:h-10 transition-all " onClick={() => navigate('/profile')} alt="" />
+                                <img crossOrigin="anonymous" src={user && user.Profile} className="w-9 h-9 mt-2 cursor-pointer rounded-full border-2 border-white aspect-square hover:z-50 object-contain hover:w-10 hover:h-10 transition-all " onClick={() => navigate('/profile')} alt="" />
                                 {width > 400 && <button type="button" className="text-white font-medium rounded-lg text-sm px-2 py-2 text-center cursor-pointer"><span className="text-blue-700 hover:z-50 hover:text-[16px] transition-all font-semibold text-md underline underline-offset-4" onClick={() => navigate('/profile')}>{user && user.Name}</span></button>}
                             </div>
                         )}

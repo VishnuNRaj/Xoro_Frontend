@@ -1,55 +1,74 @@
-import React, { useRef, useState } from 'react';
-import io from 'socket.io-client';
+import React, { useEffect, useRef, useState } from 'react';
+import VideoPlayer from './ViewStream';
+import { useSocket } from '../Socket';
 
-const ScreenCapture: React.FC = () => {
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const socket = useRef<any>(null);
+const VideoCapture:React.FC = () => {
+  const videoRef = useRef<any>(null);
+  const socketRef = useRef<any>(null);
+  const mediaRecorderRef = useRef<any>(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [show, setShow] = useState(false);
+  const socket = useSocket()
+  useEffect(() => {
+    socketRef.current = socket;
+    return () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+    };
+  }, []);
 
-  const startCapture = async () => {
-    try {
-      const captureStream = await navigator.mediaDevices.getDisplayMedia({ video: true,audio:true });
-      setStream(captureStream);
+  const startStreaming = () => {
+    navigator.mediaDevices.getDisplayMedia({ audio: true, video: true }).then((stream) => {
+      videoRef.current.srcObject = stream;
 
-      socket.current = io('http://localhost:5000');
+      socketRef.current.emit('start-stream');
 
-      // Send the stream to the backend
-      socket.current.emit('stream', captureStream);
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp9'
+      });
 
-      // Handle screen capture errors
-      captureStream.getTracks()[0].onended = () => {
-        console.log('Screen sharing ended');
-        stopCapture();
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          socketRef.current.emit('stream', event.data);
+        }
       };
-    } catch (error) {
-      console.error('Error capturing screen:', error);
-    }
+
+      mediaRecorder.onstop = () => {
+        socketRef.current.emit('stop-stream');
+      };
+
+      mediaRecorder.start(100); // Send data in chunks every 100ms
+      mediaRecorderRef.current = mediaRecorder;
+      setIsStreaming(true);
+    });
   };
 
-  const stopCapture = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      setStream(null);
+  const stopStreaming = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+    }
+    setIsStreaming(false);
+  };
 
-      // Close WebSocket connection
-      if (socket.current) {
-        socket.current.disconnect();
-        socket.current = null;
-      }
+  const toggleStreaming = () => {
+    if (isStreaming) {
+      stopStreaming();
+    } else {
+      startStreaming();
     }
   };
 
   return (
-    <div className='bg-[#333] text-white'>
-      {!stream ? (
-        <button onClick={startCapture}>Start Screen Capture</button>
-      ) : (
-        <div>
-          <video src={''} controls autoPlay className='w-52 h-52'></video>
-          <button onClick={stopCapture}>Stop Screen Capture</button>
-        </div>
-      )}
-    </div>
+    <>
+      <video ref={videoRef} autoPlay muted></video>
+      <button className='p-2 px-3 text-white bg-blue-700' onClick={toggleStreaming}>
+        {isStreaming ? 'Stop Streaming' : 'Start Streaming'}
+      </button>
+      <button className='p-2 px-3 text-white bg-blue-700' onClick={() => setShow(!show)}>Show</button>
+      {show && <VideoPlayer />}
+    </>
   );
 };
 
-export default ScreenCapture;
+export default VideoCapture;

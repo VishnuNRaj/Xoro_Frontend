@@ -1,8 +1,9 @@
 import React, { useRef, useState, memo, useEffect } from 'react'
 import VideoInput from './VideoInput'
-import { getCookie, useEssentials, useToast } from '../../Functions/CommonFunctions'
+import { getCookie, useEssentials } from '../../Functions/CommonFunctions'
 import { uploadVideo } from '../../Store/UserStore/Video-Management/VideoSlice'
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from 'sonner'
+import { toast } from 'sonner'
 interface detailsProps {
     Video: File,
     Thumbnail: string[],
@@ -81,7 +82,7 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
             dispatch(uploadVideo(complete)).then((state: any) => {
                 console.log(state.payload)
                 if (state.payload.status === 202) navigate('/login')
-                useToast(state.payload.message, (state.payload.status !== 201 && state.payload.status !== 500 ? 'success' : 'error'))
+                toast[(state.payload.status !== 201 && state.payload.status !== 500 ? 'success' : 'error')](state.payload.message)
                 state.payload.status !== 201 && state.payload.status !== 500 ? navigate('/profile') : undefined
             })
         }
@@ -89,13 +90,14 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
 
     return (
         <div>
-            <Toaster />
+            <Toaster richColors />
             <div className="sm:px-8 md:px-16 sm:py-8 flex justify-center ">
                 <div className="md:w-2/3 w-full bg-gray-400 p-3 rounded-md">
                     <div className="md:flex justify-between">
                         <div className="md:pr-2 md:w-1/2">
                             {React.useMemo(() => (
                                 <video
+                                    crossOrigin="anonymous"
                                     src={URL.createObjectURL(Video)}
                                     className="rounded-lg w-full aspect-video h-full object-cover"
                                     controls={true}
@@ -112,7 +114,7 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
                                         {React.useMemo(() => (
                                             <>
                                                 <div key={index} className="">
-                                                    <img src={img} onClick={() => {
+                                                    <img crossOrigin="anonymous" src={img} onClick={() => {
                                                         setData({
                                                             ...data,
                                                             Thumbnail: img

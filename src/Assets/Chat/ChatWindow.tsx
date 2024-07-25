@@ -105,7 +105,7 @@ const ChatWindow: React.FC<props> = ({ close }) => {
                             {!group && (
                                 <button onClick={() => setGroup([])} className="w-full py-2 focus:outline-none rounded-md focus-visible:bg-indigo-50">
                                     <div className="flex items-center ml-6">
-                                        <img className="rounded-full items-start flex-shrink-0" src='https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-group-icon-png-image_1796653.jpg' width="32" height="32" alt="Marie Zulfikar" />
+                                        <img crossOrigin="anonymous" className="rounded-full items-start flex-shrink-0" src='https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-group-icon-png-image_1796653.jpg' width="32" height="32" alt="Marie Zulfikar" />
                                         <div className='ml-5'>
                                             <h4 className="text-sm font-semibold text-gray-100">Create Group</h4>
                                         </div>
@@ -161,7 +161,7 @@ const ChatWindow: React.FC<props> = ({ close }) => {
                                                     />
                                                 </div>
                                             )}
-                                            <img className="rounded-full items-start object-cover w-10 h-10" src={user.Profile} width="32" height="32" alt="Marie Zulfikar" />
+                                            <img crossOrigin="anonymous" className="rounded-full items-start object-cover w-10 h-10" src={user.Profile} width="32" height="32" alt="Marie Zulfikar" />
                                             <div className='ml-5'>
                                                 <h4 className="text-sm font-semibold text-gray-100">{user.Name}</h4>
                                                 <div className="text-[13px]">@{user.Username}</div>
@@ -194,7 +194,7 @@ const ChatWindow: React.FC<props> = ({ close }) => {
 
                                     <div className="flex items-center">
                                         <a className="inline-flex items-start mr-3" href="#0">
-                                            <img className="rounded-full w-10 h-10" src={auth.user?.Profile} alt="Lauren Marsano" />
+                                            <img crossOrigin="anonymous" className="rounded-full w-10 h-10" src={auth.user?.Profile} alt="Lauren Marsano" />
                                         </a>
                                         <div className="pr-1">
                                             <a className="inline-flex" href="#0">
@@ -245,7 +245,7 @@ const ChatWindow: React.FC<props> = ({ close }) => {
                                                             dispatch(setChat(val))
                                                         }} className="w-full text-left py-2 focus:outline-none focus-visible:bg-indigo-50">
                                                             <div className="flex items-center">
-                                                                <img className="rounded-full relative items-start object-contain flex-shrink-0 w-10 h-10 mr-3" src={val.GroupName ? val.Profile : val.users.find((user) => user._id !== auth?.user?._id)?.Profile} width="32" height="32" alt="Marie Zulfikar" />
+                                                                <img crossOrigin="anonymous" className="rounded-full relative items-start object-contain flex-shrink-0 w-10 h-10 mr-3" src={val.GroupName ? val.Profile : val.users.find((user) => user._id !== auth?.user?._id)?.Profile} width="32" height="32" alt="Marie Zulfikar" />
                                                                 {online.find((usr)=>usr._id === val.users.find((user) => user._id !== auth?.user?._id)?._id) && <i className='fa fa-circle absolute right-0 top-0'></i> }
                                                                 <div>
                                                                     <h4 className="text-sm font-semibold text-gray-100">{val.GroupName ? val.GroupName : val.users.find((user) => user._id !== auth?.user?._id)?.Name}</h4>

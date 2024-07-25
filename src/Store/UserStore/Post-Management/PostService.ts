@@ -78,9 +78,9 @@ export const deletePost: Function = async (data: interfaces.deletePost) => {
     }
 }
 
-export const LikeDislikeRemove: Function = async ({ postId, type, token }: interfaces.likeDislikeRemove) => {
+export const LikeDislikeRemove: Function = async ({ postId, type, token, base }: interfaces.likeDislikeRemove) => {
     try {
-        const response = await axios.patch(`${config.POST}/${type}/${postId}`,null, {
+        const response = await axios.patch(`${config.BASE}/${base}/reactions/${type}/${postId}`, null, {
             headers: {
                 Authorization: token
             },

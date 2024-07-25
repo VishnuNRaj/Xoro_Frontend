@@ -1,11 +1,14 @@
 import React from 'react';
-import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
+import { googleConfig } from '../../Configs/googleConfig';
 
 interface props {
     socialMedia: Function;
 }
-const Google: React.FC<props> = ({ socialMedia }) => {
+
+
+const GoogleAuth: React.FC<props> = ({ socialMedia }) => {
     const responseMessage = (response: CredentialResponse) => {
         if (response.credential) {
             const userData: {
@@ -14,7 +17,7 @@ const Google: React.FC<props> = ({ socialMedia }) => {
                 sub: string | number;
                 picture: string;
             } = jwtDecode(response.credential);
-             if (userData) {
+            if (userData) {
                 socialMedia({
                     type: 'Google',
                     user: {
@@ -28,19 +31,28 @@ const Google: React.FC<props> = ({ socialMedia }) => {
         }
     };
     return (
-            <div>
-                <GoogleLogin
-                    onSuccess={responseMessage}
-                    size="medium"
-                    theme='filled_black'
-                    logo_alignment='center'
-                    text='continue_with'
-                    shape='pill'
-                    type='icon'
-                    ux_mode='popup'
-                />
-            </div>
+        <div>
+            <GoogleLogin
+                onSuccess={responseMessage}
+                size="medium"
+                theme='filled_black'
+                logo_alignment='center'
+                text='continue_with'
+                shape='pill'
+                type='icon'
+                ux_mode='popup'
+            />
+        </div>
     );
 };
+
+const Google: React.FC<props> = ({ socialMedia }) => {
+    return (
+        <GoogleOAuthProvider clientId={googleConfig.CliendID}>
+            <GoogleAuth socialMedia={socialMedia} />
+        </GoogleOAuthProvider>
+
+    )
+}
 
 export default Google;

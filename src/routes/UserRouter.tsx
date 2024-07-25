@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import LoginPage from "../Assets/Login/LoginPage";
 import Home from "../Assets/UserHome/Home";
 import SignUpForm from "../Assets/Register/UserRegister";
@@ -10,25 +10,28 @@ import VideoUpload from "../Assets/VideoUpload/VideoUpload";
 
 import OtherProfiles from "../Assets/OtherProfiles/OtherProfiles";
 import SocketToast from "../Other/SocketToast";
-import StartStream from "../Assets/LiveStream/StartStream";
+// import StartStream from "../Assets/LiveStream/StartStream";
 import Videos from "../Assets/Videos/Videos";
 import ShowVideos from "../Assets/Videos/ShowVideos";
 import ViewStream from "../Assets/LiveStream/ViewStream";
 import SocketMessage from "../Other/SocketMessage";
 import { Offcanvas } from "../Assets/Components/Canvas";
 import Shorts from "../Assets/Shorts/Shorts";
-import MeteorEffect from "../Assets/Components/Meteor";
+import VideoCapture from "../Assets/Livestream";
 
 const UserRoutes: React.FC = () => {
+    const location = useLocation();
 
     return (
         <>
             <SocketToast />
             <SocketMessage />
             {/* <MeteorEffect /> */}
-            <div className="w-full h-[70px]">
-                <Offcanvas />
-            </div>
+            {!location.pathname.startsWith("/admin") && (
+                <div className="w-full mt-0 h-[20px]">
+                    <Offcanvas />
+                </div>
+            )}
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/" element={<Home />} />
@@ -39,14 +42,13 @@ const UserRoutes: React.FC = () => {
                 <Route path="/profile/:ProfileLink" element={<OtherProfiles />} />
                 <Route path="/post/" element={<UploadCamera />} />
                 <Route path="/videos/upload" element={<VideoUpload />} />
-                <Route path="/test/" element={<StartStream />} />
+                <Route path="/test/" element={<VideoCapture />} />
                 <Route path="/test/view" element={<ViewStream />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />
                 <Route path="/feed" element={<Shorts />} />
                 {/* <Route path="*" element={<Preloader/>} /> */}
             </Routes>
-            {/* </div> */}
         </>
     );
 };

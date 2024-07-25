@@ -23,7 +23,7 @@ const NavbarAdmin: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
             <nav className="fixed w-full z-20 top-0 start-0 black-varient-1 border-b-2">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <span className="flex items-center space-x-3 rtl:space-x-reverserounded-full">
-                        <img src={Logo} onClick={openDrawerLeft} className="h-8 shadow-lg shadow-red-700 rounded-full bg-white border-2 border-white" alt="" />
+                        <img crossOrigin="anonymous" src={Logo} onClick={openDrawerLeft} className="h-8 shadow-lg shadow-red-700 rounded-full bg-white border-2 border-white" alt="" />
                     </span>
                     <div className="flex w-auto px-5 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         {admin && (
@@ -54,8 +54,8 @@ export const OffcanvasAdmin: React.FC = memo(() => {
     const [openLeft, setOpenLeft] = useState<boolean>(false);
     const openDrawerLeft = () => setOpenLeft(true);
     const closeDrawerLeft = () => setOpenLeft(false);
-    const { navigate, dispatch, auth } = useEssentials()
-    const { user, loading } = auth
+    const { navigate, dispatch, Admin } = useEssentials()
+    const { admin,loading } =  Admin
 
     const logout = () => {
         removeCookie()
@@ -78,7 +78,7 @@ export const OffcanvasAdmin: React.FC = memo(() => {
                 <div>
                     <button className="px-4 pt-4" onClick={closeDrawerLeft}><i className="fa fa-close text-blue-700 hover:text-purple-800"></i></button>
                 </div>
-                <div className="mt-5  h-auto snap-center font-medium py-5">
+                <div className="mt-5 font-semibold h-auto snap-center text-sm py-5">
                     <Buttons text={'Dashboard'} route={'/admin/'} />
                     <Buttons text={'Manage Users'} route={'/admin/users'} />
                     <Buttons text={'Manage Post'} route={'/admin/post'} />
@@ -90,7 +90,7 @@ export const OffcanvasAdmin: React.FC = memo(() => {
                 <div className="mt-20 h-auto">
                     <div className="w-full h-12 px-4">
                         <div className={`w-full h-full text-white `}>
-                            {!user ? (
+                            {!admin ? (
                                 <>
                                     <button className={`w-1/2 h-full cursor-pointer rounded-l-2xl text-white hover:bg-blue-900`} onClick={() => navigate('/login')}>Login</button>
                                     <button className={`w-1/2 h-full cursor-pointer rounded-r-2xl text-white  hover:bg-blue-900`} onClick={() => navigate('/register')}>Register</button>

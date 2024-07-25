@@ -1,46 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react';
-import io from 'socket.io-client';
+import React, { useEffect, useRef } from 'react';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 
-const StreamViewer: React.FC<{ match: any }> = ({ match }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const socket = useRef<any>(null);
+const VideoPlayer: React.FC = () => {
+  const videoRef = useRef<any>(null);
+  const src = "http://localhost:6067/videos/66a0dec37a46b784a7632b03/index.m3u8";
 
   useEffect(() => {
-    const socketId = match.params.socketId;
-
-    // Connect to the server with the provided socket ID
-    socket.current = io('http://localhost:5000', {
-      query: { socketId },
-    });
-
-    // Receive the stream from the server
-    socket.current.on('stream', (stream: MediaStream) => {
-      setStream(stream);
+    const player = videojs(videoRef.current, {
+      controls: true,
+      autoplay: true, 
+      fluid: true,
+      liveui: true,
+      sources: [{
+        src: src,
+        type: 'application/x-mpegURL',
+      }],
     });
 
     return () => {
-      // Disconnect from the server when the component unmounts
-      if (socket.current) {
-        socket.current.disconnect();
+      if (player) {
+        player.dispose();
       }
     };
-  }, [match.params.socketId]);
+  }, [src]);
 
   return (
-    <div className='bg-[#333] text-white'>
-      {stream && (
-        <video
-          ref={videoRef}
-          src={""}
-          autoPlay
-          controls
-          className='w-52 h-52'
-        ></video>
-      )}
-      {!stream && <p>Loading...</p>}
+    <div>
+      <video ref={videoRef} className="video-js vjs-default-skin" />
     </div>
   );
 };
 
-export default StreamViewer;
+export default VideoPlayer;

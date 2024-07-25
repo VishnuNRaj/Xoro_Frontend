@@ -33,26 +33,27 @@ const useHooks = () => {
 }
 
 
-export const useFunctions = () => {
+export const useFunctions = ({ base }:{base:string}) => {
     const { dispatch, navigate } = useEssentials()
     const [comments, setComments] = useState<Comments[]>([])
     const likePost: Function = (postId: string) => {
+        alert(postId)
         const token = getCookie("token")
-        dispatch(LikeDislikeRemoveThunk({ postId, token, type: "like" })).then((state: any) => {
+        dispatch(LikeDislikeRemoveThunk({ postId, token, type: "like", base })).then((state: any) => {
             if (state.payload.status === 202) return navigate("/login")
             return true
         })
     }
     const dislikePost: Function = (postId: string) => {
         const token = getCookie("token")
-        dispatch(LikeDislikeRemoveThunk({ postId, token, type: "dislike" })).then((state: any) => {
+        dispatch(LikeDislikeRemoveThunk({ postId, token, type: "dislike", base })).then((state: any) => {
             if (state.payload.status === 202) return navigate("/login")
             return true
         })
     }
     const removeReaction: Function = (postId: string) => {
         const token = getCookie("token")
-        dispatch(LikeDislikeRemoveThunk({ postId, token, type: "remove" })).then((state: any) => {
+        dispatch(LikeDislikeRemoveThunk({ postId, token, type: "remove", base })).then((state: any) => {
             if (state.payload.status === 202) return navigate("/login")
             return true
         })

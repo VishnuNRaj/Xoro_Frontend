@@ -27,7 +27,7 @@ const UserMap: React.FC<{ user: User, show: "follow" | "following" | "mutual" }>
     return (
         <div onClick={() => navigate(`/profile/${user.ProfileLink}`)} className='w-full flex'>
             <div className=' rounded-full flex-shrink-0 items-center justify-center border-1'>
-                <img src={user.Profile} alt="" className='w-6 h-6 rounded-full object-cover' />
+                <img crossOrigin="anonymous" src={user.Profile} alt="" className='w-6 h-6 rounded-full object-cover' />
             </div>
             <div className='ml-3'>
                 <p className=''>{user.Name}</p>
@@ -60,14 +60,14 @@ const ShowConnections: React.FC<props> = ({ open, connections, setOpen, setConne
                 open={open}
                 handler={() => setOpen(false)}
                 placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}    >
-                <div className='flex-shrink-0'>
+                <div className='flex-shrink-0 '>
                     <div className='w-full h-[50px] text-md font-semibold bg-gray-800 grid grid-cols-3'>
                         {arr.map((values) => (
                             <Buttons setShow={setShow} show={show} value={values.value} text={values.text} />
                         ))}
                     </div>
-                    <div className='w-full p-2'>
-                        <div className='w-full border-y border-y-gray-600 grid grid-cols-1'>
+                    <div className='w-full p-2 h-[220px] overflow-y-scroll'>
+                        <div className='w-full border-y border-y-gray-600 grid grid-cols-1 '>
                             {connections[show]?.map((userData) => (
                                 <div className='w-full font-semibold border-y border-y-gray-600 bg-gray-800 h-10 p-6 hover:bg-gray-600 hover:text-white text-gray-300 flex items-center'>
                                     <UserMap user={userData} show={show} />

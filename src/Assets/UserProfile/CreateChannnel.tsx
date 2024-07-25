@@ -18,7 +18,7 @@ interface stateProps {
 }
 
 const arr = [
-    "Gaming", "Comedy", "Short-Films", "Vlog", "Science", "Tech", "Education", "Drama", "Music", "Art", "Architechture", "Dance"]
+    "Gaming", "Comedy", "Short-Films", "Vlog", "Science", "Tech", "Education", "Drama", "Music", "Art", "Architechture", "Dance","Sports","Action","Movie","Adventure",""]
 
 const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
     const { navigate, dispatch, profile } = useEssentials()
@@ -85,7 +85,7 @@ const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
                 <div style={{ scrollbarColor: 'white' }} className='border-t-2 rounded-md border-blue-700 px-6 py-4 w-full space-y-2 max-h-[75vh] overflow-y-auto'>
                     <div className="w-full">
                         <div className='w-full flex items-center justify-center'>
-                            <img className='rounded-full aspect-square w-[100px] h-[100px] object-cover ' src={state.Logo ? URL.createObjectURL(state.Logo) : 'https://images.pexels.com/photos/3377405/pexels-photo-3377405.jpeg?cs=srgb&dl=pexels-elina-araja-1743227-3377405.jpg&fm=jpg'} alt="" />
+                            <img crossOrigin="anonymous" className='rounded-full aspect-square w-[100px] h-[100px] object-cover ' src={state.Logo ? URL.createObjectURL(state.Logo) : 'https://images.pexels.com/photos/3377405/pexels-photo-3377405.jpeg?cs=srgb&dl=pexels-elina-araja-1743227-3377405.jpg&fm=jpg'} alt="" />
                         </div>
                         <div className="w-full">
                             <div className="mt-5 flex justify-center w-full">

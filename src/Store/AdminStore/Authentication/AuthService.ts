@@ -1,9 +1,10 @@
 import axios from "axios";
 import * as interfaces from "./Interfaces";
+import config from "../../../Configs/config";
 
 export const adminLogin: Function = async (data: interfaces.AdminLogin): Promise<interfaces.AdminLoginResponse> => {
     try {
-        const response = await axios.post('http://localhost:6700/admin/login', data, {
+        const response = await axios.post(`${config.ADMIN}/login`, data, {
             withCredentials: true
         })
         return <interfaces.AdminLoginResponse>response.data
@@ -17,7 +18,7 @@ export const adminLogin: Function = async (data: interfaces.AdminLogin): Promise
 
 export const adminOTP: Function = async (data: interfaces.adminVerifyOTP): Promise<interfaces.adminVerifyOTPResponse> => {
     try {
-        const response = await axios.post(`http://localhost:6700/admin/otp/${data.UserId}`, data, {
+        const response = await axios.post(`${config.ADMIN}/otp/${data.UserId}`, data, {
             withCredentials: true
         })
         return <interfaces.adminVerifyOTPResponse>response.data
@@ -31,7 +32,7 @@ export const adminOTP: Function = async (data: interfaces.adminVerifyOTP): Promi
 
 export const adminResendOTP: Function = async (data: interfaces.adminResendOTP): Promise<interfaces.adminResendOTPResponse> => {
     try {
-        const response = await axios.post(`http://localhost:6700/admin/resendotp/${data.UserId}`, data, {
+        const response = await axios.post(`${config.ADMIN}/resendotp/${data.UserId}`, data, {
             withCredentials: true
         })
         return <interfaces.adminResendOTPResponse>response.data
@@ -44,7 +45,7 @@ export const adminResendOTP: Function = async (data: interfaces.adminResendOTP):
 
 export const verifyAdmin: Function = async (data: interfaces.adminVerifyAuth): Promise<interfaces.adminVerifyAuthResponse> => {
     try {
-        const response = await axios.get('http://localhost:6700/admin/verify', {
+        const response = await axios.get(`${config.ADMIN}/verify`, {
             headers: {
                 Authorization: `${data.token}`
             }

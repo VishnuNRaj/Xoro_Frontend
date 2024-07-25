@@ -18,7 +18,7 @@ const ChannelMap: React.FC<{ user: Channel[] }> = ({ user }) => {
                     {show || index < 5 && (
                         <div onClick={() => navigate(`/channel/${user._id}`)} className="w-[80%] ml-[10%] py-2 border-t-2  flex float-left">
                             <div  onClick={() => navigate(`/channel/${user._id}`)} className='w-[10%] cursor-pointer float-left'>
-                                <img src={user.Logo} className=' aspect-square float-left rounded-full' />
+                                <img crossOrigin="anonymous" src={user.Logo} className=' aspect-square float-left rounded-full' />
                             </div>
                             <div onClick={() => navigate(`/channel/${user._id}`)} style={{ overflowX: 'scroll', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }} className="w-full cursor-pointer float-left ml-10 overflow-x-scroll">
                                 <p className='mt-2 font-semibold'>{user.Name}</p>
