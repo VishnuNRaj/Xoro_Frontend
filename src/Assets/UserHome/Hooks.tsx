@@ -37,7 +37,6 @@ export const useFunctions = ({ base }:{base:string}) => {
     const { dispatch, navigate } = useEssentials()
     const [comments, setComments] = useState<Comments[]>([])
     const likePost: Function = (postId: string) => {
-        alert(postId)
         const token = getCookie("token")
         dispatch(LikeDislikeRemoveThunk({ postId, token, type: "like", base })).then((state: any) => {
             if (state.payload.status === 202) return navigate("/login")
