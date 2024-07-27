@@ -41,7 +41,7 @@ const AdminLoginOTP: React.FC = () => {
                     duration: 2000,
                 })
                 if (state.payload.status === 200) {
-                    setCookie('admin', state.payload.token)
+                    setCookie(state.payload.token,'admin')
                     navigate('/admin')
                 }
             })
