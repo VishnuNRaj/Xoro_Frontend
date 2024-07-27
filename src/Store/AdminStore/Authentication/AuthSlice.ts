@@ -99,7 +99,7 @@ const authSliceAdmin = createSlice({
             .addCase(adminOTP.fulfilled, (state, action: PayloadAction<interfaces.adminVerifyOTPResponse>) => {
                 state.loading = false;
                 state.message = action.payload.message;
-                if (action.payload.admin) {
+                if (action.payload.status === 200) {
                     state.admin = action.payload.admin
                     Cookies.set('admin', action.payload.token)
                 }
