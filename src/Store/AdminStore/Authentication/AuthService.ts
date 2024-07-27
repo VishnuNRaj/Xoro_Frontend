@@ -1,7 +1,10 @@
 import axios from "axios";
 import * as interfaces from "./Interfaces";
 import config from "../../../Configs/config";
-
+axios.interceptors.request.use(config=>{
+    config.withCredentials = true;
+    return config;
+})
 export const adminLogin: Function = async (data: interfaces.AdminLogin): Promise<interfaces.AdminLoginResponse> => {
     try {
         const response = await axios.post(`${config.ADMIN}/login`, data, {
