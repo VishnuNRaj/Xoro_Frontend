@@ -2,7 +2,6 @@ import * as interfaces from "./interfaces"
 import axios from "axios"
 import Config from "../../../Configs/config"
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { Form } from "react-router-dom"
 export const search = createAsyncThunk<interfaces.searchResponse, interfaces.searchData>(
     "search",
     async (credentials, { rejectWithValue }) => {
