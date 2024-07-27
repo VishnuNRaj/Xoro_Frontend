@@ -4,7 +4,10 @@ import config from "../../../Configs/config";
 import { getCookie } from "../../../Functions/CommonFunctions";
 axios.interceptors.request.use(config=>{
     config.withCredentials = true;
-    config.headers.Authorization = getCookie("admin")
+    const token = getCookie("admin"); 
+    if (token) {
+        config.headers.Authorization = `${token}`;
+    }
     return config;
 })
 export const adminLogin: Function = async (data: interfaces.AdminLogin): Promise<interfaces.AdminLoginResponse> => {
