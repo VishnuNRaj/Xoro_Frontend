@@ -1,10 +1,8 @@
 import axios from "axios";
 import * as interfaces from "./Interfaces";
 import config from "../../../Configs/config";
-import { getCookie } from "../../../Functions/CommonFunctions";
 axios.interceptors.request.use(config=>{
     config.withCredentials = true;
-    config.headers.Authorization = getCookie("admin")
     return config;
 })
 export const adminLogin: Function = async (data: interfaces.AdminLogin): Promise<interfaces.AdminLoginResponse> => {
