@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Logo from '/Logo.png'
 import { FormInput } from '../Components/Input';
-import { useEssentials, getCookie, setCookie } from '../../Functions/CommonFunctions';
+import { useEssentials, getCookie } from '../../Functions/CommonFunctions';
 import { adminOTP, adminVerifyAuth, resendOTP } from '../../Store/AdminStore/Authentication/AuthSlice';
 import { toast } from 'react-hot-toast';
 import Preloader from '../Components/Preloader';
