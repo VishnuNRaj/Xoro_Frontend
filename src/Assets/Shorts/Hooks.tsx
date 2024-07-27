@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 export const useUploadShorts = () => {
   const [video, setVideo] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [search, setSearch] = useState("")
   const [data, setData] = useState<{ Caption: string; Tags: string; Context: string }>({
     Caption: '',
     Tags: '',
@@ -30,13 +31,15 @@ export const useUploadShorts = () => {
   //   };
   // }, []);
 
-  const clear = () => {
+  const clear = (trim: any) => {
     setData({ Caption: '', Context: '', Tags: '' });
     setTags([]);
     setVideo(null);
+    setSearch("")
+    trim(null)
   };
 
-  const selectVideo = (e: React.ChangeEvent<HTMLInputElement>,setTrim:any) => {
+  const selectVideo = (e: React.ChangeEvent<HTMLInputElement>, setTrim: any) => {
     const { files } = e.target;
     if (files && files.length > 0 && files[0].type.startsWith('video/')) {
       setVideo(files[0]);
@@ -54,6 +57,10 @@ export const useUploadShorts = () => {
     setTags([...tags, tag]);
     setData({ ...data, Tags: '' });
   };
+
+  const handleContext = (name:string) => {
+      setData({...data,Context:name})
+  }
 
   const handleUpload = () => {
     if (!video) return;
@@ -82,5 +89,5 @@ export const useUploadShorts = () => {
     // };
   };
 
-  return { video, selectVideo, clear, data, inputRef, handleChange, setTagUsers, handleUpload };
+  return { video, selectVideo, clear, data, inputRef, handleChange,handleContext, setTagUsers, handleUpload, search, setSearch };
 };

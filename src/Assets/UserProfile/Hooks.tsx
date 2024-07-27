@@ -86,11 +86,12 @@ import { showPost } from '../../Store/UserStore/Post-Management/PostSlice';
 import { Connections } from '../../Store/UserStore/Authentication/Interfaces';
 import { handleBanner, handleImages } from './Functions';
 
+
 const useProfileData = () => {
     const { navigate, dispatch, auth, Post, profile } = useEssentials();
 
     const { user, loading } = auth;
-    const { loadingPost,post } = Post;
+    const { loadingPost, post } = Post;
     const { loadingProfile } = profile;
 
     const [connections, setConnections] = useState<Connections | null>(null);

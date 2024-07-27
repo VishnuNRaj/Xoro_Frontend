@@ -1,4 +1,4 @@
-import React, { useRef, useState, memo, useEffect } from 'react'
+import React, { useRef, useState, memo } from 'react'
 import VideoInput from './VideoInput'
 import { getCookie, useEssentials } from '../../Functions/CommonFunctions'
 import { uploadVideo } from '../../Store/UserStore/Video-Management/VideoSlice'
@@ -17,7 +17,7 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
     const handleThumbnailButtonClick = () => {
         thumbRef.current?.click()
     }
-    const [progress, setProgress] = useState<number | null>(null)
+    const [, setProgress] = useState<number | null>(null)
     const [data, setData] = useState({
         Caption: '',
         Description: '',
@@ -52,12 +52,6 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
             [e.target.name]: e.target.value
         })
     }
-
-    useEffect(() => {
-        if (progress) {
-
-        }
-    }, [progress])
     const upload = () => {
         const token: string | undefined = getCookie('token')
         if (token) {

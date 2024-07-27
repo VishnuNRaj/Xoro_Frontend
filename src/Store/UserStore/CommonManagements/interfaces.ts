@@ -62,8 +62,16 @@ export interface addCommentResponse {
 }
 
 export interface Category {
-    Name:string;
-    _id:string;
-    videos:number;
-    Listed:boolean;
+    Name: string;
+    _id: string;
+    Videos: number;
+    Listed: boolean;
+    CreatedAt: Date;
+}
+
+export interface trimVideo {
+    video:File,
+    start:number;
+    end:number;
+    token:string;
 }

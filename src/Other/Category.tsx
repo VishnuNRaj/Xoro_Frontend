@@ -1,0 +1,28 @@
+import React, { useState } from "react"
+import { Category } from "../Store/UserStore/CommonManagements/interfaces"
+import { useEssentials, getCookie } from "../Functions/CommonFunctions"
+import { getCategory } from "../Store/UserStore/CommonManagements/CommonService"
+
+const useCategory = () => {
+    const { navigate } = useEssentials()
+    const [category, setCategory] = useState<Category[]>([])
+    const [search, setSearch] = useState("")
+    const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(e.target.value)
+        if (e.target.value.length > 0) {
+            const token: string | undefined = getCookie("token")
+            if (token) {
+                const response: any = await getCategory({ token, PostId: e.target.value })
+                if (response.status === 202) return navigate("/login")
+                setCategory(response.category)
+            } else navigate("/login")
+        } else setCategory([])
+    }
+    const emptySearch = () => {
+        setCategory([])
+        setSearch("")
+    }
+    return { category, search, handleSearchChange,emptySearch }
+}
+
+export default useCategory;

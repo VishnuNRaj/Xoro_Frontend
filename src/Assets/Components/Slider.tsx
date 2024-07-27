@@ -1,55 +1,47 @@
 import { useEffect, useState } from 'react'
-import { createFFmpeg, fetchFile, FFmpeg } from "@ffmpeg/ffmpeg";
 import { toast } from 'sonner';
+import { trimVideo } from '../../Store/UserStore/CommonManagements/CommonService';
+import { getCookie } from '../../Functions/CommonFunctions';
 
 interface props {
     video: File | null;
+    type?:string
 };
 
-const useSlider = ({ video }: props) => {
+
+const useSlider = ({ video,type }: props) => {
     const [duration, setDuration] = useState<number>(0)
     const [trim, setTrim] = useState<File | Blob | null>(null)
     const [start, setStart] = useState<number>(0)
     const [end, setEnd] = useState<number>(0)
-    const [ffmpeg, setFFmpeg] = useState<FFmpeg | null>(null)
     useEffect(() => {
         if (video) {
-            const ffmpegData = createFFmpeg({ log: true })
-            setFFmpeg(ffmpegData)
             const videoElement = document.createElement('video');
             videoElement.src = URL.createObjectURL(video);
             videoElement.onloadedmetadata = () => {
                 console.log(videoElement.duration)
                 setDuration(videoElement.duration);
-                setEnd(videoElement.duration >= 60 ? 60 : videoElement.duration);
+                setEnd(videoElement.duration >= 60 && !type ? 60 : videoElement.duration);
             };
         }
     }, [video]);
     const handleTrimVideo = async () => {
-        if (video && ffmpeg) {
+        if (video) {
             try {
-                if (!ffmpeg.isLoaded()) {
-                    await ffmpeg.load();
-                }
-                await ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(video));
-                await ffmpeg.run('-i', 'input.mp4', '-ss', `${start}`, '-to', `${end}`, '-c', 'copy', 'output.mp4');
-                const data = await ffmpeg.FS('readFile', 'output.mp4');
-                const trimmedVideo = new Blob([data.buffer], { type: 'video/mp4' });
-                console.log(trimmedVideo)
-                setTrim(trimmedVideo);
-                // ffmpeg.exit()
+                const token = getCookie("token")
+                const response: Blob = await trimVideo({ end, start, token, video })
+                const trimmedVideo = new Blob([response], { type: 'video/mp4' });
+                setTrim(new File([trimmedVideo], "trimmed-video.mp4", { type: "video/mp4" }));
             } catch (error) {
                 console.error('Error trimming video:', error);
-                ffmpeg.exit()
             }
         }
     };
     const handleSlide = (_e: any, newValue: any) => {
-        console.log(newValue[0], newValue[1], duration, "______", start, "_____", end)
         if (newValue[1] - newValue[0] <= 10) {
             return toast.warning("Minimum 10 Seconds")
         };
-        if (newValue[1] - newValue[0] >= 60) {
+        if (newValue[1] - newValue[0] >= 60 && !type) {
             return toast.warning("Maximum 1 Minute Allowed")
         }
         setStart(newValue[0])

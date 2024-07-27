@@ -2,6 +2,7 @@ import * as interfaces from "./interfaces"
 import axios from "axios"
 import Config from "../../../Configs/config"
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { Form } from "react-router-dom"
 export const search = createAsyncThunk<interfaces.searchResponse, interfaces.searchData>(
     "search",
     async (credentials, { rejectWithValue }) => {
@@ -16,6 +17,8 @@ export const search = createAsyncThunk<interfaces.searchResponse, interfaces.sea
         }
     }
 )
+
+
 
 
 
@@ -70,6 +73,25 @@ export const searchUser: Function = async ({ search, token }: interfaces.searchD
     }
 }
 
+export const trimVideo = async ({ end, start, video, token }: interfaces.trimVideo) => {
+    try {
+        const from = new FormData()
+        from.append("video", video)
+        from.append("start", start.toString())
+        from.append("end", end.toString())
+        const response = await axios.post(`${Config.USER}/trim`, from, {
+            headers: {
+                Authorization: token
+            },
+            responseType: "blob"
+        })
+        return response.data
+    } catch (e) {
+        return null
+    }
+}
+
+
 export const addComments: Function = async ({ Comment, PostId, token }: interfaces.addComment) => {
     try {
         const response = await axios.post(`${Config.BASE}/comment/${PostId}`, { Comment }, {
@@ -89,6 +111,22 @@ export const addComments: Function = async ({ Comment, PostId, token }: interfac
 export const getComments: Function = async ({ PostId, token }: interfaces.addComment) => {
     try {
         const response = await axios.get(`${Config.BASE}/comment/${PostId}`, {
+            headers: {
+                Authorization: token
+            },
+        })
+        return response.data
+    } catch (e) {
+        return {
+            message: "Internal Server Error",
+            status: 500,
+        }
+    }
+}
+
+export const getCategory: Function = async ({ PostId, token }: interfaces.addComment) => {
+    try {
+        const response = await axios.get(`${Config.USER}/category/${PostId}`, {
             headers: {
                 Authorization: token
             },

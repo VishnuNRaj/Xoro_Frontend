@@ -111,7 +111,7 @@ const authSliceAdmin = createSlice({
             .addCase(adminVerifyAuth.fulfilled, (state, action: PayloadAction<interfaces.adminVerifyAuthResponse>) => {
                 state.loading = false;
                 state.message = action.payload.message;
-                console.log(state,'____________________')
+                console.log(state, '____________________')
                 if (action.payload.admin) {
                     state.admin = action.payload.admin
                 } else {
@@ -130,5 +130,5 @@ const authSliceAdmin = createSlice({
 
 })
 
-export const { resetAdminState,setAdmin } = authSliceAdmin.actions
+export const { resetAdminState, setAdmin } = authSliceAdmin.actions
 export default authSliceAdmin.reducer

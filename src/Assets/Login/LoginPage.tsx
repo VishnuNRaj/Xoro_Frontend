@@ -39,7 +39,7 @@ const LoginForm: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         SetForm({
             ...Form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value.trim()
         });
         setErrors({
             ...errors,
@@ -112,7 +112,7 @@ const LoginForm: React.FC = () => {
                         </div>
                         <center><p className='text-red-700 text-lg font-semibold'>{errors.Main}</p></center>
                         <div className="w-full">
-                            <div className="w-3/4 p-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
+                            <div onKeyDown={(e) => e.code === "Enter" && userLogin()} className="w-3/4 p-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
                                 <div className='float-left w-full md:w-full mb-4'>
                                     <FormInput error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
                                 </div>

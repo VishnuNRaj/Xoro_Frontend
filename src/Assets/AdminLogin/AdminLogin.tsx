@@ -38,7 +38,7 @@ const AdminLogin: React.FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         SetForm({
             ...Form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value.trim()
         });
         setErrors({
             ...errors,
@@ -78,7 +78,7 @@ const AdminLogin: React.FC = () => {
 
     return (
         <>
-            <Toaster richColors/>
+            <Toaster richColors />
             <div className='md:w-2/4 md:ml-[25%] w-full justify-center ml-0 h-auto rounded-md mt-24 text-white '>
                 <div>
                     <div className="mx-auto text-center w-1/2">
@@ -89,25 +89,23 @@ const AdminLogin: React.FC = () => {
                     </div>
                     <center><p className='text-red-700 text-lg font-semibold'>{errors.Main}</p></center>
                     <div className="w-full">
-                        <div className="w-3/4 p-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
+                        <div onKeyDown={(e) => {
+                            if (e.code === "Enter") {
+                                admin()
+                            }
+                        }} className="w-3/4 p-4 bg-[#111] rounded-lg mb-5 mt-5 inline-block justify-center mx-[12.5%] md:mx-[12.5%] ">
                             <div className='float-left w-full md:w-full mb-4'>
-                                <FormInput error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
+                                <FormInput key={1} error={errors.Email} width={'w-full'} label={'Email'} name={'Email'} value={Form.Email} onChange={handleChange} placeholder={'Enter Email Address'} type={'text'} />
                             </div>
                             <div>
                                 <div className='float-left w-full ml-0 mb-4'>
-                                    <FormInput error={errors.Password} width={'w-full'} label={'Password'} name={'Password'} value={Form.Password} onChange={handleChange} placeholder={'Enter Password'} type={'password'} />
+                                    <FormInput key={2} error={errors.Password} width={'w-full'} label={'Password'} name={'Password'} value={Form.Password} onChange={handleChange} placeholder={'Enter Password'} type={'password'} />
                                 </div>
                             </div>
                             <div className='float-left w-full md:w-full mb-4'>
                                 <center>
                                     <button onClick={admin} className='w-full md:w-[300px] h-10 rounded-md bg-green-700 text-white font-semibold text-sm px-4 py-2'>Login</button>
                                 </center>
-                            </div>
-                            <div className="w-full md:w-1/2 float-left">
-                                <center><span className='font-medium text-sm float-none md:float-left hover:text-green-700'>Don't have an account ?</span></center>
-                            </div>
-                            <div className="w-full md:w-1/2 float-left">
-                                <center><span className='font-medium text-sm float-none md:float-right hover:text-green-700'>Forgot Password ?</span></center>
                             </div>
                         </div>
                     </div>
