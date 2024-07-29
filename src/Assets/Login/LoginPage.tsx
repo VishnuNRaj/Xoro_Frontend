@@ -9,7 +9,6 @@ import { encryptUserID } from '../../Common';
 import Google from '../Components/Google';
 import LinkedIn from '../Components/LinkedIn';
 import { useEssentials, getCookie, useToast, setCookie } from '../../Functions/CommonFunctions';
-import { useGoogleOneTapLogin } from '@react-oauth/google';
 
 
 const LoginForm: React.FC = () => {
