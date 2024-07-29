@@ -1,7 +1,11 @@
 import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { getCookie, useEssentials } from '../../Functions/CommonFunctions';
+import { uploadShorts } from '../../Store/UserStore/Shorts-Management/shortSlice';
 
 export const useUploadShorts = () => {
   const [video, setVideo] = useState<File | null>(null);
+  const { dispatch, navigate } = useEssentials()
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [search, setSearch] = useState("")
   const [data, setData] = useState<{ Caption: string; Tags: string; Context: string }>({
@@ -10,27 +14,6 @@ export const useUploadShorts = () => {
     Context: '',
   });
   const [tags, setTags] = useState<string[]>([]);
-
-  // useEffect(() => {
-  //   const ws = new WebSocket('ws://localhost:8000');
-
-  //   ws.onopen = () => {
-  //     console.log('Connected to WebSocket server');
-  //   };
-
-  //   ws.onclose = () => {
-  //     console.log('Disconnected from WebSocket server');
-  //   };
-
-  //   ws.onerror = (error) => {
-  //     console.error('WebSocket error:', error);
-  //   };
-
-  //   return () => {
-  //     ws.close();
-  //   };
-  // }, []);
-
   const clear = (trim: any) => {
     setData({ Caption: '', Context: '', Tags: '' });
     setTags([]);
@@ -58,36 +41,26 @@ export const useUploadShorts = () => {
     setData({ ...data, Tags: '' });
   };
 
-  const handleContext = (name:string) => {
-      setData({...data,Context:name})
+  const handleContext = (name: string) => {
+    setData({ ...data, Context: name })
   }
 
-  const handleUpload = () => {
-    if (!video) return;
-    // const ws = new WebSocket('ws://localhost:8000');
+  const handleUpload = (trim: File, set: any) => {
+    if (!trim) return toast.error("Select a Video To Upload");
+    const token: string | undefined = getCookie("token")
+    if (token) {
+      dispatch(uploadShorts({ Caption: data.Caption, Context: data.Context, CommentsOn: true, Private: false, Shorts: trim, Hashtags: tags, token })).then(({ payload }: any) => {
+        if (payload.status === 202) return navigate("/login");
+        toast[payload.status === 200 ? "success" : "error"](payload.message)
+        payload.status === 200 && clear(set)
+      })
 
-    // ws.onopen = () => {
-    //   console.log('Connected to WebSocket server');
-    //   const reader = new FileReader();
-    //   reader.onload = () => {
-    //     const arrayBuffer = reader.result;
-    //     if (arrayBuffer) {
-    //       const blob = new Blob([arrayBuffer], { type: 'video/flv' });
-    //       console.log(blob);
-    //       ws.send(blob);
-    //     }
-    //   };
-    //   reader.readAsArrayBuffer(video);
-    // };
-
-    // ws.onerror = (error) => {
-    //   console.error('WebSocket error:', error);
-    // };
-
-    // ws.onclose = () => {
-    //   console.log('Disconnected from WebSocket server');
-    // };
+    }
   };
 
-  return { video, selectVideo, clear, data, inputRef, handleChange,handleContext, setTagUsers, handleUpload, search, setSearch };
+  const handleRemoveTags = (i: number) => {
+    setTags([...tags].filter((_val, idx) => idx !== i))
+  }
+
+  return { video, selectVideo, clear, data, inputRef, handleChange, handleContext, setTagUsers, handleUpload, search, setSearch, tags, handleRemoveTags };
 };

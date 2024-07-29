@@ -12,6 +12,7 @@ import { toast } from 'react-hot-toast'
 import { useMemo } from 'react';
 import { ChatState } from '../Store/UserStore/Chat-Management/interfaces';
 import { CategoryState } from '../Store/AdminStore/Management/CategoryManagement/Interfaces';
+import { shortState } from '../Store/UserStore/Shorts-Management/interfaces';
 
 interface RootReducerInterface {
     navigate: NavigateFunction;
@@ -22,9 +23,10 @@ interface RootReducerInterface {
     post: PostState;
     profile: profileState;
     video: videoState
-    Post: PostState,
-    chat: ChatState,
-    categoryadmin: CategoryState
+    Post: PostState;
+    chat: ChatState;
+    categoryadmin: CategoryState;
+    shorts: shortState;
     // progress:number;
     // setProgress:React.Dispatch<SetStateAction<number | null>>
 }
@@ -34,7 +36,7 @@ interface RootReducerInterface {
 export const useEssentials = (): RootReducerInterface => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const { auth, admin, adminuser, post, profile, video, chat, categoryadmin } = useSelector(
+    const { auth, admin, adminuser, post, profile, video, chat, categoryadmin, shorts } = useSelector(
         (state: RootState) => ({
             auth: state.auth,
             admin: state.admin,
@@ -43,7 +45,8 @@ export const useEssentials = (): RootReducerInterface => {
             profile: state.profile,
             video: state.video,
             chat: state.chat,
-            categoryadmin: state.categoryadmin
+            categoryadmin: state.categoryadmin,
+            shorts: state.shorts
             // progress,setProgress
         }),
         shallowEqual
@@ -60,8 +63,9 @@ export const useEssentials = (): RootReducerInterface => {
         profile,
         video,
         chat,
-        categoryadmin
-    }), [dispatch, navigate, auth, admin, adminuser, post, profile, video, chat, categoryadmin]);
+        categoryadmin,
+        shorts,
+    }), [dispatch, navigate, auth, admin, adminuser, post, profile, video, chat, shorts, categoryadmin]);
 };
 
 

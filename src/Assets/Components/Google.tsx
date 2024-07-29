@@ -1,22 +1,31 @@
-import React from 'react';
-import { GoogleLogin, CredentialResponse, GoogleOAuthProvider } from '@react-oauth/google';
+import React, { useEffect } from 'react';
+import { GoogleLogin, GoogleOAuthProvider, useGoogleOneTapLogin } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { googleConfig } from '../../Configs/googleConfig';
 
-interface props {
+interface Props {
     socialMedia: Function;
 }
 
+const GoogleAuth: React.FC<Props> = ({ socialMedia }) => {
+    useGoogleOneTapLogin({
+        onSuccess: (credentialResponse:any) => handleResponse(credentialResponse),
+        onError: () => {
+          console.log('Login Failed');
+        },
+        auto_select:true, 
+        use_fedcm_for_prompt:true,
+      });
 
-const GoogleAuth: React.FC<props> = ({ socialMedia }) => {
-    const responseMessage = (response: CredentialResponse) => {
+    const handleResponse = (response: any) => {
         if (response.credential) {
-            const userData: {
+            const userData = jwtDecode(response.credential) as {
                 email: string;
                 name: string;
                 sub: string | number;
                 picture: string;
-            } = jwtDecode(response.credential);
+            };
+
             if (userData) {
                 socialMedia({
                     type: 'Google',
@@ -24,35 +33,35 @@ const GoogleAuth: React.FC<props> = ({ socialMedia }) => {
                         Email: userData.email,
                         Name: userData.name,
                         Password: userData.sub,
-                        Profile: userData.picture
-                    }
-                })
+                        Profile: userData.picture,
+                    },
+                });
             }
         }
     };
+
     return (
         <div>
             <GoogleLogin
-                onSuccess={responseMessage}
+                onSuccess={handleResponse}
                 size="medium"
-                theme='filled_black'
-                logo_alignment='center'
-                text='continue_with'
-                shape='pill'
-                type='icon'
-                ux_mode='popup'
+                theme="filled_black"
+                logo_alignment="center"
+                text="continue_with"
+                shape="pill"
+                type="icon"
+                ux_mode="popup"
             />
         </div>
     );
 };
 
-const Google: React.FC<props> = ({ socialMedia }) => {
+const Google: React.FC<Props> = ({ socialMedia }) => {
     return (
         <GoogleOAuthProvider clientId={googleConfig.CliendID}>
             <GoogleAuth socialMedia={socialMedia} />
         </GoogleOAuthProvider>
-
-    )
-}
+    );
+};
 
 export default Google;

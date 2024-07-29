@@ -5,26 +5,44 @@ import { getCookie } from '../../Functions/CommonFunctions';
 
 interface props {
     video: File | null;
-    type?:string
+    type?: string
 };
 
 
-const useSlider = ({ video,type }: props) => {
+const useSlider = ({ video, type }: props) => {
     const [duration, setDuration] = useState<number>(0)
     const [trim, setTrim] = useState<File | Blob | null>(null)
     const [start, setStart] = useState<number>(0)
     const [end, setEnd] = useState<number>(0)
+    const [load, setload] = useState(false)
     useEffect(() => {
         if (video) {
             const videoElement = document.createElement('video');
             videoElement.src = URL.createObjectURL(video);
             videoElement.onloadedmetadata = () => {
-                console.log(videoElement.duration)
-                setDuration(videoElement.duration);
                 setEnd(videoElement.duration >= 60 && !type ? 60 : videoElement.duration);
+                setDuration(videoElement.duration);
+                !load && setload(true)
+                console.log(videoElement.duration)
+
             };
         }
     }, [video]);
+    useEffect(() => {
+        if (video && load) {
+            if (duration >= 60 && !type) {
+                handleTrimVideo()
+            } else setTrim(video)
+        }
+    }, [load])
+
+    const handleClear = () => {
+        setTrim(null)
+        setDuration(0)
+        setEnd(0)
+        setStart(0)
+        setload(false)
+    }
     const handleTrimVideo = async () => {
         if (video) {
             try {
@@ -41,7 +59,7 @@ const useSlider = ({ video,type }: props) => {
         if (newValue[1] - newValue[0] <= 10) {
             return toast.warning("Minimum 10 Seconds")
         };
-        if (newValue[1] - newValue[0] >= 60 && !type) {
+        if (newValue[1] - newValue[0] > 60 && !type) {
             return toast.warning("Maximum 1 Minute Allowed")
         }
         setStart(newValue[0])
@@ -73,7 +91,7 @@ const useSlider = ({ video,type }: props) => {
     const valueText = (value: number) => {
         return `${convertToHHMMSS(value)}`;
     }
-    return { start, end, trim, duration, handleTrimVideo, handleSlide, valueText, setTrim }
+    return { start, end, trim, duration, handleTrimVideo, handleSlide, valueText, setTrim, handleClear }
 }
 
 

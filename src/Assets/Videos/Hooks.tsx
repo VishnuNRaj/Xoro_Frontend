@@ -9,6 +9,7 @@ import { Comments } from '../../Store/UserStore/CommonManagements/interfaces';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import Player from 'video.js/dist/types/player';
+import config from '../../Configs/config';
 
 
 export const useVideoPlayer = () => {
@@ -42,9 +43,9 @@ export const useVideoPlayer = () => {
                         autoplay: true,
                         fluid: true,
                         liveui: true,
-                        // preload:true,
+                        preload:true,
                         sources: [{
-                            src: response.payload.Video.Video,
+                            src: `${config.SERVER}/videos/${response.payload.Video.Key}/index.m3u8`,
                             type: 'application/x-mpegURL',
                         }],
                     });

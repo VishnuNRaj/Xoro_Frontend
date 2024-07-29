@@ -4,6 +4,7 @@ import { getCookie, useEssentials } from '../../Functions/CommonFunctions'
 import { uploadVideo } from '../../Store/UserStore/Video-Management/VideoSlice'
 import { Toaster } from 'sonner'
 import { toast } from 'sonner'
+import useCategory from '../../Other/Category'
 interface detailsProps {
     Video: File,
     Thumbnail: string[],
@@ -12,6 +13,7 @@ interface detailsProps {
 const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnail }) => {
     const thumbRef = useRef<HTMLInputElement>(null)
     const videoRef = useRef<HTMLVideoElement | null>(null)
+    const { category, emptySearch, handleSearchChange, search } = useCategory()
     const { auth, dispatch, navigate } = useEssentials()
     const { user } = auth;
     const handleThumbnailButtonClick = () => {
@@ -81,7 +83,9 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
             })
         }
     }
-
+    const handleContext = (name: string) => {
+        setData({ ...data, RelatedTags: name })
+    }
     return (
         <div>
             <Toaster richColors />
@@ -214,9 +218,30 @@ const AddDetails: React.FC<detailsProps> = memo(({ Video, Thumbnail, setThumbnai
                                 </div>
                             </div>
                             <div className="w-full">
-                                <VideoInput label={'Type'} placeholder='Type' value={data.RelatedTags} onChange={handleChange} name={'RelatedTags'} />
+                                <VideoInput label={'Type'} placeholder='Type' value={search.length > 0 ? search : data.RelatedTags} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
+                                    if(e.target.value.length === 0) {
+                                        handleSearchChange(e)
+                                        handleChange(e)
+                                    } else handleSearchChange(e)
+                                }} name={'RelatedTags'} />
+                                {category.length > 0 && (
+                                    <>
+                                        <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="absolute w-[380px] p-1 space-y-1 max-h-[150px] overflow-y-scroll bg-gray-200 z-50">
+                                            {category.map((value) => (
+                                                <>
+                                                    <div onClick={() => {
+                                                        handleContext(value.Name)
+                                                        emptySearch()
+                                                    }} className="w-full h-[40px] rounded-md flex items-center justify-center border-2 border-slate-800">
+                                                        <h1 className="text-gray-800 font-semibold text-sm">{value.Name}</h1>
+                                                    </div>
+                                                </>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            <div className="w-full">
+                            <div className="w-full md:mt-0 mt-2">
                                 <select onChange={(e) => setData({ ...data, Restriction: e.target.value })} name="Restriction" className='text-black h-[40px] font-medium border-1 shadow-md shadow-black border-gray-900 focus:border-2 placeholder:font-normal focus:border-black w-full p-2 px-3 rounded-lg ' id="">
                                     <option value="18">18 +</option>
                                     <option value="16">16 +</option>

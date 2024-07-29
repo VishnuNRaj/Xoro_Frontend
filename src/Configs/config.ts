@@ -8,6 +8,7 @@ interface configuration {
     PROFILE:string;
     VIDEO:string;
     CHAT:string;
+    SERVER:string;
 }
 
 
@@ -21,6 +22,7 @@ const config: configuration = {
     PROFILE:import.meta.env.VITE_APP_PROFILE_API_URL,
     VIDEO:import.meta.env.VITE_APP_VIDEO_API_URL,
     CHAT:import.meta.env.VITE_APP_CHAT_API_URL,
+    SERVER:import.meta.env.VITE_APP_SERVER_URL,
 }
 
 export default config;

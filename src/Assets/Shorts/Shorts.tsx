@@ -19,8 +19,8 @@ const Shorts: React.FC = () => {
         <div>
             {open && <ShortsUpload open={open} setOpen={setOpen} />}
             <div className='fixed right-[20px] top-[80px]'>
-                <button onClick={() => setOpen(true)} className='w-10 h-10 rounded-full bg-blue-700 p-1 flex items-center justify-center'>
-                    <i className='fa fa-upload text-white'></i>
+                <button onClick={() => setOpen(true)} className='w-24 font-semibold text-white text-sm h-10 rounded-full bg-blue-700 p-1 px-2 flex items-center gap-2 justify-center'>
+                    <i className='fa fa-upload '></i> Shorts
                 </button>
             </div>
         </div>

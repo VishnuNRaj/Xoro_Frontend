@@ -11,14 +11,14 @@ interface Props {
 }
 
 const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
-    const { video, selectVideo, inputRef, data, handleChange,handleContext, clear, handleUpload } = useUploadShorts();
-    const { start, duration, handleSlide, end, valueText, trim, handleTrimVideo, setTrim } = useSlider({ video })
-    const { category, handleSearchChange, search,emptySearch } = useCategory()
+    const { video, selectVideo, inputRef, data, handleChange, tags, handleContext, clear, handleUpload, setTagUsers, handleRemoveTags } = useUploadShorts();
+    const { start, duration, handleSlide, end, valueText, trim, handleTrimVideo, setTrim, handleClear } = useSlider({ video })
+    const { category, handleSearchChange, search, emptySearch } = useCategory()
     const videoElement = useMemo(() => {
         if (trim) {
             return (
                 <>
-                    <video controls className="md:w-[225px] w-full flex-shrink-0 rounded-md h-[300px] md:h-[400px]" src={URL.createObjectURL(trim)}></video>
+                    <video controls className="md:w-[225px] w-full flex-shrink-0 rounded-md h-[200px] md:h-[400px]" src={URL.createObjectURL(trim)}></video>
                 </>
             );
         }
@@ -34,13 +34,13 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
     return (
         <Dialog className="" size="xs" open={open} handler={() => setOpen(!open)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
             <Toaster richColors closeButton duration={2000} />
-            <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full p-1 md:flex overflow-y-scroll">
-                <div className="p-2 w-full border-2 rounded-lg md:flex border-gray-400">
-                    <div className={`md:w-[225px] w-full flex-shrink-0 bg-slate-900 rounded-md h-full md:h-[${"400px"}]`}>
+            <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full p-1 md:flex overflow-y-scroll border-2 border-gray-400 rounded-lg">
+                <div className="p-2 w-full h-auto rounded-lg md:flex ">
+                    <div className={`md:w-[225px] w-full flex justify-center flex-shrink-0 bg-slate-900 rounded-md h-full md:h-[${"400px"}]`}>
                         <input ref={inputRef} onChange={(e) => selectVideo(e, setTrim)} type="file" name="image" accept="video/*" hidden />
                         {videoElement}
                     </div>
-                    <div className="w-full p-1 h-full relative">
+                    <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full p-1 h-full md:h-[400px] relative overflow-y-scroll">
                         <textarea
                             placeholder="Enter Caption..."
                             className="w-full text-sm text-gray-200 p-3 rounded-md resize-none bg-slate-900 font-semibold"
@@ -57,14 +57,20 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
                             placeholder="Content Type..."
                             className="w-full text-sm relative text-gray-200 p-3 rounded-md resize-none bg-slate-900 font-semibold"
                             name="Context"
-                            onChange={handleSearchChange}
+                            onChange={(e) => {
+                                if (e.target.value.length === 0) {
+                                    handleChange(e)
+                                    handleSearchChange(e)
+                                } else handleSearchChange(e)
+
+                            }}
                         />
                         {category.length > 0 && (
                             <>
-                                <div style={{scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}} className="absolute w-full p-1 space-y-1 max-h-[150px] overflow-y-scroll bg-gray-200 z-50">
-                                    {category.map((value)=>(
+                                <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="absolute w-full p-1 space-y-1 max-h-[150px] overflow-y-scroll bg-gray-200 z-50">
+                                    {category.map((value) => (
                                         <>
-                                            <div onClick={()=>{
+                                            <div onClick={() => {
                                                 handleContext(value.Name)
                                                 emptySearch()
                                             }} className="w-full h-[40px] rounded-md flex items-center justify-center border-2 border-slate-800">
@@ -75,20 +81,42 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
                                 </div>
                             </>
                         )}
-                        <input
-                            type="text"
-                            value={data.Tags}
-                            placeholder="set hashtags for Recommendation ..."
-                            className="w-full text-sm mt-2 text-gray-200 p-3 rounded-md resize-none bg-slate-900 font-semibold"
-                            name="Tags"
-                            onChange={handleChange}
-                        />
-                        <div className="bottom-1 mt-2 flex gap-2 items-center justify-center w-full h-14">
-                            <button onClick={() => clear(setTrim)} className="bg-red-500 rounded-lg font-semibold text-white p-2 px-3">Clear</button>
-                            <button onClick={handleUpload} className="bg-blue-700 rounded-lg font-semibold text-white p-2 px-3">Upload</button>
+                        <div className="relative top-0">
+                            <input
+                                type="text"
+                                value={data.Tags}
+                                placeholder="set hashtags for Recommendation ..."
+                                className="w-full relative flex items-center text-sm mt-2 text-gray-200 p-3 rounded-md resize-none bg-slate-900 font-semibold"
+                                name="Tags"
+                                onChange={handleChange}
+                            />
+                            <div className="absolute right-2 top-2.5 w-6 h-6 flex items-center justify-center">
+                                <button onClick={setTagUsers} className={`w-full h-full ${data.Tags.startsWith("#") && data.Tags[1] !== "#" && data.Tags.length > 2 ? "bg-blue-700" : "bg-gray-800"} rounded-md text-white flex items-center justify-center text-sm font-semibold`}><i className="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div className={`w-full h-[100px] p-1 gap-2 ${tags.length > 0 ? "grid grid-cols-2" : "flex flex-shrink-0 items-center justify-center"} mt-2 rounded-md bg-gray-400 overflow-y-scroll`} style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
+                            {tags.length > 0 ?
+                                <>
+                                    {tags.map((tag, idx) => (
+                                        <>
+                                            <div className="w-full p-1 h-10 flex items-center rounded-lg justify-center relative font-semibold text-white text-sm bg-slate-800">
+                                                <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="overflow-x-scroll w-[90%] cursor-auto" >
+                                                    <h1>#{tag}</h1>
+                                                </div>
+                                                <div className="absolute right-2 h-5 w-5">
+                                                    <button onClick={() => handleRemoveTags(idx)} className="w-full h-full flex p-1 rounded-md bg-red-500 items-center justify-center"><i className="fa fa-times"></i> </button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ))}
+                                </> :
+                                <>
+                                    <h1 className="font-semibold text-sm">Add Hashtags</h1>
+                                </>
+                            }
                         </div>
                         {video && (
-                            <div className="w-full h-20 p-3">
+                            <div className="w-full h-20 mb-5 p-3">
                                 <div className="h-full p-3">
                                     <div className=" flex items-center justify-center">
                                         <h1 className="flex-shrink-0 font-semibold">Trim Video</h1>
@@ -110,6 +138,11 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
                                 </div>
                             </div>
                         )}
+                        <div className={`${video ? "mt-12" : "mt-2"} flex gap-2 items-center justify-center w-full h-14`}>
+                            <button onClick={() => clear(handleClear)} className="bg-red-500 rounded-lg font-semibold text-white p-2 px-3 hover:bg-red-600">Clear</button>
+                            <button onClick={() => trim && handleUpload(trim as File, setTrim)} className={`rounded-lg font-semibold p-2 px-3 ${trim ? "bg-blue-700 text-white hover:bg-blue-800" : "bg-gray-400 text-gray-600"}`}>Upload</button>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
