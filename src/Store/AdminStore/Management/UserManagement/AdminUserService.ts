@@ -1,11 +1,10 @@
 import axios from "axios"
 import * as interfaces from "./Interfaces"
-const admin = import("../../../../Configs/config").then((response)=>{
-    return response.default.ADMIN
+import config from "../../../../Configs/config"
 })
 export const getUsers: Function = async ({ token }: interfaces.GetUsers): Promise<interfaces.GetUsersResponse> => {
     try {
-        const response = await axios.get(admin+'/get-userdata', {
+        const response = await axios.get(config.ADMIN + '/get-userdata', {
             headers: {
                 Authorization: `${token}`,
             },
