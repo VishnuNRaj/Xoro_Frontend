@@ -20,7 +20,7 @@ export const getUsers: Function = async ({ token }: interfaces.GetUsers): Promis
 
 export const updateUser: Function = async (data: interfaces.UpdateUser): Promise<interfaces.GetUsersResponse> => {
     try {
-        const response = await axios.post(`${admin}/${data.UserId}/manageUser`, data, {
+        const response = await axios.post(`${config.ADMIN}/${data.UserId}/manageUser`, data, {
             headers: {
                 Authorization: `${data.token}`,
                 'Content-Type': 'application/json'
