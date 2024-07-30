@@ -55,7 +55,7 @@ const VideoFile: React.FC<Props> = ({ video }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
             >
-                <div className="flex bg-gray-800 flex-col rounded-md w-full h-full" onClick={() => navigate(`/videos/${video.VideoLink}`)}>
+                <div className="flex bg-gray-800 border-2 border-gray-600 flex-col rounded-md w-full h-full" onClick={() => navigate(`/videos/${video.VideoLink}`)}>
                     <video className='w-full' src={video.Video} ref={videoRef} hidden></video>
                     <div className='rounded-md bg-gray-800 relative' onMouseOver={() => setState(true)} onMouseOut={() => setState(false)}>
                         {!state ? (
