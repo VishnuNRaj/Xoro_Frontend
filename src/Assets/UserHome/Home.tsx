@@ -5,7 +5,6 @@ import useHooks from './Hooks';
 import PostShowComponent from './PostShowComponent';
 import Recommendations from './Recommendations';
 import { useOnline } from '../../Other/Hooks';
-// import { DefaultSidebar } from '../Components/Sidebar';
 
 const Home: React.FC = () => {
     const { auth } = useEssentials()

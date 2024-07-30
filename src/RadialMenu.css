@@ -1,0 +1,203 @@
+.radial {
+    position: fixed;
+    z-index: 20;
+    bottom: 70px;
+    right: 40px;
+
+    .triggerButton {
+        position: absolute;
+        z-index: 9;
+        left: 50%;
+        top: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 50px;
+        border: none;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 50%;
+        text-decoration: none;
+        background: linear-gradient(0deg, rgba(22, 9, 240, 1) 0%, rgba(49, 110, 244, 1) 100%);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.15s ease-in-out;
+        transform: translate(-50%, -50%);
+
+        &:hover {
+            background-color: darken(#0000b3, 5);
+        }
+
+        .faOpen {
+            position: absolute;
+            font-size: 12px;
+            transform: scale(1);
+            transition: .25s ease-in-out;
+
+            &:nth-child(1) {
+                top: 20%;
+            }
+
+            &:nth-child(2) {
+                left: 20%;
+                top: 52%;
+            }
+
+            &:nth-child(3) {
+                right: 20%;
+                top: 52%;
+            }
+        }
+
+        .faClose {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0) translate(-50%, -50%);
+            transition: .25s ease-in-out;
+        }
+    }
+
+    .radialMenu {
+        --width: 195px;
+        width: var(--width);
+        height: var(--width);
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .radialItem {
+        list-style: none;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all .3s ease;
+
+        &:nth-child(1) {
+
+            a,
+            span {
+                background: rgb(96, 9, 240);
+                background: linear-gradient(-90deg, rgba(96, 9, 240, 1) 0%, rgba(129, 5, 240, 1) 100%);
+            }
+        }
+
+        &:nth-child(2) {
+
+            a,
+            span {
+                background-color: #ff4081;
+                background-image: linear-gradient(90deg, #ff4081 0%, #ff4081);
+            }
+        }
+
+        &:nth-child(3) {
+
+            a,
+            span {
+                background: #FF2000;
+                background: linear-gradient(-90deg, #FF2000 0%, #FF2100 100%);
+            }
+        }
+
+        a {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            height: 80%;
+            color: #fff;
+            background: #ff4081;
+            border-radius: 50%;
+            text-decoration: none;
+
+            &:hover {
+                transition-delay: 0s;
+                background-color: darken(#ff4081, 15);
+
+                span {
+                    opacity: 1;
+                    right: calc(100% + 15px);
+                    visibility: visible;
+                }
+            }
+        }
+
+        span {
+            position: absolute;
+            top: 50%;
+            background-color: #f30053;
+            right: 100%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 14px;
+            transition: .25s;
+            opacity: 0;
+            visibility: hidden;
+
+        }
+    }
+
+    &.active {
+        .triggerButton {
+            .faOpen {
+                opacity: 0;
+                visibility: hidden;
+                transform: scale(0);
+            }
+
+            .faClose {
+                opacity: 1;
+                visibility: visible;
+                transform-origin: top left;
+                transform: scale(1) translate(-50%, -50%);
+            }
+        }
+
+        .radialItem {
+            --angle: 0deg;
+            --point-size: 60px;
+            --countItem: 8;
+
+            /* we subtract the point size to place point inside circle */
+            --radius: calc((var(--width) / 2) - (var(--point-size) / 2));
+            --x: calc(var(--radius) * cos(var(--angle)));
+            --y: calc(var(--radius) * sin(var(--angle)));
+
+            /* position point at center of circle with radius. We add x and y values to move to edge of circle. */
+            top: calc(var(--radius) + var(--y) + (var(--point-size) / 2));
+            left: calc(var(--radius) + var(--x) + (var(--point-size) / 2));
+
+            width: var(--point-size);
+            height: var(--point-size);
+
+            a {
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15), 0px 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            &:nth-child(1) {
+                --angle: 270deg;
+            }
+
+            &:nth-child(2) {
+                --angle: 200deg;
+            }
+
+            &:nth-child(3) {
+                --angle: 130deg;
+            }
+        }
+    }
+}

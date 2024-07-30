@@ -89,7 +89,7 @@ const VideoFile: React.FC<Props> = ({ video }) => {
                     </div>
                     <div className="flex flex-row mt-2 ml-4">
                         <img
-                            src={video.Channel[0].Logo}
+                            src={video.Channel[0]?.Logo}
                             alt="channel_logo"
                             className="rounded-full h-8 w-8 mt-1 object-cover"
                         />
@@ -97,7 +97,7 @@ const VideoFile: React.FC<Props> = ({ video }) => {
                             <span className="text-white text-ellipsis break-words font-semibold max-w-full text-sm px-2 line-clamp-1">
                                 {video.Caption === '' ? "No Captions Given" : video.Caption}
                             </span>
-                            <span className="text-gray-200 font-semibold text-xs px-2">{video.Channel[0].Name}</span>
+                            <span className="text-gray-200 font-semibold text-xs px-2">{video.Channel[0]?.Name}</span>
                             <span className="text-gray-300 font-medium text-xs pl-2">
                                 {video.Views} views • {duration}
                             </span>

@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react";
 import { useEssentials } from '../../Functions/CommonFunctions';
 import Search from './Search'
-import { Dialog } from '@material-tailwind/react'
+import { Dialog, Drawer } from '@material-tailwind/react'
 import { User } from "../../Store/UserStore/Authentication/Interfaces";
 import { PostImage } from "../../Store/UserStore/Post-Management/Interfaces";
 import UserMap from "./UserMap";
@@ -9,6 +9,8 @@ import ChannelMap from "./ChannelMap";
 import ChatPopup from "../Chat/ChatPopup";
 import { Channel } from "../../Store/UserStore/Video-Management/Interfaces";
 import useWindowDimensions from "../../Other/Hooks";
+import RadialMenuComponent from "./Radial";
+import Notification from "./Notification";
 
 interface NavbarProps {
     openDrawerLeft: () => void;
@@ -36,6 +38,7 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
         live: []
     })
     const [chatWindow, setChatwindow] = useState<boolean>(false)
+    const [notificationWin, setNotificationWin] = useState(false)
     return (
         <>
             {chatWindow && (
@@ -43,14 +46,17 @@ const Navbar: React.FC<NavbarProps> = memo(({ openDrawerLeft }) => {
                     <ChatPopup setChatWindow={setChatwindow} chatWindow={chatWindow} />
                 </div>
             )}
-            {user && !chatWindow && (
-                <div className="fixed bottom-0 right-0 mb-4 mr-4 w-[40px] h-[40px] rounded-full flex items-center z-50 justify-center bg-blue-700">
-                    <button onClick={() => {
-                        setChatwindow(!chatWindow)
-                    }} className="bg-transparent w-[40px] fixed h-[40px] rounded-full text-xl text-white flex items-center justify-center">
-                        <i className="fa fa-comments"></i>
-                    </button>
+            {notificationWin && (
+                <div className="w-auto">
+                    <Drawer placement="right" className="bg-black bg-opacity-50 p-1 w-[300px]" open={notificationWin} onClose={() => setNotificationWin(false)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                        <div className="w-full">
+                            <Notification/>
+                        </div>
+                    </Drawer>
                 </div>
+            )}
+            {user && !chatWindow && !notificationWin && (
+                <RadialMenuComponent setChat={setChatwindow} setNot={setNotificationWin} />
             )}
             <Dialog open={search} size="xs" className="rounded-md bg-[#002244] bg-opacity-80 border-2  border-blue-700" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} handler={function (): void {
                 throw new Error("Function not implemented.");
