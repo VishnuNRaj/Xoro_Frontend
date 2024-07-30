@@ -103,12 +103,12 @@ const ShowVideos: React.FC = () => {
                         <h1 className=''>{videoData?.Caption}</h1>
                     </div>
                     <div className='w-full h-[60px] grid grid-cols-2 gap-2'>
-                        <div className='w-full flex items-center px-2'>
+                        <div className='w-full flex items-center px-1'>
                             <div className='flex'>
                                 <div className='w-10 h-10 ml-1 flex-shrink-0 rounded-full'>
                                     <img src={videoData?.Channel[0].Logo} className='rounded-full shadow-md shadow-black object-center' alt="" />
                                 </div>
-                                <div className='w-full px-1'>
+                                <div className='w-full'>
                                     <div className='font-semibold text-gray-300'>
                                         <h1>{videoData?.Channel[0].Name}</h1>
                                         <p className='text-xs text-gray-500'>{subs > 0 ? (
