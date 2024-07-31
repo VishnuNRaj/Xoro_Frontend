@@ -138,3 +138,19 @@ export const getCategory: Function = async ({ PostId, token }: interfaces.addCom
         }
     }
 }
+
+
+export const getChannelBase = async ({ token }: { token: string }) => {
+    try {
+        const response = await axios.get(`${Config.USER}/getChannel`, {
+            withCredentials: true,
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        return response.data
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+}

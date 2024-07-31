@@ -1,9 +1,10 @@
 import { Dialog } from '@material-tailwind/react';
-import React, { SetStateAction, useRef, useState } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { createChannel } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 import Preloader from '../Components/Preloader';
 import { useEssentials, getCookie, useToast } from '../../Functions/CommonFunctions';
+import useCategory from '../../Other/Category';
 
 interface Props {
     open: boolean;
@@ -17,11 +18,12 @@ interface stateProps {
     Logo: File | null;
 }
 
-const arr = [
-    "Gaming", "Comedy", "Short-Films", "Vlog", "Science", "Tech", "Education", "Drama", "Music", "Art", "Architechture", "Dance","Sports","Action","Movie","Adventure",""]
-
 const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
     const { navigate, dispatch, profile } = useEssentials()
+    const { category, getAllCategory } = useCategory()
+    useEffect(() => {
+        getAllCategory()
+    }, [])
     const inputRef = useRef<HTMLInputElement | null>(null)
     const { loadingProfile } = profile
     const [state, setState] = useState<stateProps>({
@@ -34,7 +36,7 @@ const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
     const create = () => {
         const { Name, Logo, Description, Type } = state
         if (!Name || !Logo) {
-            useToast('Enter Channel Details Properly','error')
+            useToast('Enter Channel Details Properly', 'error')
         }
         const token: string | undefined = getCookie('token')
         if (token && Logo) {
@@ -42,16 +44,13 @@ const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
                 if (state.payload.status === 202) {
                     navigate('/login')
                 }
-                useToast(state.payload.message,'success')
+                useToast(state.payload.message, 'success')
                 if (state.payload.status == 200) setOpen(false)
 
             })
         }
 
     }
-
-
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState({ ...state, [e.target.name]: e.target.value })
     }
@@ -96,7 +95,7 @@ const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
                                 </label>
                                 <input id="logo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     const { files } = e.target
-                                    if (files && files[0].type.split('/')[0] !== 'image') return useToast('Select a proper image','error')
+                                    if (files && files[0].type.split('/')[0] !== 'image') return useToast('Select a proper image', 'error')
                                     if (files) {
                                         console.log(files)
                                         return setState({ ...state, Logo: files[0] })
@@ -146,22 +145,22 @@ const CreateChannel: React.FC<Props> = ({ open, setOpen }) => {
                         </center>
                     </div>
                     <div className='w-[80%] mt-3 ml-[10%] grid grid-cols-3 gap-4'>
-                        {arr.map((data, index) => (
+                        {category.length > 0 && category.map((data, index) => (
                             <div key={index} className="flex items-center mb-5">
                                 <input
                                     id={`remember-${index}`}
                                     type="checkbox"
-                                    value={data}
+                                    value={data.Name}
                                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                                     required
-                                    onChange={() => handleCheckboxChange(data)}
-                                    checked={state.Type.some((val) => val === data)}
+                                    onChange={() => handleCheckboxChange(data.Name)}
+                                    checked={state.Type.some((val) => val === data.Name)}
                                 />
                                 <label
                                     htmlFor={`remember-${index}`}
                                     className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                 >
-                                    {data}
+                                    {data.Name}
                                 </label>
                             </div>
                         ))}

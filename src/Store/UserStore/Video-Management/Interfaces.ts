@@ -5,10 +5,11 @@ export interface Channel {
     _id: string;
     Name: string,
     UserId: string;
-    Type: string;
+    Type: string[];
     Subsribers: string[];
     Reports: number;
     Logo: string;
+    Description:string;
 }
 export interface Reactions {
     PostId: string;

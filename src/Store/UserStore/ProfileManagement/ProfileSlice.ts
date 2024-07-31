@@ -157,6 +157,20 @@ export const createChannel = createAsyncThunk<interfaces.createChannelResponse, 
     }
 )
 
+export const editChannel = createAsyncThunk<interfaces.createChannelResponse, interfaces.editChannel>(
+    'auth/editChannel',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.editChannel(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.createChannelResponse>{
+                message: 'Internal Server Error',
+            })
+        }
+    }
+)
+
 
 const profileSlice = createSlice({
     name: 'profile',
@@ -227,7 +241,13 @@ const profileSlice = createSlice({
                 state.loadingProfile = true
             })
             .addCase(createChannel.fulfilled,(state)=>{
+                state.loadingProfile = false
+            })
+            .addCase(editChannel.pending,(state)=>{
                 state.loadingProfile = true
+            })
+            .addCase(editChannel.fulfilled,(state)=>{
+                state.loadingProfile = false
             })
     }
 })

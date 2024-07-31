@@ -135,13 +135,29 @@ export const unFollowUser: Function = async (data: interfaces.followUser) => {
 export const createChannel: Function = async (data: interfaces.createChannel): Promise<interfaces.createChannelResponse> => {
     try {
         const form = new FormData()
-        form.append('Logo',data.Logo)
-        form.append('Name',data.Name)
-        form.append('Description',data.Description)
-        data.Type.forEach((type)=>{
-            form.append('Type',type)
+        form.append('Logo', data.Logo)
+        form.append('Name', data.Name)
+        form.append('Description', data.Description)
+        data.Type.forEach((type) => {
+            form.append('Type', type)
         })
         const response = await axios.post(`${config.PROFILE}/createChannel`, form, {
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data
+    } catch (e) {
+        return {
+            message: 'Internal Server Error',
+            status: 500
+        }
+    }
+}
+
+export const editChannel: Function = async (data: interfaces.editChannel): Promise<interfaces.createChannelResponse> => {
+    try {
+        const response = await axios.post(`${config.PROFILE}/edit-channel`, data, {
             headers: {
                 'Authorization': data.token,
             }

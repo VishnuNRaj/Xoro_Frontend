@@ -100,6 +100,14 @@ export interface createChannel {
     token:string;
 }
 
+export interface editChannel {
+    Name:string;
+    Description:string;
+    Type:string[];
+    Logo:string | null;
+    token:string;
+}
+
 export interface createChannelResponse {
     message:string;
     status:number;

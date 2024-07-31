@@ -1,9 +1,14 @@
 import { Dialog } from '@material-tailwind/react';
-import React, { SetStateAction, useRef, useState } from 'react';
-import { Toaster } from 'react-hot-toast';
-import { createChannel } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
+import { editChannel } from '../../Store/UserStore/ProfileManagement/ProfileSlice';
 import Preloader from '../Components/Preloader';
 import { useEssentials, getCookie, useToast } from '../../Functions/CommonFunctions';
+import useCategory from '../../Other/Category';
+import { useSocket } from '../../Socket';
+import { Socket } from 'socket.io-client';
+import { getChannelBase } from '../../Store/UserStore/CommonManagements/CommonService';
+import { toast, Toaster } from 'sonner';
+import { Channel } from '../../Store/UserStore/Video-Management/Interfaces';
 
 interface Props {
     open: boolean;
@@ -14,14 +19,28 @@ interface stateProps {
     Name: string;
     Description: string;
     Type: string[];
-    Logo: File | null;
+    Logo: string | null;
 }
-
-const arr = [
-    "Gaming", "Comedy", "Short-Films", "Vlog", "Science", "Tech", "Education", "Drama", "Music", "Art", "Architechture", "Dance","Sports","Action","Movie","Adventure",""]
+let fileData: File | null = null
 
 const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
+    const socket = useSocket()
     const { navigate, dispatch, profile } = useEssentials()
+    const [soc, setSoc] = useState<Socket | null>(null)
+    const { category, getAllCategory } = useCategory()
+    useEffect(() => {
+        getAllCategory()
+        setSoc(socket)
+        getChannel()
+    }, [])
+
+    useEffect(() => {
+        if (soc) {
+            soc.on("getChannel", (data) => {
+                console.log(data)
+            })
+        }
+    }, [soc])
     const inputRef = useRef<HTMLInputElement | null>(null)
     const { loadingProfile } = profile
     const [state, setState] = useState<stateProps>({
@@ -30,27 +49,40 @@ const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
         Type: [],
         Logo: null
     })
-
+    const getChannel = async () => {
+        const token: string | undefined = getCookie("token")
+        if (token) {
+            const response = await getChannelBase({ token })
+            if (response.status !== 200) {
+                toast.error(response.message)
+            } else {
+                const channel: Channel = response.channel
+                console.log(channel)
+                setState({
+                    Name: channel.Name,
+                    Description: channel.Description,
+                    Logo: channel.Logo,
+                    Type: channel.Type
+                })
+            }
+        }
+    }
     const create = () => {
         const { Name, Logo, Description, Type } = state
         if (!Name || !Logo) {
-            useToast('Enter Channel Details Properly','error')
+            useToast('Enter Channel Details Properly', 'error')
         }
         const token: string | undefined = getCookie('token')
-        if (token && Logo) {
-            dispatch(createChannel({ Name, Logo, Description, Type, token })).then((state: any) => {
+        if (token) {
+            dispatch(editChannel({ Name, Logo: fileData ? Logo : null, Description, Type, token })).then((state: any) => {
                 if (state.payload.status === 202) {
                     navigate('/login')
                 }
-                useToast(state.payload.message,'success')
-                if (state.payload.status == 200) setOpen(false)
-
+                toast[state.payload.status === 200 ? "success" : "error"](state.payload.message)
             })
         }
 
     }
-
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState({ ...state, [e.target.name]: e.target.value })
@@ -63,6 +95,23 @@ const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
             return { ...prevState, Type: updatedType };
         });
     };
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { files } = e.target;
+        if (files && files[0].type.split('/')[0] !== 'image') {
+            useToast('Select a proper image', 'error');
+            return;
+        }
+        if (files && files[0]) {
+            const file = files[0];
+            fileData = file;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setState({ ...state, Logo: reader.result as string });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <Dialog
             className='animate-slideInFromLeft border-blue-700 border-2 bg-[#111] bg-opacity-60'
@@ -70,7 +119,7 @@ const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
             open={open}
             handler={() => setOpen(false)}
             placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}    >
-            <Toaster />
+            <Toaster richColors position='top-right' />
             {loadingProfile && <Preloader />}
             <div className='w-full h-full'>
                 <div className="relative w-full h-[40px] flex items-center justify-center">
@@ -85,7 +134,7 @@ const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
                 <div style={{ scrollbarColor: 'white' }} className='border-t-2 rounded-md border-blue-700 px-6 py-4 w-full space-y-2 max-h-[75vh] overflow-y-auto'>
                     <div className="w-full">
                         <div className='w-full flex items-center justify-center'>
-                            <img crossOrigin="anonymous" className='rounded-full aspect-square w-[100px] h-[100px] object-cover ' src={state.Logo ? URL.createObjectURL(state.Logo) : 'https://images.pexels.com/photos/3377405/pexels-photo-3377405.jpeg?cs=srgb&dl=pexels-elina-araja-1743227-3377405.jpg&fm=jpg'} alt="" />
+                            <img className='rounded-full aspect-square w-[100px] h-[100px] object-cover ' src={state.Logo ? state.Logo : 'https://images.pexels.com/photos/3377405/pexels-photo-3377405.jpeg?cs=srgb&dl=pexels-elina-araja-1743227-3377405.jpg&fm=jpg'} alt="" />
                         </div>
                         <div className="w-full">
                             <div className="mt-5 flex justify-center w-full">
@@ -94,14 +143,7 @@ const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
                                 }} className="cursor-pointer">
                                     <i className="fa fa-camera cursor-pointer text-white bg-blue-500 rounded-full p-2"></i>
                                 </label>
-                                <input id="logo" onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    const { files } = e.target
-                                    if (files && files[0].type.split('/')[0] !== 'image') return useToast('Select a proper image','error')
-                                    if (files) {
-                                        console.log(files)
-                                        return setState({ ...state, Logo: files[0] })
-                                    }
-                                }} type="file" ref={inputRef} className="hidden" />
+                                <input id="logo" onChange={handleFileChange} type="file" ref={inputRef} className="hidden" />
                             </div>
                         </div>
                     </div>
@@ -146,22 +188,22 @@ const EditChannel: React.FC<Props> = ({ open, setOpen }) => {
                         </center>
                     </div>
                     <div className='w-[80%] mt-3 ml-[10%] grid grid-cols-3 gap-4'>
-                        {arr.map((data, index) => (
+                        {category.length > 0 && category.map((data, index) => (
                             <div key={index} className="flex items-center mb-5">
                                 <input
                                     id={`remember-${index}`}
                                     type="checkbox"
-                                    value={data}
+                                    value={data.Name}
                                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                                     required
-                                    onChange={() => handleCheckboxChange(data)}
-                                    checked={state.Type.some((val) => val === data)}
+                                    onChange={() => handleCheckboxChange(data.Name)}
+                                    checked={state.Type.some((val) => val === data.Name)}
                                 />
                                 <label
                                     htmlFor={`remember-${index}`}
                                     className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                                 >
-                                    {data}
+                                    {data.Name}
                                 </label>
                             </div>
                         ))}

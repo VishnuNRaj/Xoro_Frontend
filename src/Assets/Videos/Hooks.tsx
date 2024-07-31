@@ -49,13 +49,34 @@ export const useVideoPlayer = () => {
                         autoplay: true,
                         fluid: true,
                         liveui: true,
-                        preload: true,
+                        preload: 'auto',
+                        controlBar: {
+                            playToggle: true,
+                            volumePanel: { inline: true },
+                            currentTimeDisplay: true,
+                            timeDivider: true,
+                            durationDisplay: true,
+                            progressControl: true,
+                            liveDisplay: true,
+                            seekToLive: true,
+                            remainingTimeDisplay: true,
+                            customControlSpacer: true,
+                            playbackRateMenuButton: true,
+                            chaptersButton: true,
+                            descriptionsButton: true,
+                            subsCapsButton: true,
+                            audioTrackButton: true,
+                            pictureInPictureToggle: true,
+                            fullscreenToggle: true,
+                        },
                         sources: [{
                             src: `${config.SERVER}/videos/${response.payload.Video.Key}/index.m3u8`,
                             type: 'application/x-mpegURL',
                         }],
                     });
+                    player.aspectRatio("16:9")
                     playerRef.current = player
+                    player.fill(true)
                     return () => {
                         player.dispose();
                     };

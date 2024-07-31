@@ -11,6 +11,7 @@ import AccountSettings from './SecureAccount';
 import CreateChannnel from './CreateChannnel';
 import ShowConnections from './ShowConnections';
 import useProfileData, { } from './Hooks';
+import EditChannel from './EditChannel';
 
 
 const Profile: React.FC = () => {
@@ -38,7 +39,8 @@ const Profile: React.FC = () => {
         dispatch,
         handleBanner,
         handleImages,
-        post
+        post,
+        edit, setEdit
     } = useProfileData();
 
     // const { anchorEl, openMenu, handleMenuClick, handleMenuClose } = useMenu();
@@ -47,6 +49,7 @@ const Profile: React.FC = () => {
             {state && connections && <ShowConnections setConnection={setConnections} setOpen={setState} open={state} connections={connections} />}
             {open && <AccountSettings open={open} setOpen={setOpen} />}
             {channel && <CreateChannnel open={channel} setOpen={setChannel} />}
+            {edit && <EditChannel open={edit} setOpen={setEdit} />}
             {loadingPost || loading || loadingProfile ? (
                 <Preloader />
             ) : <></>}
@@ -76,7 +79,7 @@ const Profile: React.FC = () => {
                                                 <MenuItem onClick={() => setChannel(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-television bg-blue-500 rounded-full p-2 mr-4'></i>Create Channel</MenuItem>
 
                                             ) : (
-                                                <MenuItem onClick={() => setChannel(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-television bg-blue-500 rounded-full p-2 mr-4'></i>Edit Channel</MenuItem>
+                                                <MenuItem onClick={() => setEdit(true)} className='cursor-pointer hover:text-white hover:bg-blue-500 rounded-md' placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}> <i className='fa fa-television bg-blue-500 rounded-full p-2 mr-4'></i>Edit Channel</MenuItem>
                                             )}
                                         </MenuList>
                                     </Menu>

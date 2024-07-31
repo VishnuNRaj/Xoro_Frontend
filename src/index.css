@@ -11,6 +11,9 @@ body {
   font-family: 'inter',sans-serif;
 }
 
+.videoContainer {
+  height:60vh;
+}
 
 .black-varient-1 {
   background-color: #111;

@@ -22,7 +22,15 @@ const useCategory = () => {
         setCategory([])
         setSearch("")
     }
-    return { category, search, handleSearchChange,emptySearch }
+    const getAllCategory = async () => {
+        const token = getCookie("token")
+        if (token) {
+            const response: any = await getCategory({ token, PostId: "null" })
+            if (response.status === 202) return navigate("/login")
+            setCategory(response.category)
+        } else navigate("/login")
+    }
+    return { category, search, handleSearchChange, emptySearch,getAllCategory }
 }
 
 export default useCategory;

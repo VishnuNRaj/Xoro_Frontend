@@ -130,6 +130,7 @@ const useProfileData = () => {
 
     const [open, setOpen] = useState(false);
     const [channel, setChannel] = useState(false);
+    const [edit, setEdit] = useState(false)
     const [state, setState] = useState(false);
 
     const bannerRef = useRef<HTMLInputElement | null>(null);
@@ -159,7 +160,9 @@ const useProfileData = () => {
         dispatch,
         handleBanner,
         handleImages,
-        post
+        post,
+        edit,
+        setEdit
     };
 };
 
