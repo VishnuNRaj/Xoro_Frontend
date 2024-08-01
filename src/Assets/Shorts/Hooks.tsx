@@ -15,7 +15,7 @@ import { useSocket } from '../../Socket';
 
 export const useUploadShorts = () => {
   const [video, setVideo] = useState<File | null>(null);
-  const { dispatch, navigate } = useEssentials()
+  const { dispatch, navigate, shorts } = useEssentials()
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [search, setSearch] = useState("")
   const [data, setData] = useState<{ Caption: string; Tags: string; Context: string }>({
@@ -72,7 +72,7 @@ export const useUploadShorts = () => {
     setTags([...tags].filter((_val, idx) => idx !== i))
   }
 
-  return { video, selectVideo, clear, data, inputRef, handleChange, handleContext, setTagUsers, handleUpload, search, setSearch, tags, handleRemoveTags };
+  return { video, selectVideo, clear, data, inputRef, handleChange, handleContext, setTagUsers, handleUpload, search, setSearch, tags, handleRemoveTags, loading: shorts.loadingShorts };
 };
 
 export const useShorts = () => {
@@ -234,11 +234,11 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
   const handleTouchMove = async (e: TouchEvent) => {
     const touchEndY = e.changedTouches[0].clientY;
     const currentIndex = shorts.indexOf(id || "");
-    if (touchStartY.current - touchEndY > 50) {
+    if (touchStartY.current - touchEndY > 100) {
       if (shorts[currentIndex + 1]) navigate(`/shorts/${shorts[currentIndex + 1]}`)
       const token = getCookie("token")
       if (token) await getMoreShorts(token)
-    } else if (touchEndY - touchStartY.current > 50) {
+    } else if (touchEndY - touchStartY.current > 100) {
       if (currentIndex === 0) return;
       else if (shorts[currentIndex - 1]) navigate(`/shorts/${shorts[currentIndex + 1]}`)
     }

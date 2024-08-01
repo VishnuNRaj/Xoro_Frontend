@@ -26,11 +26,18 @@ export default {
             opacity: 0,
           },
         },
+        keyframes: {
+          slideInFromBottom: {
+            '0%': { transform: 'translateY(100%)', opacity: '0' },
+            '100%': { transform: 'translateY(0)', opacity: '1' },
+          },
+        },
       },
       animation: {
         slideInFromLeft: 'slideInFromLeft 1s ease-out forwards',
         popup: 'popup 0.5s ease-out forwards',
         meteoreffect: "meteor 0.5s linear infinite",
+        slideInFromBottom: 'slideInFromBottom 0.5s ease-out',
       },
     },
   },

@@ -66,11 +66,11 @@ const Shorts: React.FC = () => {
     const { width } = useWindowDimensions()
     const { videoRef, handleKeyDown, comments, setComments, setDialog, dialog, subs, subscribe, handleSubscribe, handleUnsubscribe } = useShortsComponent({ video, shorts, id, getMoreShorts });
     console.log(video)
-
     return (
         <div>
             {open && <ShortsUpload open={open} setOpen={setOpen} />}
             <Toaster richColors closeButton duration={2000} position="top-right" />
+            {}
             {dialog && video && (
                 <Dialog open={dialog} className='bg-[#111] p-2 bg-opacity-50' handler={() => setDialog(false)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
                     <CommentComponent comments={comments} setComments={setComments} PostId={video._id} />
@@ -102,7 +102,7 @@ const Shorts: React.FC = () => {
 
                     <div className={`w-full grid ${width > 968 && "grid-cols-2"} grid-cols-1 justify-center h-full`}>
                         <div className={`w-full h-full  flex flex-shrink-0 items-center justify-center relative ${width > 968 && "ml-14"}`}>
-                            <div onKeyDown={handleKeyDown} className={`w-full p-2 flex items-center rounded-lg ${width > 968 && "md:w-[400px]"} border-2 h-[75vh]`}>
+                            <div onKeyDown={handleKeyDown} className={`w-full animate-popup p-2 flex items-center rounded-lg ${width > 968 && "md:w-[400px]"} border-2 h-[75vh]`}>
                                 <video ref={videoRef} autoPlay loop className='w-full video-js rounded-lg vjs-default-skin'></video>
                             </div>
                             <div className='w-full absolute bg-gray-900 bg-opacity-50 flex bottom-0 items-center rounded-lg md:w-[400px] border-t-2'>

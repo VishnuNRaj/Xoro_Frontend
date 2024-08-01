@@ -4,13 +4,14 @@ import { useUploadShorts } from "./Hooks";
 import useSlider from "../Components/Slider";
 import { Slider } from "@mui/material";
 import useCategory from "../../Other/Category";
+import Preloader from "../Components/Preloader";
 interface Props {
     open: boolean;
     setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
-    const { video, selectVideo, inputRef, data, handleChange, tags, handleContext, clear, handleUpload, setTagUsers, handleRemoveTags } = useUploadShorts();
+    const { video, selectVideo, inputRef, data, handleChange, tags, handleContext, clear, handleUpload, setTagUsers, handleRemoveTags, loading } = useUploadShorts();
     const { start, duration, handleSlide, end, valueText, trim, handleTrimVideo, setTrim, handleClear } = useSlider({ video })
     const { category, handleSearchChange, search, emptySearch } = useCategory()
     const videoElement = useMemo(() => {
@@ -32,7 +33,8 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
 
     return (
         <Dialog className="" size="xs" open={open} handler={() => setOpen(!open)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-            <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full p-1 md:flex overflow-y-scroll border-2 border-gray-400 rounded-lg">
+            {loading && <Preloader />}
+            <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full animate-slideInFromBottom p-1 md:flex overflow-y-scroll border-2 border-gray-400 rounded-lg">
                 <div className="p-2 w-full h-auto rounded-lg md:flex ">
                     <div className={`md:w-[225px] w-full flex justify-center flex-shrink-0 bg-slate-900 rounded-md h-full md:h-[${"400px"}]`}>
                         <input ref={inputRef} onChange={(e) => selectVideo(e, setTrim)} type="file" name="image" accept="video/*" hidden />
@@ -140,7 +142,7 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
                             <button onClick={() => clear(handleClear)} className="bg-red-500 rounded-lg font-semibold text-white p-2 px-3 hover:bg-red-600">Clear</button>
                             <button onClick={() => trim && handleUpload(trim as File, setTrim)} className={`rounded-lg font-semibold p-2 px-3 ${trim ? "bg-blue-700 text-white hover:bg-blue-800" : "bg-gray-400 text-gray-600"}`}>Upload</button>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
