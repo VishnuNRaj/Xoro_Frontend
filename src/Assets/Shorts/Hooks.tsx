@@ -231,19 +231,16 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
     touchStartY.current = e.touches[0].clientY;
   };
 
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = async (e: TouchEvent) => {
     const touchEndY = e.changedTouches[0].clientY;
+    const currentIndex = shorts.indexOf(id || "");
     if (touchStartY.current - touchEndY > 50) {
-      alert(1)
-      // Swiped up
-      // if (currentIndex < shorts.length - 1) {
-      //     // setCurrentIndex(currentIndex + 1);
-      // }
+      if (shorts[currentIndex + 1]) navigate(`/shorts/${shorts[currentIndex + 1]}`)
+      const token = getCookie("token")
+      if (token) await getMoreShorts(token)
     } else if (touchEndY - touchStartY.current > 50) {
-      // Swiped down
-      // if (currentIndex > 0) {
-      //     setCurrentIndex(currentIndex - 1);
-      // }
+      if (currentIndex === 0) return;
+      else if (shorts[currentIndex - 1]) navigate(`/shorts/${shorts[currentIndex + 1]}`)
     }
   };
   const [subs, setSubs] = useState(0)
