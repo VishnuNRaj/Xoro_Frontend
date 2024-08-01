@@ -3,7 +3,6 @@ import { Dialog } from "@material-tailwind/react";
 import { useUploadShorts } from "./Hooks";
 import useSlider from "../Components/Slider";
 import { Slider } from "@mui/material";
-import { Toaster } from "sonner";
 import useCategory from "../../Other/Category";
 interface Props {
     open: boolean;
@@ -33,7 +32,6 @@ const ShortsUpload: React.FC<Props> = ({ open, setOpen }) => {
 
     return (
         <Dialog className="" size="xs" open={open} handler={() => setOpen(!open)} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-            <Toaster richColors closeButton duration={2000} />
             <div style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }} className="w-full p-1 md:flex overflow-y-scroll border-2 border-gray-400 rounded-lg">
                 <div className="p-2 w-full h-auto rounded-lg md:flex ">
                     <div className={`md:w-[225px] w-full flex justify-center flex-shrink-0 bg-slate-900 rounded-md h-full md:h-[${"400px"}]`}>

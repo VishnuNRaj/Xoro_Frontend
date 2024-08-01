@@ -1,7 +1,16 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { getCookie, useEssentials } from '../../Functions/CommonFunctions';
-import { uploadShorts } from '../../Store/UserStore/Shorts-Management/shortSlice';
+import { getShorts, getShortsVideo, uploadShorts } from '../../Store/UserStore/Shorts-Management/shortSlice';
+import { useLocation, useParams } from 'react-router-dom';
+import { Shorts } from '../../Store/UserStore/Shorts-Management/interfaces';
+import { setUser } from '../../Store/UserStore/Authentication/AuthSlice';
+import { Comments } from '../../Store/UserStore/CommonManagements/interfaces';
+import videojs from 'video.js';
+import Player from 'video.js/dist/types/player';
+import config from '../../Configs/config';
+import useWindowDimensions from '../../Other/Hooks';
+import { useFunctions } from '../UserHome/Hooks';
 
 export const useUploadShorts = () => {
   const [video, setVideo] = useState<File | null>(null);
@@ -64,3 +73,166 @@ export const useUploadShorts = () => {
 
   return { video, selectVideo, clear, data, inputRef, handleChange, handleContext, setTagUsers, handleUpload, search, setSearch, tags, handleRemoveTags };
 };
+
+export const useShorts = () => {
+  const [shorts, setShorts] = useState<string[]>([]);
+  const [video, setVideo] = useState<Shorts | null>(null);
+  const [total, setTotal] = useState(0);
+  const { dispatch, navigate, auth } = useEssentials();
+  const location = useLocation();
+  const { id } = useParams();
+
+  const getMoreShorts = async (token: string) => {
+    if (total === 0 || total !== shorts.length) {
+      try {
+        const { payload }: any = await dispatch(getShorts({ shorts, token }));
+        if (!payload.user) return navigate("/login");
+        if (!auth.user) dispatch(setUser(payload.user));
+        setTotal(payload.total);
+        const array = payload.shorts.filter((val: string) => !shorts.includes(val));
+        if (!id) {
+          if (array.length === 0) {
+            return;
+          }
+          console.log(array)
+          navigate(`/shorts/${array[0]}`)
+        }
+        setShorts((prevShorts) => [...prevShorts, ...array]);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      toast.warning("All Shorts Seen");
+    }
+  };
+
+  const getVideo = async (token: string, id: string) => {
+    try {
+      const { payload }: any = await dispatch(getShortsVideo({ token, id }));
+      if (!payload.user) return navigate("/login");
+      if (!auth.user) dispatch(setUser(payload.user));
+      if (!payload.shorts) {
+        toast.error(payload.message);
+        navigate("/shorts");
+        return;
+      }
+      setShorts((prevShorts) => [...prevShorts, id].filter((value, idx, arr) => arr.indexOf(value) === idx));
+      setVideo(payload.shorts);
+      if (location.pathname !== "/shorts") {
+        navigate(`/shorts/${id}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const token = getCookie("token");
+    if (token) {
+      if (id) {
+        getVideo(token, id);
+      } else {
+        getMoreShorts(token);
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [id]);
+
+  return { shorts, video, getMoreShorts, id };
+};
+
+export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video: Shorts | null, shorts: string[], id: string | undefined; getMoreShorts: any }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [dialog, setDialog] = useState(false)
+  const { navigate } = useEssentials();
+  const playerRef = useRef<Player | null>(null);
+
+  useEffect(() => {
+    if (videoRef.current && video) {
+      if (playerRef.current) {
+        playerRef.current.src({ src: `${config.SERVER}/shorts/${video?.Key}/index.m3u8`, type: 'application/x-mpegURL' });
+        playerRef.current.fill(true)
+      } else {
+        const player = videojs(videoRef.current, {
+          controls: true,
+          autoplay: true,
+          fluid: true,
+          liveui: true,
+          loop: true,
+          preload: 'auto',
+          controlBar: {
+            playToggle: false,
+            volumePanel: false,
+            currentTimeDisplay: false,
+            timeDivider: true,
+            durationDisplay: true,
+            progressControl: true,
+            liveDisplay: false,
+            seekToLive: false,
+            remainingTimeDisplay: false,
+            customControlSpacer: true,
+            playbackRateMenuButton: true,
+            chaptersButton: false,
+            descriptionsButton: false,
+            subsCapsButton: true,
+            audioTrackButton: false,
+            pictureInPictureToggle: false,
+            fullscreenToggle: false,
+          },
+          src: `${config.SERVER}/shorts/${video?.Key}/index.m3u8`,
+          type: 'application/x-mpegURL',
+        });
+        player.aspectRatio("9:16");
+        player.fill(true);
+        playerRef.current = player;
+      }
+    }
+  }, [video]);
+
+  const handleKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
+    if (e.code === "ArrowDown" || e.code === "ArrowUp") {
+      const currentIndex = shorts.indexOf(id || "");
+      if (e.code === "ArrowDown" && currentIndex < shorts.length - 1) {
+        navigate(`/shorts/${shorts[currentIndex + 1]}`);
+      } else if (e.code === "ArrowUp" && currentIndex > 0) {
+        navigate(`/shorts/${shorts[currentIndex - 1]}`);
+      } else if (e.code === "ArrowDown" && currentIndex === shorts.length - 1) {
+        const token = getCookie("token");
+        if (token) getMoreShorts(token);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [shorts, id]);
+
+  const [comments, setComments] = useState<Comments[]>([]);
+
+  return { comments, setComments, videoRef, handleKeyDown, dialog, setDialog };
+};
+
+export const useReactions = ({ comment, post }: { comment: number, post: Shorts }) => {
+  const { dislikePost, likePost, removeReaction } = useFunctions({ base: "shorts" })
+  const { auth } = useEssentials()
+  useEffect(() => {
+    setCount({ like: post.reactions[0].Likes.length, dislike: post.reactions[0].Dislikes.length, comment: comment })
+    setLike(auth.user?._id ? post.reactions[0].Likes.includes(auth.user._id) : false)
+    setDisLike(auth.user?._id ? post.reactions[0].Dislikes.includes(auth.user._id) : false)
+  }, [comment])
+  const { width } = useWindowDimensions()
+  const [count, setCount] = useState<{ like: number, dislike: number, comment: number }>({
+    comment: 0,
+    dislike: 0,
+    like: 0
+  })
+  const [like, setLike] = useState<boolean>(false)
+  const [dislike, setDisLike] = useState<boolean>(false)
+
+  return { width, like, dislike, setLike, setDisLike, dislikePost, likePost, removeReaction, count, setCount }
+}
+

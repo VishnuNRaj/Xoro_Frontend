@@ -35,6 +35,7 @@ const UserRoutes: React.FC = () => {
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/shorts/:id" element={<Shorts />} />
                 <Route path="/register" element={<SignUpForm />} />
                 <Route path="/verify-account/:VerificationLink/:UserId" element={<VerifyAccount />} />
                 <Route path="/otp/:UserId" element={<OTPPage />} />
@@ -46,7 +47,7 @@ const UserRoutes: React.FC = () => {
                 <Route path="/test/view" element={<ViewStream />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />
-                <Route path="/feed" element={<Shorts />} />
+                <Route path="/shorts" element={<Shorts />} />
                 {/* <Route path="*" element={<Preloader/>} /> */}
             </Routes>
         </>

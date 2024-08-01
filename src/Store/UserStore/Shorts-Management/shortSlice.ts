@@ -16,34 +16,37 @@ export const uploadShorts = createAsyncThunk<interfaces.uploadShortsResponse, in
     }
 )
 
-// export const getVideos = createAsyncThunk<interfaces.getVideosResponse, interfaces.getVideos>(
-//     'video/getVideos',
-//     async (credentials: interfaces.getVideos, { rejectWithValue }) => {
-//         try {
-//             const data = await videoService.getVideos(credentials)
-//             return data
-//         } catch (e) {
-//             return rejectWithValue(<interfaces.uploadVideoResponse>{
-//                 message: 'Internal Server Error'
-//             })
-//         }
-//     }
-// )
+export const getShorts = createAsyncThunk<interfaces.getShortsResponse, interfaces.getShorts>(
+    'video/getShorts',
+    async (credentials: interfaces.getShorts, { rejectWithValue }) => {
+        try {
+            const data = await videoService.getShorts(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.getShortsResponse>{
+                message: 'Internal Server Error',
+                status: 201,
+                shorts: [],
+                total: 0
+            })
+        }
+    }
+)
 
-// export const getVideo = createAsyncThunk<interfaces.getVideoResponse, interfaces.getVideo>(
-//     'video/getVideo',
-//     async (credentials: interfaces.getVideo, { rejectWithValue }) => {
-//         try {
-//             const data = await videoService.getVideo(credentials)
-//             return data
-//         } catch (e) {
-//             return rejectWithValue(<interfaces.getVideoResponse>{
-//                 message: 'Internal Server Error'
-//             })
-//         }
-//     }
-// )
-
+export const getShortsVideo = createAsyncThunk<interfaces.getShortsVideoResponse, interfaces.getShortsVideo>(
+    'video/getShortsVideo',
+    async (credentials: interfaces.getShortsVideo, { rejectWithValue }) => {
+        try {
+            const data = await videoService.getShortsVideo(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.getShortsVideoResponse>{
+                message: 'Internal Server Error',
+                status: 201,
+            })
+        }
+    }
+)
 
 export const videoInitialState: interfaces.shortState = {
     loadingShorts: false,
@@ -60,7 +63,7 @@ const shortSlice = createSlice({
             .addCase(uploadShorts.pending, (state) => {
                 state.loadingShorts = true
             })
-            .addCase(uploadShorts.fulfilled,(state)=>{
+            .addCase(uploadShorts.fulfilled, (state) => {
                 state.loadingShorts = false
             })
     },
