@@ -11,7 +11,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
     const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
     const [recording, setRecording] = useState(false);
     const [mediaFiles, setMediaFiles] = useState<File[]>([]);
-    const [cam, setCam] = useState<'user' | 'enviourment'>('enviourment')
+    const [cam, setCam] = useState<'user' | 'environment'>('environment')
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -118,7 +118,7 @@ const Camera: React.FC<CameraProps> = ({ setMedia }) => {
                                 <button className='bg-blue-700 w-10 h-10 m-2 border-2 text-white rounded-full'  onClick={() => document.getElementById('profile-upload')?.click()}><i className='fa fa-image'></i></button>
                                 <input multiple id="profile-upload" onChange={handleFileChange} type="file" className="hidden" />
                                 <button className='text-blue-700 w-10 h-10 m-2 bg-white rounded-full' onClick={() => {
-                                    setCam(cam === 'user' ? 'enviourment' : 'user')
+                                    setCam(cam === 'user' ? 'environment' : 'user')
                                 }}><i className='fa fa-refresh'></i></button>
                                 <button className='bg-red-700 w-10 h-10 m-2 border-2 text-white rounded-full' onClick={startRecording}><i className='fa fa-video-camera'></i></button>
                                 <button className='text-blue-700 w-10 h-10 m-2 bg-white rounded-full' onClick={captureImage}><i className='fa fa-camera'></i></button>
