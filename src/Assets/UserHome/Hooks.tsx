@@ -33,7 +33,7 @@ const useHooks = () => {
 }
 
 
-export const useFunctions = ({ base }:{base:string}) => {
+export const useFunctions = ({ base }: { base: string }) => {
     const { dispatch, navigate } = useEssentials()
     const [comments, setComments] = useState<Comments[]>([])
     const likePost: Function = (postId: string) => {
@@ -83,7 +83,7 @@ export const useComments = ({ PostId }: { PostId: string }) => {
                 setComments(response.payload.comments.filter((value: any, idx: number, arr: any[]) => arr.indexOf(value) === idx))
             })
         }
-    }, [])
+    }, [PostId])
     const getTags = (value: string[], tags: User[]) => {
         value.forEach((data, idx, arr) => {
             const response = arr[idx - 1] === "@" ? tags.find((tag) => tag._id === data) : null;

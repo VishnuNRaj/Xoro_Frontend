@@ -218,6 +218,34 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [shorts, id]);
+  useEffect(() => {
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [video, shorts]);
+  const touchStartY = useRef(0);
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    if (touchStartY.current - touchEndY > 50) {
+      alert(1)
+      // Swiped up
+      // if (currentIndex < shorts.length - 1) {
+      //     // setCurrentIndex(currentIndex + 1);
+      // }
+    } else if (touchEndY - touchStartY.current > 50) {
+      // Swiped down
+      // if (currentIndex > 0) {
+      //     setCurrentIndex(currentIndex - 1);
+      // }
+    }
+  };
   const [subs, setSubs] = useState(0)
 
   const [comments, setComments] = useState<Comments[]>([]);
@@ -237,20 +265,20 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
       return setSubscribe(false)
     } else return
   }
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const currentScrollTop = (e.currentTarget as HTMLDivElement).scrollTop;
+  const handleScroll = (e: React.MouseEvent<HTMLDivElement>) => {
+    // const currentScrollTop = (e.currentTarget as HTMLDivElement).scrollTop;
     console.log(e)
     alert(1)
-    if (currentScrollTop > previousScrollTop.current) {
-      // setScrollDirection('down');
-    } else {
-      alert(2)
-      // setScrollDirection('up');
-    }
-    previousScrollTop.current = currentScrollTop;
+    // if (currentScrollTop > previousScrollTop.current) {
+    //   // setScrollDirection('down');
+    // } else {
+    //   alert(2)
+    //   // setScrollDirection('up');
+    // }
+    // previousScrollTop.current = currentScrollTop;
   };
 
-  return { comments, setComments, videoRef, handleKeyDown,handleScroll, dialog, setDialog, subs, subscribe, handleSubscribe, handleUnsubscribe };
+  return { comments, setComments, videoRef, handleKeyDown, handleScroll, dialog, setDialog, subs, subscribe, handleSubscribe, handleUnsubscribe };
 };
 
 export const useReactions = ({ comment, post }: { comment: number, post: Shorts }) => {

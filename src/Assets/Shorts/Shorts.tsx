@@ -98,7 +98,7 @@ const Shorts: React.FC = () => {
                 </div>
             </>)}
             {shorts.length > 0 && video &&
-                <div onScrollCapture={handleScroll} className={`w-full h-[75vh] mt-[55px]  items-center flex flex-col`}>
+                <div className={`w-full h-[75vh] mt-[55px]  items-center flex flex-col`}>
 
                     <div className={`w-full grid ${width > 968 && "grid-cols-2"} grid-cols-1 justify-center h-full`}>
                         <div className={`w-full h-full  flex flex-shrink-0 items-center justify-center relative ${width > 968 && "ml-14"}`}>
