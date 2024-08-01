@@ -180,12 +180,14 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
             pictureInPictureToggle: false,
             fullscreenToggle: false,
           },
-          src: `${config.SERVER}/shorts/${video?.Key}/index.m3u8`,
-          type: 'application/x-mpegURL',
         });
         player.aspectRatio("9:16");
-        player.fill(true);
+        player.fill(true)
         playerRef.current = player;
+        player.src({
+          src: `${config.SERVER}/shorts/${video?.Key}/index.m3u8`,
+          type: 'application/x-mpegURL'
+        })
       }
     }
   }, [video]);
