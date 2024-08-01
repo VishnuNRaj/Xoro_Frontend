@@ -147,7 +147,7 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [dialog, setDialog] = useState(false)
   const { navigate, auth } = useEssentials();
-  const previousScrollTop = useRef(0);
+  // const previousScrollTop = useRef(0);
   const playerRef = useRef<Player | null>(null);
 
   useEffect(() => {

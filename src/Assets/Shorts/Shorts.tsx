@@ -64,7 +64,7 @@ const Shorts: React.FC = () => {
     const [open, setOpen] = useState(false);
     const { shorts, video, getMoreShorts, id } = useShorts();
     const { width } = useWindowDimensions()
-    const { videoRef, handleKeyDown, comments, setComments,handleScroll, setDialog, dialog, subs, subscribe, handleSubscribe, handleUnsubscribe } = useShortsComponent({ video, shorts, id, getMoreShorts });
+    const { videoRef, handleKeyDown, comments, setComments, setDialog, dialog, subs, subscribe, handleSubscribe, handleUnsubscribe } = useShortsComponent({ video, shorts, id, getMoreShorts });
     console.log(video)
 
     return (
