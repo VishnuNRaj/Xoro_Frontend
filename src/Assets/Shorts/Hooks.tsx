@@ -11,6 +11,7 @@ import Player from 'video.js/dist/types/player';
 import config from '../../Configs/config';
 import useWindowDimensions from '../../Other/Hooks';
 import { useFunctions } from '../UserHome/Hooks';
+import { useSocket } from '../../Socket';
 
 export const useUploadShorts = () => {
   const [video, setVideo] = useState<File | null>(null);
@@ -145,7 +146,8 @@ export const useShorts = () => {
 export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video: Shorts | null, shorts: string[], id: string | undefined; getMoreShorts: any }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [dialog, setDialog] = useState(false)
-  const { navigate } = useEssentials();
+  const { navigate, auth } = useEssentials();
+  const previousScrollTop = useRef(0);
   const playerRef = useRef<Player | null>(null);
 
   useEffect(() => {
@@ -190,6 +192,10 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
         })
       }
     }
+    if (video && auth.user) {
+      setSubscribe(video.channel.Subsribers.includes(auth.user._id))
+      setSubs(video.channel.Subsribers.length)
+    }
   }, [video]);
 
   const handleKeyDown = (e: KeyboardEvent | React.KeyboardEvent) => {
@@ -212,10 +218,39 @@ export const useShortsComponent = ({ video, shorts, id, getMoreShorts }: { video
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [shorts, id]);
+  const [subs, setSubs] = useState(0)
 
   const [comments, setComments] = useState<Comments[]>([]);
+  const socket = useSocket()
+  const [subscribe, setSubscribe] = useState(false)
+  const handleSubscribe = () => {
+    if (auth.user && video) {
+      socket?.emit("subscribeChannel", auth.user._id, video.channel._id)
+      setSubs(prev => prev + 1)
+      return setSubscribe(true)
+    } else return
+  }
+  const handleUnsubscribe = () => {
+    if (auth.user && video) {
+      socket?.emit("unsubscribeChannel", auth.user._id, video.channel._id)
+      setSubs(prev => prev - 1)
+      return setSubscribe(false)
+    } else return
+  }
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollTop = (e.currentTarget as HTMLDivElement).scrollTop;
+    console.log(e)
+    alert(1)
+    if (currentScrollTop > previousScrollTop.current) {
+      // setScrollDirection('down');
+    } else {
+      alert(2)
+      // setScrollDirection('up');
+    }
+    previousScrollTop.current = currentScrollTop;
+  };
 
-  return { comments, setComments, videoRef, handleKeyDown, dialog, setDialog };
+  return { comments, setComments, videoRef, handleKeyDown,handleScroll, dialog, setDialog, subs, subscribe, handleSubscribe, handleUnsubscribe };
 };
 
 export const useReactions = ({ comment, post }: { comment: number, post: Shorts }) => {

@@ -16,7 +16,7 @@ const LikeDislikeVideo: React.FC<{ post: any, dialog: boolean, setDialog: React.
                 <div className="flex">
                     {width < 968 && <button className='p-2 md:px-4 rounded-full' onClick={() => {
                         setDialog(!dialog)
-                    }} > 
+                    }} >
                         <svg fill="#f0f2f5" height="20" viewBox="0 0 48 48" width="20"><path clipRule="evenodd" d="M47.5 46.1l-2.8-11c1.8-3.3 2.8-7.1 2.8-11.1C47.5 11 37 .5 24 .5S.5 11 .5 24 11 47.5 24 47.5c4 0 7.8-1 11.1-2.8l11 2.8c.8.2 1.6-.6 1.4-1.4zm-3-22.1c0 4-1 7-2.6 10-.2.4-.3.9-.2 1.4l2.1 8.4-8.3-2.1c-.5-.1-1-.1-1.4.2-1.8 1-5.2 2.6-10 2.6-11.4 0-20.6-9.2-20.6-20.5S12.7 3.5 24 3.5 44.5 12.7 44.5 24z" fillRule="evenodd"></path></svg>
                     </button>}
                     <button className='md:p-2 pr-2 rounded-full'>
@@ -64,7 +64,7 @@ const Shorts: React.FC = () => {
     const [open, setOpen] = useState(false);
     const { shorts, video, getMoreShorts, id } = useShorts();
     const { width } = useWindowDimensions()
-    const { videoRef, handleKeyDown, comments, setComments, setDialog, dialog } = useShortsComponent({ video, shorts, id, getMoreShorts });
+    const { videoRef, handleKeyDown, comments, setComments,handleScroll, setDialog, dialog, subs, subscribe, handleSubscribe, handleUnsubscribe } = useShortsComponent({ video, shorts, id, getMoreShorts });
     console.log(video)
 
     return (
@@ -98,15 +98,33 @@ const Shorts: React.FC = () => {
                 </div>
             </>)}
             {shorts.length > 0 && video &&
-                <div className={`w-full h-[75vh] mt-[55px]  items-center flex flex-col`}>
-                    
+                <div onScrollCapture={handleScroll} className={`w-full h-[75vh] mt-[55px]  items-center flex flex-col`}>
+
                     <div className={`w-full grid ${width > 968 && "grid-cols-2"} grid-cols-1 justify-center h-full`}>
-                        <div className={`w-full h-full flex flex-shrink-0 items-center justify-center ${width > 968 && "ml-14"}`}>
-                            <div onKeyDown={handleKeyDown} className={`w-full p-2 relative flex items-center rounded-lg ${width > 968 && "md:w-[400px]"} border-2 h-[75vh]`}>
+                        <div className={`w-full h-full  flex flex-shrink-0 items-center justify-center relative ${width > 968 && "ml-14"}`}>
+                            <div onKeyDown={handleKeyDown} className={`w-full p-2 flex items-center rounded-lg ${width > 968 && "md:w-[400px]"} border-2 h-[75vh]`}>
                                 <video ref={videoRef} autoPlay loop className='w-full video-js rounded-lg vjs-default-skin'></video>
                             </div>
-                            <div className='w-full absolute flex bottom-[40px] items-center rounded-lg md:w-[400px] border-t-2'>
+                            <div className='w-full absolute bg-gray-900 bg-opacity-50 flex bottom-0 items-center rounded-lg md:w-[400px] border-t-2'>
                                 <LikeDislikeVideo comment={comments.length} dialog={dialog} post={video} setDialog={setDialog} />
+                                <div className='w-full flex items-center'>
+                                    <div className='flex'>
+                                        <div className=' w-8 h-8 object-center ml-1 flex-shrink-0 rounded-full'>
+                                            <img src={video.channel.Logo} className='rounded-full flex-shrink-0 w-8 h-8 shadow-md shadow-red-400 object-center' alt="" />
+                                        </div>
+                                        <div className='w-full min-w-[80px] ml-1 pl-1'>
+                                            <div className='font-semibold text-gray-300'>
+                                                <h1 className='text-sm'>{video.channel.Name}</h1>
+                                                <p className='text-[10px] text-gray-500'>{subs > 0 ? (
+                                                    <>{subs > 1000 ? <>{parseInt((subs / 1000).toString())}K</> : <>{subs}</>} Subscribers</>
+                                                ) : <>No subsribers</>}</p>
+                                            </div>
+                                        </div>
+                                        <div className='w-full justify-end flex items-center ml-0 h-8 font-semibold text-[10px]'>
+                                            <button onClick={subscribe ? handleUnsubscribe : handleSubscribe} className={`h-8 px-3 flex items-center justify-center rounded-full ${subscribe ? "bg-slate-500 text-gray-200" : "bg-red-600 text-white"}`} >{!subscribe ? "Subscribe" : "Unsubscribe"}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {width > 968 && (
