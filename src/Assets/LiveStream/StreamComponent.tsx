@@ -29,7 +29,7 @@ const StreamScreen: React.FC = () => {
             reader.readAsArrayBuffer(event.data);
           }
         };
-        mediaRecorderRef.current.start(1000);
+        mediaRecorderRef.current.start(500);
 
         socketRef.current?.emit('start-stream', { streamKey });
       });
