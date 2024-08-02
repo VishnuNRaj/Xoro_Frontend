@@ -46,7 +46,7 @@ const UserRoutes: React.FC = () => {
                 <Route path="/videos/upload" element={<VideoUpload />} />
                 <Route path="/test/" element={<VideoCapture />} />
                 <Route path="/stream/:streamKey" element={<StreamScreen />} />
-                <Route path="/test/view" element={<ViewStream />} />
+                <Route path="/test/view/:streamKey" element={<ViewStream />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />
                 <Route path="/shorts" element={<Shorts />} />
