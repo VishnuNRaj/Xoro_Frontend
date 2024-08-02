@@ -1,72 +1,57 @@
 import React, { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import io, { Socket } from 'socket.io-client';
+import ViewStream from './ViewStream';
+import config from '../../Configs/config';
+const StreamScreen: React.FC = () => {
+  const { streamKey } = useParams<{ streamKey: string }>();
+  const socketRef = useRef<Socket | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
-const StreamComponent: React.FC = () => {
-    const screenVideoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    console.log(config.SOCKET)
+    socketRef.current = io(config.SOCKET);
+    console.log(socketRef.current?.id)
+    navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
+      .then((stream) => {
+        streamRef.current = stream;
 
-    const startStreaming = async () => {
-        try {
-            const ws = new WebSocket('ws://localhost:8080/');
-            ws.binaryType = 'arraybuffer';
-
-            ws.onopen = () => {
-                console.log('WebSocket connection opened');
+        mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+        mediaRecorderRef.current.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const arrayBuffer = reader.result as ArrayBuffer;
+              console.log(arrayBuffer)
+              socketRef.current?.emit('stream-data', { streamKey, data: arrayBuffer });
             };
+            reader.readAsArrayBuffer(event.data);
+          }
+        };
+        mediaRecorderRef.current.start(1000);
 
-            ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
+        socketRef.current?.emit('start-stream', { streamKey });
+      });
 
-            ws.onclose = () => {
-                console.log('WebSocket connection closed');
-            };
-
-            // Get screen stream
-            const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
-            if (screenVideoRef.current) {
-                screenVideoRef.current.srcObject = screenStream;
-            }
-
-            // Combine screen stream
-            const combinedStream = new MediaStream([...screenStream.getTracks()]);
-
-            const mediaRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm; codecs=vp8' });
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0 && ws.readyState === WebSocket.OPEN) {
-                    const reader = new FileReader();
-                    reader.onload = () => {
-                        const arrayBuffer:any = reader.result;
-                        console.log('Sending data:', new Uint8Array(arrayBuffer));
-                        ws.send(arrayBuffer);
-                    };
-                    reader.readAsArrayBuffer(event.data);
-                }
-            };
-
-            mediaRecorder.onerror = (error) => {
-                console.error('MediaRecorder error:', error);
-            };
-
-            mediaRecorder.onstop = () => {
-                console.log('MediaRecorder stopped');
-            };
-
-            mediaRecorder.start(1000); // Send data every second
-
-        } catch (error) {
-            console.error('Error capturing media:', error);
-        }
+    return () => {
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+      socketRef.current?.emit('end-stream', { streamKey });
+      socketRef.current?.disconnect();
     };
+  }, [streamKey]);
 
-    useEffect(() => {
-        startStreaming();
-    }, []);
-
-    return (
-        <div>
-            <video ref={screenVideoRef} autoPlay muted controls></video>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Streaming Screen</h1>
+      <ViewStream />
+    </div>
+  );
 };
 
-export default StreamComponent;
+export default StreamScreen;

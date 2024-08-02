@@ -18,6 +18,7 @@ import SocketMessage from "../Other/SocketMessage";
 import { Offcanvas } from "../Assets/Components/Canvas";
 import Shorts from "../Assets/Shorts/Shorts";
 import VideoCapture from "../Assets/Livestream";
+import StreamScreen from "../Assets/LiveStream/StreamComponent";
 
 const UserRoutes: React.FC = () => {
     const location = useLocation();
@@ -44,6 +45,7 @@ const UserRoutes: React.FC = () => {
                 <Route path="/post/" element={<UploadCamera />} />
                 <Route path="/videos/upload" element={<VideoUpload />} />
                 <Route path="/test/" element={<VideoCapture />} />
+                <Route path="/stream/:streamKey" element={<StreamScreen />} />
                 <Route path="/test/view" element={<ViewStream />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />

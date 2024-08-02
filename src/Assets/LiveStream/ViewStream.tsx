@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
+import config from '../../Configs/config';
 
-const VideoPlayer:React.FC<{src:string}> = ({ src }) => {
+const VideoPlayer: React.FC<{ src: string }> = ({ src }) => {
   const videoRef = useRef<any>(null);
   const playerRef = useRef<any>(null);
 
@@ -12,6 +13,7 @@ const VideoPlayer:React.FC<{src:string}> = ({ src }) => {
         controls: true,
         autoplay: true,
         preload: 'auto',
+        liveui: true,
         sources: [{
           src,
           type: 'application/x-mpegURL'
@@ -34,10 +36,10 @@ const VideoPlayer:React.FC<{src:string}> = ({ src }) => {
 };
 
 const ViewStream = () => {
-  const hlsUrl = 'http://localhost:6067/hls/stream.m3u8';
+  const hlsUrl = `${config.SERVER}/live/celtic/index.m3u8`;
 
   return (
-    <div>
+    <div className='bg-white'>
       <h1>Live Stream</h1>
       <VideoPlayer src={hlsUrl} />
     </div>
