@@ -2,10 +2,10 @@ import axios from "axios";
 import config from "./Configs/config";
 import { getCookie } from "./Functions/CommonFunctions";
 
-export const subscribe = async (serviceWorkerReg: ServiceWorkerRegistration) => {
+export const subscribe = async (serviceWorkerReg: ServiceWorkerRegistration, status: boolean) => {
     try {
         let subscription = await serviceWorkerReg.pushManager.getSubscription();
-        if (!subscription) {
+        if (!subscription && status) {
             subscription = await serviceWorkerReg.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: 'BOCVKtCi34hgnwOWSK5jXlZEUijYKyAcRkBa5jwCPuo0jheodoV1974ij6SupCtiUEoHEofyaucnRo2EqXNBNwY',
@@ -20,7 +20,7 @@ export const subscribe = async (serviceWorkerReg: ServiceWorkerRegistration) => 
                 });
             }
         }
-        console.log({ subscription });
+        console.log(subscription)
         return subscription;
     } catch (e) {
         console.log(e)
@@ -28,7 +28,7 @@ export const subscribe = async (serviceWorkerReg: ServiceWorkerRegistration) => 
 }
 
 
-const fction = async () => {
+const fction = async (status: boolean) => {
     try {
         const token = getCookie("token")
         if (token) {
@@ -36,16 +36,15 @@ const fction = async () => {
             const reg = await navigator.serviceWorker.register(url, {
                 scope: "/"
             });
-            console.log('Service worker registered:', reg);
             await navigator.serviceWorker.ready;
-            console.log('Service worker is active');
 
-            await subscribe(reg);
+            return await subscribe(reg, status);
         } else return;
 
     } catch (error) {
         console.error('Service worker registration failed:', error);
     }
 };
+
 
 export default fction;

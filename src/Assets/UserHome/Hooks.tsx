@@ -8,11 +8,13 @@ import { searchUsers } from '../../Store/UserStore/ProfileManagement/ProfileSlic
 import { addCommentThunk, getCommentThunk } from '../../Store/UserStore/CommonManagements/CommonService'
 import { Comments } from '../../Store/UserStore/CommonManagements/interfaces'
 import { PayloadAction } from '@reduxjs/toolkit'
+import { useSocket } from '../../Socket'
 
 const useHooks = () => {
     const { dispatch, navigate } = useEssentials()
     const [skip, setSkip] = useState<number>(0)
     const [post, setPost] = useState<PostImage[]>([])
+    const [noMore, setNoMore] = useState(false)
     const [connections, setConnections] = useState<Connections | null>(null)
     const [recommend, setRecommend] = useState<User[]>([])
     useEffect(() => {
@@ -22,14 +24,20 @@ const useHooks = () => {
                 console.log(state.payload.post)
                 if (!state.payload.user) return navigate("/login")
                 dispatch(setUser(state.payload.user))
-                setPost(state.payload.post)
+                if (state.payload.post.length === 0) {
+                    setNoMore(true)
+                }
+                setPost([...post, state.payload.post])
                 setConnections(state.payload.connections)
                 setSkip((prev) => prev + 1)
                 setRecommend(state.payload.recommendations || [])
             })
         } else navigate("/login")
-    }, [])
-    return { post, connections, setConnections, setPost, recommend }
+    }, [skip])
+    const skipping = () => {
+        setSkip(skip + 10)
+    }
+    return { post, connections, setConnections, setPost, recommend, skipping, noMore }
 }
 
 
@@ -70,11 +78,12 @@ export const useFunctions = ({ base }: { base: string }) => {
     return { likePost, dislikePost, removeReaction, handlePlayPause, videoRef, comments, setComments }
 }
 
-export const useComments = ({ PostId }: { PostId: string }) => {
+export const useComments = ({ PostId, live }: { PostId: string, live?: any }) => {
     const { dispatch, navigate } = useEssentials();
     const [text, setText] = useState("");
     const [comments, setComments] = useState<Comments[]>([])
     const [users, setUsers] = useState<User[] | null>(null);
+    const socket = useSocket()
     const [tags, setTags] = useState<{ Username: string, UserId: string }[]>([]);
     useEffect(() => {
         const token: string | undefined = getCookie("token")
@@ -128,7 +137,19 @@ export const useComments = ({ PostId }: { PostId: string }) => {
         setTags([...tags, { UserId, Username }]);
         setUsers(null);
     };
-
+    useEffect(() => {
+        if (socket && live) {
+            socket.emit("join", PostId)
+        }
+    }, [socket])
+    useEffect(() => {
+        if (socket && live) {
+            socket.on("new_comment", async (data: Comments) => {
+                const newData = [...comments, data].filter((value, idx, arr) => arr.indexOf(value) === idx).map((val) => val)
+                setComments(newData)
+            })
+        }
+    }, [socket])
     const setupTags: Function = () => {
         let newTxt = text.split("@").filter((value) => value.length > 0)
         if (text.split("@").length > 1) {
@@ -161,6 +182,9 @@ export const useComments = ({ PostId }: { PostId: string }) => {
                     setText("")
                     setUsers(null)
                     setTags([])
+                    if (live) {
+                        socket?.emit("live_comment", response.payload.Comment)
+                    }
                     return response.payload.Comment
                 }
             }

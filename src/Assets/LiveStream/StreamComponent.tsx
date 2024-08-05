@@ -10,7 +10,6 @@ const StreamScreen: React.FC = () => {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    console.log(config.SOCKET)
     socketRef.current = io(config.SOCKET);
     console.log(socketRef.current?.id)
     navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })

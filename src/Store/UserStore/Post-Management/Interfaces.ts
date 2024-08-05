@@ -3,10 +3,10 @@ import { Comments } from "../CommonManagements/interfaces";
 import { Reactions } from "../Video-Management/Interfaces";
 
 export interface PostImage {
-    _id:string;
+    _id: string;
     Images: {
-        postType:string,
-        link:string,
+        postType: string,
+        link: string,
     }[];
     Caption: string;
     Hashtags: string[];
@@ -17,11 +17,11 @@ export interface PostImage {
     Dislikes: number;
     ShareLink: string;
     PostDate: Date;
-    CommentsOn:boolean;
-    user:User;
-    tags:User[];
-    reactions:Reactions;
-    comments:Comments[];
+    CommentsOn: boolean;
+    user: User;
+    tags: User[];
+    reactions: Reactions;
+    comments: Comments[];
 }
 
 export interface PostState {
@@ -58,34 +58,46 @@ export interface showPostResponse {
 }
 
 export interface deletePost {
-    token:string;
-    PostId:string;
+    token: string;
+    PostId: string;
 }
 
 export interface deletePostResponse {
-    message:string;
-    status:number;
+    message: string;
+    status: number;
 }
 
 export interface getPosts {
-    token:string;
-    skip:number;
+    token: string;
+    skip: number;
 }
 export interface getPostsResponse {
-    post:PostImage[];
-    user:User;
-    status:number;
-    message:string;
+    post: PostImage[];
+    user: User;
+    status: number;
+    message: string;
 }
 
 export interface likeDislikeRemove {
-    token:string;
-    postId:string;
-    type:string;
-    base:string;
+    token: string;
+    postId: string;
+    type: string;
+    base: string;
 }
 
 export interface likeDislikeRemoveResponse {
-    message:string;
-    status:number;
+    message: string;
+    status: number;
+}
+
+export interface getPost {
+    id: string;
+    token: string;
+}
+
+export interface getPostResponse {
+    post: PostImage;
+    user: User;
+    status: number;
+    message: string;
 }

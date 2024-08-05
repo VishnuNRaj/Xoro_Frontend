@@ -129,7 +129,7 @@ const ShowVideos: React.FC = () => {
                         </div>
                         <div className='w-full flex justify-end p-1'>
                             {videoData && <LikeDislikeVideo comment={comments.length} dialog={dialog} setDialog={setDialog} post={videoData} />}
-                        </div>skin
+                        </div>
                     </div>
                 </div>
             </div>

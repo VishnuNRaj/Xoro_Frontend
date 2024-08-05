@@ -1,5 +1,6 @@
 import { User } from "../Authentication/Interfaces";
 import { PostImage } from "../Post-Management/Interfaces";
+import { Channel } from "../Video-Management/Interfaces";
 
 export interface profileState {
     loadingProfile:boolean;
@@ -110,5 +111,16 @@ export interface editChannel {
 
 export interface createChannelResponse {
     message:string;
+    status:number;
+}
+
+export interface getChannel {
+    token:string;
+    id?:string;
+}
+
+export interface getChannelResponse {
+    message:string;
+    Channel:Channel;
     status:number;
 }

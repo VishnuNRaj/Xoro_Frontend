@@ -7,7 +7,7 @@ const useCategory = () => {
     const { navigate } = useEssentials()
     const [category, setCategory] = useState<Category[]>([])
     const [search, setSearch] = useState("")
-    const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) => {
         setSearch(e.target.value)
         if (e.target.value.length > 0) {
             const token: string | undefined = getCookie("token")
@@ -30,7 +30,10 @@ const useCategory = () => {
             setCategory(response.category)
         } else navigate("/login")
     }
-    return { category, search, handleSearchChange, emptySearch,getAllCategory }
+    const emptyCategory = () => {
+        setCategory([])
+    }
+    return { category, search, handleSearchChange, emptySearch, getAllCategory, emptyCategory }
 }
 
 export default useCategory;

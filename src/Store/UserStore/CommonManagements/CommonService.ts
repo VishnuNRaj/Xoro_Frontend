@@ -154,3 +154,69 @@ export const getChannelBase = async ({ token }: { token: string }) => {
         return null
     }
 }
+
+export const createLive = async ({ Caption, Description, Hashtags, RelatedTags, Restriction, Thumbnail, token }: interfaces.createLive) => {
+    try {
+        const from = new FormData()
+        from.append("Caption", Caption)
+        from.append("Description", Description)
+        Hashtags.forEach((tag) => {
+            from.append("Hashtags", tag)
+        })
+        from.append("RelatedTags", RelatedTags)
+        from.append("Restriction", Restriction.toString())
+        from.append("Thumbnail", Thumbnail)
+        const response = await axios.post(`${Config.BASE}/live/create`, from, {
+            withCredentials: true,
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        return response.data
+    } catch (e: any) {
+        console.log(e)
+        return e.response.data
+    }
+}
+
+export const getLiveVideos = async ({ token, isLive, type, videos }: interfaces.getLiveVideos) => {
+    try {
+        const response = await axios.post(`${Config.BASE}/live/${type}`, { videos, isLive }, {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        return response.data
+    } catch (e: any) {
+        console.log(e)
+        return e.response.data
+    }
+}
+
+export const getLiveVideo = async ({ token, key }: interfaces.getLiveVideo) => {
+    try {
+        const response = await axios.get(`${Config.BASE}/live/stream/${key}`, {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        return response.data
+    } catch (e: any) {
+        console.log(e)
+        return e.response.data
+    }
+}
+
+export const getNotifications = async ({ token, key }: interfaces.getLiveVideo) => {
+    try {
+        const response = await axios.get(`${Config.USER}/msg/${key}`, {
+            headers: {
+                Authorization: `${token}`
+            }
+        })
+        return response.data
+    } catch (e: any) {
+        console.log(e)
+        return e.response.data
+    }
+}

@@ -1,6 +1,30 @@
 import { User } from "../Authentication/Interfaces";
 import { PostImage } from "../Post-Management/Interfaces";
-import { Channel } from "../Video-Management/Interfaces";
+import { Channel, Reactions } from "../Video-Management/Interfaces";
+
+export interface LiveInterface {
+    _id:string;
+    Caption: string;
+    Description: string;
+    Key: string;
+    Live: boolean;
+    Duration: string;
+    Start: Date;
+    End: Date;
+    Completed: boolean;
+    Views: number;
+    Likes: number;
+    Dislikes: number;
+    RelatedTags: string;
+    UserId: string;
+    Reports: number;
+    Thumbnail: string;
+    Restriction: number;
+    reactions: Reactions[];
+    from: string;
+    Video: string;
+    channel:Channel[]
+}
 
 export interface searchData {
     token: string;
@@ -70,8 +94,43 @@ export interface Category {
 }
 
 export interface trimVideo {
-    video:File,
-    start:number;
-    end:number;
+    video: File,
+    start: number;
+    end: number;
+    token: string;
+}
+
+
+export interface createLive {
+    Caption: string;
+    token: string;
+    Description: string;
+    Hashtags: string[];
+    Thumbnail: File;
+    RelatedTags: string;
+    Restriction: number;
+}
+
+export interface createLiveResponse {
+    live: LiveInterface;
+    message: string;
+    status: number;
+}
+
+export interface getLiveVideos {
+    token:string;
+    isLive:boolean;
+    type:string;
+    videos:string[];
+}
+
+export interface getLiveVideosResponse {
+    message:string;
+    videos:LiveInterface[];
+    status:number;
+}
+
+export interface getLiveVideo {
+    key:string;
     token:string;
 }

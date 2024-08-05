@@ -9,6 +9,7 @@ interface Props {
     setComments: React.Dispatch<SetStateAction<Comments[]>>;
     comments: Comments[];
     PostId: string;
+    live?: any
 }
 
 const CommentList: React.FC<{ tags: User[]; value: string[] }> = ({ tags, value }) => {
@@ -85,8 +86,8 @@ const Comment: React.FC<{ comment: Comments }> = ({ comment }) => {
 }
 
 
-const CommentComponent: React.FC<Props> = ({ PostId }) => {
-    const { text, addComment, users, addTag, upload, comments, setComments } = useComments({ PostId });
+const CommentComponent: React.FC<Props> = ({ PostId, live }) => {
+    const { text, addComment, users, addTag, upload, comments, setComments } = useComments({ PostId, live });
     return (
         <div className='p-2'>
             <div className='relative w-full'>
@@ -134,14 +135,20 @@ const CommentComponent: React.FC<Props> = ({ PostId }) => {
             <div className='py-2'>
                 <div className='flex flex-row justify-between gap-1 h-12'>
                     <div className='w-full'>
-                        <textarea value={text} onChange={addComment} rows={2} style={{ overflowY: "auto", scrollbarWidth: "none" }} className='resize-none p-3 font-semibold w-full h-12 border-2 border-gray-700 rounded-md'></textarea>
+                        <textarea onKeyDown={async (e) => {
+                            if (e.code === "Enter") {
+                                const response: any = await upload(PostId);
+                                console.log(response)
+                                if (response) setComments([...comments, response]);
+                            }
+                        }} value={text} onChange={addComment} rows={2} style={{ overflowY: "auto", scrollbarWidth: "none" }} className='resize-none p-3 font-semibold w-full h-12 border-2 border-gray-700 rounded-md'></textarea>
                     </div>
                     <div className='w-12 h-12'>
                         <button onClick={async () => {
                             const response: any = await upload(PostId);
                             console.log(response)
                             if (response) setComments([...comments, response]);
-                        }} className='w-12 h-12 p-3 text-white bg-blue-700 rounded-md flex justify-center items-center'>
+                        }} className='w-12 h-12 p-3 text-white bg-blue-700 cursor-pointer rounded-md flex justify-center items-center'>
                             <svg fill="#fff" viewBox="0 0 48 48"><path d="M47.8 3.8c-.3-.5-.8-.8-1.3-.8h-45C.9 3.1.3 3.5.1 4S0 5.2.4 5.7l15.9 15.6 5.5 22.6c.1.6.6 1 1.2 1.1h.2c.5 0 1-.3 1.3-.7l23.2-39c.4-.4.4-1 .1-1.5zM5.2 6.1h35.5L18 18.7 5.2 6.1zm18.7 33.6l-4.4-18.4L42.4 8.6 23.9 39.7z"></path></svg>
                         </button>
                     </div>

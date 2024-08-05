@@ -91,6 +91,19 @@ export const getProfile: Function = async (data: interfaces.getProfile) => {
     }
 }
 
+export const getChannel = async (data: interfaces.getChannel) => {
+    try {
+        const response = await axios.get(`${config.PROFILE}/channel/${data.id ? data.id : ""}`, {
+            headers: {
+                'Authorization': data.token,
+            }
+        })
+        return response.data;
+    } catch (e) {
+        return { message: 'Internal Server Error' }
+    }
+}
+
 export const followUser: Function = async (data: interfaces.followUser) => {
     try {
         const response = await axios.post(`${config.PROFILE}/follow/${data.UserId}`, null, {

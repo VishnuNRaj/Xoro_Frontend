@@ -13,11 +13,11 @@ const AdminRoutes: React.FC = () => {
         <OffcanvasAdmin />
       </div>
       <Routes>
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/otp/:UserId" element={<AdminLoginOTP />} />
-        <Route path="/admin/" element={<Dashboard />} />
-        <Route path="/admin/users" element={<UserManagement />} />
-        <Route path="/admin/category" element={<CategoryManagement />} />
+        <Route path="/login" element={<AdminLogin />} />
+        <Route path="/otp/:UserId" element={<AdminLoginOTP />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/users" element={<UserManagement />} />
+        <Route path="/category" element={<CategoryManagement />} />
       </Routes>
     </>
   );

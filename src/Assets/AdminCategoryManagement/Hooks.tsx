@@ -21,7 +21,7 @@ export const useCategory = () => {
                 dispatch(setAdmin(payload.admin))
                 setTotal(payload.total)
             })
-        }
+        } else navigate("/admin/login")
     }
     const editData = (Name: string, id: string) => {
         if (!Name || Name.length < 3) return toast.error("Minimum 3 Characters")

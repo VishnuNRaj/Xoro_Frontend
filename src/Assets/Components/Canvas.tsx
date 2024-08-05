@@ -41,7 +41,7 @@ export const Offcanvas: React.FC = memo(() => {
                     <Buttons text={'Home'} route={'/'} />
                     <Buttons text={'Videos'} route={'/videos'} />
                     <Buttons text={'Shorts'} route={'/shorts'} />
-                    <Buttons text={'Feeds'} route={'/feed'} />
+                    <Buttons text={'Live'} route={'/live'} />
                     <Buttons text={'Stream now'} route={'/stream'} />
                     <Buttons text={'Rewards'} route={'/rewards'} />
                     <Buttons text={'Contact'} route={'/contact'} />

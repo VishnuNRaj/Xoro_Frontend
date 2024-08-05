@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Menu, MenuHandler, MenuItem, MenuList } from '@material-tailwind/react';
 import { deletePost, setPosts } from '../../Store/UserStore/Post-Management/PostSlice';
-import { PostImage } from '../../Store/UserStore/Post-Management/Interfaces';
 import { useEssentials, getCookie, } from '../../Functions/CommonFunctions';
 
 const ImgComponent: React.FC = () => {
     const { navigate, dispatch, Post } = useEssentials()
     const { post } = Post;
-
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const [menuOpen, setMenuOpen] = useState<number | null>(null);
     const menuRef = useRef<HTMLUListElement | null>(null);
-    const [, setShow] = useState<PostImage | null>(null)
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -32,7 +29,6 @@ const ImgComponent: React.FC = () => {
     if (!post || post.length === 0) {
         return <div className="text-center font-semibold text-xl">Upload Feeds</div>;
     }
-
     return (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 font-semibold">
             {post.map((item, index) => (
@@ -41,14 +37,15 @@ const ImgComponent: React.FC = () => {
                     className="relative"
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
+
                 >
                     {item.Images[0].postType === 'image' ? (
                         <img src={item.Images[0].link} alt='' onClick={() => {
-                            setShow(post[index])
+                            return navigate(`/post/${item.ShareLink}`);
                         }} className='object-cover border-2 border-gray-400 overflow-hidden aspect-square cursor-pointer rounded-md' />
                     ) : (
                         <video className='cursor-pointer aspect-square' onClick={() => {
-                            setShow(post[index])
+                            return navigate(`/post/${item.ShareLink}`);
                         }} src={item.Images[0].link} controls></video>
                     )}
                     <div className="absolute top-0 cursor-pointer right-0 p-2 text-black hover:text-white" onClick={() => handleMenuOpen(index)}>

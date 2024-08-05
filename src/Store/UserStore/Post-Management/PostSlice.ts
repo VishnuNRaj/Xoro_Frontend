@@ -64,6 +64,21 @@ export const getPosts = createAsyncThunk<interfaces.getPostsResponse, interfaces
     }
 )
 
+export const getPost = createAsyncThunk<interfaces.getPostResponse, interfaces.getPost>(
+    'post/getPost',
+    async (credentials: interfaces.getPost, { rejectWithValue }) => {
+        try {
+            const data = await postService.getPost(credentials);
+            return data;
+        } catch (error) {
+            return rejectWithValue(<interfaces.getPostResponse>{
+                message: 'Internal Server Error',
+                status: 500
+            })
+        }
+    }
+)
+
 export const deletePost = createAsyncThunk<interfaces.deletePostResponse, interfaces.deletePost>(
     'post/deletePost',
     async (credentials: interfaces.deletePost, { rejectWithValue }) => {
@@ -121,6 +136,14 @@ const postSlice = createSlice({
             .addCase(deletePost.fulfilled, (state) => {
                 state.loadingPost = false;
             })
+            .addCase(getPost.pending, (state) => {
+                state.loadingPost = true;
+                state.message = '';
+            })
+            .addCase(getPost.fulfilled, (state) => {
+                state.loadingPost = false;
+            })
+
     },
 })
 

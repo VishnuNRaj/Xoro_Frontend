@@ -7,18 +7,19 @@ import OTPPage from "../Assets/OTPLogin/OTPPage";
 import Profile from "../Assets/UserProfile/Profile";
 import UploadCamera from "../Assets/Post/SelectPost";
 import VideoUpload from "../Assets/VideoUpload/VideoUpload";
-
 import OtherProfiles from "../Assets/OtherProfiles/OtherProfiles";
 import SocketToast from "../Other/SocketToast";
-// import StartStream from "../Assets/LiveStream/StartStream";
 import Videos from "../Assets/Videos/Videos";
 import ShowVideos from "../Assets/Videos/ShowVideos";
 import ViewStream from "../Assets/LiveStream/ViewStream";
 import SocketMessage from "../Other/SocketMessage";
 import { Offcanvas } from "../Assets/Components/Canvas";
 import Shorts from "../Assets/Shorts/Shorts";
-import VideoCapture from "../Assets/Livestream";
-import StreamScreen from "../Assets/LiveStream/StreamComponent";
+import Live from "../Assets/LiveStream/Live";
+import NotFoundPage from "./404";
+import PostShow from "../Assets/UserHome/PostShow";
+import LiveVideos from "../Assets/LiveStream/LiveVideos";
+import UserChannel from "../Assets/Channel/UserChannel";
 
 const UserRoutes: React.FC = () => {
     const location = useLocation();
@@ -27,9 +28,8 @@ const UserRoutes: React.FC = () => {
         <>
             <SocketToast />
             <SocketMessage />
-            {/* <MeteorEffect /> */}
             {!location.pathname.startsWith("/admin") && (
-                <div className="w-full mt-0 h-[20px]">
+                <div className="w-full mt-0 h-[80px]">
                     <Offcanvas />
                 </div>
             )}
@@ -43,14 +43,16 @@ const UserRoutes: React.FC = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/profile/:ProfileLink" element={<OtherProfiles />} />
                 <Route path="/post/" element={<UploadCamera />} />
+                <Route path="/post/:id" element={<PostShow />} />
                 <Route path="/videos/upload" element={<VideoUpload />} />
-                <Route path="/test/" element={<VideoCapture />} />
-                <Route path="/stream/:streamKey" element={<StreamScreen />} />
-                <Route path="/test/view/:streamKey" element={<ViewStream />} />
+                <Route path="/stream/" element={<Live />} />
+                <Route path="/live" element={<LiveVideos />} />
+                <Route path="/live/:key" element={<ViewStream />} />
                 <Route path="/videos" element={<Videos />} />
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />
                 <Route path="/shorts" element={<Shorts />} />
-                {/* <Route path="*" element={<Preloader/>} /> */}
+                <Route path="/channel" element={<UserChannel />} />
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>
     );

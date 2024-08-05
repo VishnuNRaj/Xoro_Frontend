@@ -78,6 +78,22 @@ export const deletePost: Function = async (data: interfaces.deletePost) => {
     }
 }
 
+export const getPost: Function = async (data: interfaces.getPost) => {
+    try {
+        const response = await axios.get(`${config.POST}/find/${data.id}`, {
+            headers: {
+                Authorization: `${data.token}`,
+            }
+        });
+        return response.data
+    } catch (e) {
+        return <interfaces.getPostResponse>{
+            message: 'Internal Server Error',
+            status: 500,
+        }
+    }
+}
+
 export const LikeDislikeRemove: Function = async ({ postId, type, token, base }: interfaces.likeDislikeRemove) => {
     try {
         const response = await axios.patch(`${config.BASE}/${base}/reactions/${type}/${postId}`, null, {

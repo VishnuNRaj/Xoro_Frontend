@@ -90,6 +90,20 @@ export const getProfile = createAsyncThunk<interfaces.getProfileResponse, interf
     }
 )
 
+export const getChannel = createAsyncThunk<interfaces.getChannelResponse, interfaces.getChannel>(
+    'profile/getChannel',
+    async (credentials, { rejectWithValue }) => {
+        try {
+            const data = await profileService.getChannel(credentials)
+            return data
+        } catch (e) {
+            return rejectWithValue(<interfaces.getChannelResponse>{
+                message: 'Internal Server Error'
+            })
+        }
+    }
+)
+
 export const followUser = createAsyncThunk<interfaces.followUserResponse, interfaces.followUser>(
     'profile/followUser',
     async (credentials, { rejectWithValue }) => {
@@ -132,7 +146,7 @@ export const unfollowUser = createAsyncThunk<interfaces.followUserResponse, inte
     }
 )
 
-type ToastType =  'error' | 'success';
+type ToastType = 'error' | 'success';
 
 const toastify: (type: ToastType, message: string) => void = (type, message) => {
     toast[type](message,
@@ -237,16 +251,22 @@ const profileSlice = createSlice({
             .addCase(unfollowUser.fulfilled, (state) => {
                 state.loadingProfile = false;
             })
-            .addCase(createChannel.pending,(state)=>{
+            .addCase(createChannel.pending, (state) => {
                 state.loadingProfile = true
             })
-            .addCase(createChannel.fulfilled,(state)=>{
+            .addCase(createChannel.fulfilled, (state) => {
                 state.loadingProfile = false
             })
-            .addCase(editChannel.pending,(state)=>{
+            .addCase(editChannel.pending, (state) => {
                 state.loadingProfile = true
             })
-            .addCase(editChannel.fulfilled,(state)=>{
+            .addCase(editChannel.fulfilled, (state) => {
+                state.loadingProfile = false
+            })
+            .addCase(getChannel.pending, (state) => {
+                state.loadingProfile = true
+            })
+            .addCase(getChannel.fulfilled, (state) => {
                 state.loadingProfile = false
             })
     }
