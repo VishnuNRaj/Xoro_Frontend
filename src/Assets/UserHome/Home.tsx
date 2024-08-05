@@ -22,11 +22,11 @@ const Home: React.FC = () => {
                 <div className='w-full flex p-1 md:pl-20'>
                     <div className='grid grid-cols-1 space-y-8 w-full md:w-2/5 h-auto'>
                         {!noMore ? (
-                            <InfiniteScroll hasMore={noMore} next={skipping} loader={<ChatLoader />} dataLength={post.length} >
+                            // <InfiniteScroll hasMore={noMore} next={skipping} loader={<ChatLoader />} dataLength={post.length} >
                                 {post && post.length > 0 && post?.map((item) => (
                                     <div key={item._id} ><PostShowComponent postData={item} /></div>
                                 ))}
-                            </InfiniteScroll>
+                            {/* </InfiniteScroll> */}
                         ) : (
                             <>{post && post.length > 0 && post?.map((item) => (
                                 <div key={item._id} ><PostShowComponent postData={item} /></div>
