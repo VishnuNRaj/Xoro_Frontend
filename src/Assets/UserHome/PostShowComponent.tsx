@@ -42,10 +42,10 @@ const PostShowComponent: React.FC<props> = ({ postData }) => {
 
             <div className="bg-white border rounded-lg flex-shrink-0 md:min-w-[400px] max-w-md">
                 <div className="flex items-center px-4 py-3 relative">
-                    <img crossOrigin="anonymous" className="h-8 w-8 rounded-full object-cover" src={post.user.Profile} />
+                    <img crossOrigin="anonymous" className="h-8 w-8 rounded-full object-cover" src={post.user?.Profile} />
                     <div className="ml-3">
-                        <span className="text-sm font-semibold antialiased block leading-tight">{post.user.Name}</span>
-                        <span className="text-gray-600 text-xs block">{post.user.Username}</span>
+                        <span className="text-sm font-semibold antialiased block leading-tight">{post.user?.Name}</span>
+                        <span className="text-gray-600 text-xs block">{post.user?.Username}</span>
                     </div>
                     <div className='absolute right-5'>
                         <button><i className='fa fa-ellipsis-v'></i></button>
