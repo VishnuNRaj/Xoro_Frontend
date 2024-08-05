@@ -10,7 +10,7 @@ import PostShowComponent from './PostShowComponent';
 
 const Home: React.FC = () => {
     const { auth } = useEssentials()
-    const { post, noMore } = useHooks()
+    const { post, skipping, noMore } = useHooks()
     const { loading } = auth;
     // const { online } = useOnline()
     // console.log(online, "______")
