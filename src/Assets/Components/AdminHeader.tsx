@@ -81,11 +81,11 @@ export const OffcanvasAdmin: React.FC = memo(() => {
                 <div className="mt-5 font-semibold h-auto snap-center text-sm py-5">
                     <Buttons text={'Dashboard'} route={'/admin/'} />
                     <Buttons text={'Manage Users'} route={'/admin/users'} />
-                    <Buttons text={'Manage Post'} route={'/admin/post'} />
-                    <Buttons text={'Manage Report'} route={'/admin/report'} />
+                    <Buttons text={'Manage Category'} route={'/admin/category'} />
+                    {/* <Buttons text={'Manage Report'} route={'/admin/report'} />
                     <Buttons text={'Manage Streams'} route={'/admin/streams'} />
                     <Buttons text={'Manage Rewards'} route={'/admin/rewards'} />
-                    <Buttons text={'Notifications'} route={'/admin/notification'} />
+                    <Buttons text={'Notifications'} route={'/admin/notification'} /> */}
                 </div>
                 <div className="mt-20 h-auto">
                     <div className="w-full h-12 px-4">
