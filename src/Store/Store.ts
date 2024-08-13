@@ -13,10 +13,12 @@ import { videoState } from './UserStore/Video-Management/Interfaces';
 import VideoSlice from './UserStore/Video-Management/VideoSlice';
 import ChatSlice from './UserStore/Chat-Management/ChatSlice';
 import CategoryAdmin from "./AdminStore/Management/CategoryManagement/CategorySlice"
+import VoucherAdmin from "./AdminStore/Management/VoucherManagement/voucherSlice"
 import { CategoryState } from "./AdminStore/Management/CategoryManagement/Interfaces"
 import { ChatState } from './UserStore/Chat-Management/interfaces';
 import { shortState } from './UserStore/Shorts-Management/interfaces';
 import shortSlice from "./UserStore/Shorts-Management/shortSlice"
+import { VoucherState } from './AdminStore/Management/VoucherManagement/interface';
 interface RootReducerInterface {
   auth: AuthState;
   admin: AdminAuth;
@@ -25,8 +27,9 @@ interface RootReducerInterface {
   profile: profileState;
   video: videoState,
   chat: ChatState,
-  categoryadmin:CategoryState,
-  shorts:shortState
+  categoryadmin: CategoryState,
+  voucheradmin: VoucherState,
+  shorts: shortState
 }
 
 const rootReducer: Reducer<RootReducerInterface> = combineReducers({
@@ -37,8 +40,9 @@ const rootReducer: Reducer<RootReducerInterface> = combineReducers({
   profile: profileSlice,
   video: VideoSlice,
   chat: ChatSlice,
-  categoryadmin:CategoryAdmin,
-  shorts:shortSlice,
+  categoryadmin: CategoryAdmin,
+  voucheradmin: VoucherAdmin,
+  shorts: shortSlice,
 });
 
 

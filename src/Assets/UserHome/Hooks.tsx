@@ -27,9 +27,8 @@ const useHooks = () => {
                 if (state.payload.post.length === 0) {
                     setNoMore(true)
                 }
-                setPost([...post, ...state.payload.post].filter((val, idx, arr) => arr.indexOf(val) === idx).map((val)=>val))
+                setPost([...post, ...state.payload.post].filter((val, idx, arr) => arr.indexOf(val) === idx))
                 setConnections(state.payload.connections)
-                setSkip((prev) => prev + 1)
                 setRecommend(state.payload.recommendations || [])
             })
         } else navigate("/login")

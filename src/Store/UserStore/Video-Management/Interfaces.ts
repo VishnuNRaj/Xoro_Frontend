@@ -1,5 +1,7 @@
 import { SetStateAction } from "react";
 import { User } from "../Authentication/Interfaces";
+import { LiveInterface } from "../CommonManagements/interfaces";
+import { Shorts } from "../Shorts-Management/interfaces";
 
 export interface Channel {
     _id: string;
@@ -10,6 +12,9 @@ export interface Channel {
     Reports: number;
     Logo: string;
     Description:string;
+    videos:Video[];
+    live:LiveInterface[];
+    shorts:Shorts[];
 }
 export interface Reactions {
     PostId: string;

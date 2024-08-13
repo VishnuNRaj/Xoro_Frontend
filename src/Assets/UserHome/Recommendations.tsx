@@ -1,13 +1,12 @@
 import React from 'react'
-import { User } from '../../Store/UserStore/Authentication/Interfaces'
-import UserMap from '../Components/UserMap';
+// import { User } from '../../Store/UserStore/Authentication/Interfaces'
 interface props {
-    users: User[];
+    // users: User[];
 }
-const Recommendations: React.FC<props> = ({ users }) => {
+const Recommendations: React.FC<props> = ({ }) => {
     return (
         <div className='bg-black bg-opacity-50'>
-            {users.length > 0 && <UserMap user={users} />}
+
         </div>
     )
 }

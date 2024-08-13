@@ -133,7 +133,16 @@ const ChatComponent: React.FC<props> = ({ close }) => {
                                                 </div>
                                                 <div className='flex mt-2 justify-between'>
                                                     <span className="text-xs font-extralight text-gray-500 leading-none">{format(chat?.Time, "p")}</span>
-                                                    <span className="text-xs ml-1 justify-end font-extralight leading-none"> <i className={`fa ${chat?.Seen.length === users.length ? "fa-check text-blue-700" : "fa-check text-white"} `}></i></span>
+                                                    <span className="text-xs ml-1 justify-end font-extralight leading-none">{chat?.Seen.length === users.length ? (
+                                                        <svg className='w-3 h-3' viewBox="0 -0.5 25 25" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5.03033 11.4697C4.73744 11.1768 4.26256 11.1768 3.96967 11.4697C3.67678 11.7626 3.67678 12.2374 3.96967 12.5303L5.03033 11.4697ZM8.5 16L7.96967 16.5303C8.26256 16.8232 8.73744 16.8232 9.03033 16.5303L8.5 16ZM17.0303 8.53033C17.3232 8.23744 17.3232 7.76256 17.0303 7.46967C16.7374 7.17678 16.2626 7.17678 15.9697 7.46967L17.0303 8.53033ZM9.03033 11.4697C8.73744 11.1768 8.26256 11.1768 7.96967 11.4697C7.67678 11.7626 7.67678 12.2374 7.96967 12.5303L9.03033 11.4697ZM12.5 16L11.9697 16.5303C12.2626 16.8232 12.7374 16.8232 13.0303 16.5303L12.5 16ZM21.0303 8.53033C21.3232 8.23744 21.3232 7.76256 21.0303 7.46967C20.7374 7.17678 20.2626 7.17678 19.9697 7.46967L21.0303 8.53033ZM3.96967 12.5303L7.96967 16.5303L9.03033 15.4697L5.03033 11.4697L3.96967 12.5303ZM9.03033 16.5303L17.0303 8.53033L15.9697 7.46967L7.96967 15.4697L9.03033 16.5303ZM7.96967 12.5303L11.9697 16.5303L13.0303 15.4697L9.03033 11.4697L7.96967 12.5303ZM13.0303 16.5303L21.0303 8.53033L19.9697 7.46967L11.9697 15.4697L13.0303 16.5303Z" fill="#000000" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className='w-3 h-3' viewBox="0 0 3750 3750">
+                                                            <path fillRule="evenodd" fill="white" fillOpacity="1" d="M 707.742188 1930.46875 C 1233.671875 1894.089844 1143.261719 2735.75 1466.191406 2950.367188 C 1932.921875 2658.859375 2106.210938 1208.050781 3431.800781 496.660156 C 2557.660156 582.070312 1819.441406 1440.378906 1512.328125 2260.5 C 1449.449219 1767.371094 885.992188 1428.929688 707.742188 1930.46875 Z M 707.742188 1930.46875 " />
+                                                        </svg>
+                                                    )}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,8 +152,19 @@ const ChatComponent: React.FC<props> = ({ close }) => {
                                                 <div className="bg-blue-500 p-1 pl-2 rounded-l-lg rounded-br-lg">
                                                     <p className="text-sm">{chat?.Message}</p>
                                                 </div>
-                                                <span className="text-xs text-gray-500 leading-none">{format(chat?.Time, "p")}</span>
-                                                <span className="text-xs ml-1 justify-end font-extralight leading-none"> <i className={`fa ${chat?.Seen.length === users.length ? "fa-check text-blue-700" : "fa-check text-white"} `}></i></span>
+                                                <div className='flex mt-2 justify-between'>
+                                                    <span className="text-xs font-extralight text-gray-500 leading-none">{format(chat?.Time, "p")}</span>
+                                                    <span className="text-xs ml-1 justify-end font-extralight leading-none">{chat?.Seen.length === users.length ? (
+                                                        <svg className='w-3 h-3' viewBox="0 -0.5 25 25" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5.03033 11.4697C4.73744 11.1768 4.26256 11.1768 3.96967 11.4697C3.67678 11.7626 3.67678 12.2374 3.96967 12.5303L5.03033 11.4697ZM8.5 16L7.96967 16.5303C8.26256 16.8232 8.73744 16.8232 9.03033 16.5303L8.5 16ZM17.0303 8.53033C17.3232 8.23744 17.3232 7.76256 17.0303 7.46967C16.7374 7.17678 16.2626 7.17678 15.9697 7.46967L17.0303 8.53033ZM9.03033 11.4697C8.73744 11.1768 8.26256 11.1768 7.96967 11.4697C7.67678 11.7626 7.67678 12.2374 7.96967 12.5303L9.03033 11.4697ZM12.5 16L11.9697 16.5303C12.2626 16.8232 12.7374 16.8232 13.0303 16.5303L12.5 16ZM21.0303 8.53033C21.3232 8.23744 21.3232 7.76256 21.0303 7.46967C20.7374 7.17678 20.2626 7.17678 19.9697 7.46967L21.0303 8.53033ZM3.96967 12.5303L7.96967 16.5303L9.03033 15.4697L5.03033 11.4697L3.96967 12.5303ZM9.03033 16.5303L17.0303 8.53033L15.9697 7.46967L7.96967 15.4697L9.03033 16.5303ZM7.96967 12.5303L11.9697 16.5303L13.0303 15.4697L9.03033 11.4697L7.96967 12.5303ZM13.0303 16.5303L21.0303 8.53033L19.9697 7.46967L11.9697 15.4697L13.0303 16.5303Z" fill="#000000" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className='w-3 h-3' viewBox="0 0 3750 3750">
+                                                            <path fillRule="evenodd" fill="white" fillOpacity="1" d="M 707.742188 1930.46875 C 1233.671875 1894.089844 1143.261719 2735.75 1466.191406 2950.367188 C 1932.921875 2658.859375 2106.210938 1208.050781 3431.800781 496.660156 C 2557.660156 582.070312 1819.441406 1440.378906 1512.328125 2260.5 C 1449.449219 1767.371094 885.992188 1428.929688 707.742188 1930.46875 Z M 707.742188 1930.46875 " />
+                                                        </svg>
+                                                    )}
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300">
                                                 <img crossOrigin="anonymous" src={users.find((usr) => usr._id === chat.SenderId)?.Profile} className='rounded-full object-contain h-8 w-8' alt="" />
@@ -153,7 +173,9 @@ const ChatComponent: React.FC<props> = ({ close }) => {
                                     )}
                                 </>
                             ))}
-                            {type.length > 0 && <Typing />}
+                            <div className="mt-2">
+                                {type.length > 0 && <Typing />}
+                            </div>
                         </div>
                     )}
                     <div className='ml-5 mt-2'>

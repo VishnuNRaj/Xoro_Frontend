@@ -36,7 +36,7 @@ interface RootReducerInterface {
 export const useEssentials = (): RootReducerInterface => {
     const dispatch: AppDispatch = useDispatch();
     const navigate = useNavigate();
-    const { auth, admin, adminuser, post, profile, video, chat, categoryadmin, shorts } = useSelector(
+    const { auth, admin, adminuser, post, profile, video, chat, categoryadmin, shorts, voucheradmin } = useSelector(
         (state: RootState) => ({
             auth: state.auth,
             admin: state.admin,
@@ -46,7 +46,8 @@ export const useEssentials = (): RootReducerInterface => {
             video: state.video,
             chat: state.chat,
             categoryadmin: state.categoryadmin,
-            shorts: state.shorts
+            shorts: state.shorts,
+            voucheradmin: state.voucheradmin,
             // progress,setProgress
         }),
         shallowEqual
@@ -65,7 +66,8 @@ export const useEssentials = (): RootReducerInterface => {
         chat,
         categoryadmin,
         shorts,
-    }), [dispatch, navigate, auth, admin, adminuser, post, profile, video, chat, shorts, categoryadmin]);
+        voucheradmin
+    }), [dispatch, navigate, voucheradmin, auth, admin, adminuser, post, profile, video, chat, shorts, categoryadmin]);
 };
 
 

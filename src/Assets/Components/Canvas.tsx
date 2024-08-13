@@ -37,13 +37,13 @@ export const Offcanvas: React.FC = memo(() => {
                     </button>                     
 
                 </div>
-                <div className="mt-8 font-semibold h-auto snap-center py-5">
+                <div className="mt-8 space-y-2 font-semibold h-auto snap-center py-5">
                     <Buttons text={'Home'} route={'/'} />
                     <Buttons text={'Videos'} route={'/videos'} />
                     <Buttons text={'Shorts'} route={'/shorts'} />
                     <Buttons text={'Live'} route={'/live'} />
                     <Buttons text={'Stream now'} route={'/stream'} />
-                    <Buttons text={'Rewards'} route={'/rewards'} />
+                    <Buttons text={'Channel'} route={'/channel'} />
                     <Buttons text={'Contact'} route={'/contact'} />
                 </div>
                 <div className="mt-20 h-auto">
@@ -56,7 +56,7 @@ export const Offcanvas: React.FC = memo(() => {
                                 </>
                             ) : (
                                 <center>
-                                    <button onClick={logout} className={`w-1/2 bg-red-500 p-2 px-3 h-full cursor-pointer rounded-2xl text-white hover:bg-red-800 `}>Logout</button>
+                                    <button onClick={logout} className={`w-1/2 bg-red-700 p-2 px-3 h-full cursor-pointer rounded-lg text-white hover:bg-red-800 `}>Logout</button>
                                 </center>
                             )}
                         </div>

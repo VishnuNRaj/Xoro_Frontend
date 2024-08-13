@@ -13,8 +13,8 @@ const getButtonColor = (route: string) => {
 const Buttons: React.FC<ButtonProps> = memo(({ text, route }) => {
   const { navigate } = useEssentials()
   return (
-    <div className="w-full h-12">
-      <button onClick={() => navigate(route)} className={` w-full h-full text-white ${getButtonColor(route)} hover:bg-violet-700`}>{text}</button>
+    <div className="w-full h-12 px-2">
+      <button onClick={() => navigate(route)} className={` w-full rounded-lg h-full text-white ${getButtonColor(route)} hover:bg-violet-700`}>{text}</button>
     </div>
   )
 })

@@ -52,6 +52,7 @@ const UserRoutes: React.FC = () => {
                 <Route path="/videos/:VideoLink" element={<ShowVideos />} />
                 <Route path="/shorts" element={<Shorts />} />
                 <Route path="/channel" element={<UserChannel />} />
+                <Route path="/channel/:id" element={<UserChannel />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </>

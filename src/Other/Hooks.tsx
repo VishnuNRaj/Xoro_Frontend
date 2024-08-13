@@ -1,8 +1,8 @@
 import { User } from "../Store/UserStore/Authentication/Interfaces";
 import { useState, useEffect } from 'react';
 export const useOnline = () => {
-    const [online, setOnline] = useState<User[]>([])
-    return { online, setOnline }
+  const [online, setOnline] = useState<User[]>([])
+  return { online, setOnline }
 }
 
 
