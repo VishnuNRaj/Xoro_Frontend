@@ -210,21 +210,23 @@ export const useViewLive = () => {
             toast.error(response.message)
             navigate("/live")
         }
+        console.log(response)
         dispatch(setUser(response.user))
         setLive(response.live)
         setSubs(response.live.channel[0].Subsribers.length)
         setLoading(false)
+        setSubscribe(response.live.channel[0].Subsribers.includes(response.user._id))
     }
     const [subscribe, setSubscribe] = useState(false)
     const handleSubscribe = () => {
-        if (auth.user && live) {
+        if (auth.user && live && socket) {
             socket?.emit("subscribeChannel", auth.user._id, live.channel[0]._id)
             setSubs(prev => prev + 1)
             return setSubscribe(true)
         } else return
     }
     const handleUnsubscribe = () => {
-        if (auth.user && live) {
+        if (auth.user && live && socket) {
             socket?.emit("unsubscribeChannel", auth.user._id, live.channel[0]._id)
             setSubs(prev => prev - 1)
             return setSubscribe(false)
